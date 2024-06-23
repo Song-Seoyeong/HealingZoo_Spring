@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace='memberMapper'>
+
+	<select id="login" resultMap='memberResult'>
+		select *
+		from member
+		where MEM_ID = #{memId} and MEM_ACTIVE = 'Y'
+	</select>
+	
+	<resultMap type="Member" id="memberResult">
+		<id column="MEM_NO" property="memNo"/>
+		<result column="MEM_ID" property="memId"/>
+		<result column="MEM_PWD" property="memPwd"/>
+		<result column="MEM_NAME" property="memName"/>
+		<result column="MEM_EMAIL" property="memEmail"/>
+		<result column="MEM_PHONE" property="memPhone"/>
+		<result column="ENROLL_DATE" property="enrollDate"/>
+		<result column="UPDATE_DATE" property="updateDate"/>
+		<result column="MEM_ACTIVE" property="memActive"/>
+		<result column="MEM_GRADE" property="memGrade"/>
+		<result column="MEM_INTRO" property="memIntro"/>
+	</resultMap>
+	
+	<insert id='signUp'>
+		insert into member
+			values(seq_mem.nextval, #{memName}, #{memId}, #{memPwd}, #{memEmail}, #{memPhone}, sysdate, sysdate, default, default, #{memIntro})
+	</insert>
+	
+	<select id="checkId" resultType='_int'>
+		select count(*)
+			from member
+			where mem_id = #{memId}
+	</select>
+
+</mapper>
