@@ -1,5 +1,9 @@
 package com.semiproject.healingzoo.member.controller;
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -88,9 +92,14 @@ public class MemberController {
 	
 	//아이디 중복 체크
 	@RequestMapping("checkId.me")
-	public @ResponseBody int checkId(@RequestParam("id") String id) {
+	@ResponseBody
+	public void checkId(@RequestParam("id") String id, HttpServletResponse resp) {
 		int result = mService.checkId(id);
-		return result;
+		try {
+			resp.getWriter().print(result);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	 // @ReponseBody
 	 // 클라이언트에서 서버로 필요한 데이터를 전송하기 위해서 JSON이라는 데이터를 요청 본문에 담아서 서버로 보내면, 
@@ -98,6 +107,7 @@ public class MemberController {
 	 // 서버에서 클라이언트로 응답 데이터를 전송하기 위해서 @ResponseBody 를 사용하여 
 	 // 자바 객체를 HTTP 응답 본문의 객체로 변환하여 클라이언트로 전송시키는 역할을 합니다.
 	
+	// 마이페이지>내정보 수정 이동
 	@RequestMapping("myPage.me")
 	public String myInfo() {
 		return "myinfo";

@@ -53,7 +53,7 @@
 
 	<servlet-mapping>
 		<servlet-name>menuServlet</servlet-name>
-		<url-pattern>*.do</url-pattern>
+		<url-pattern>*.menu</url-pattern>
 	</servlet-mapping>
 
 	<!-- 회원 관련 -->

@@ -20,7 +20,7 @@
 			<div class="row">
 				<div class="col"></div>
 				<div class="col-8">
-					<h1>죄송합니다. 요청하신 페이지를 찾을 수 없습니다🥲</h1>
+					<h1>죄송합니다. 요청하신 페이지를 찾을 수 없습니다</h1>
 					<br><br><br><br><br><br><br>
 					<p>${ requestScope['javax.servlet.error.message'] }</p>
 					<br><br><br><br><br><br><br>

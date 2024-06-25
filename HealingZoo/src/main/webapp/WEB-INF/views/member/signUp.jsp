@@ -100,7 +100,7 @@
 				<div class="row g-3 align-items-center">
 				  <div class="col-3"></div>
 				  <div class="col-9 text-start" style='font: 10px; color: #595959;'>
-				  	비밀번호는 숫자, 영어, 특수문자 포함 8자 이상으로 생성해주세요
+				  	비밀번호는 숫자, 영어, 특수문자 포함 8자 이상 15자 미만으로 생성해주세요
 				  </div>
 				  <div class="col"></div>
 				</div>
@@ -144,7 +144,7 @@
 				</div>
 				
 				<!-- 사진 -->
-				<div class="row g-3 align-items-center marginDiv">
+				<div class="row g-3 align-items-center marginDiv" style='margin-bottom: 20px;'>
 				  <div class="col-3 text-end">
 				    <label for="inputPhone" class="form-label loginName">프로필 사진</label>
 				  </div>
@@ -232,49 +232,67 @@
 				confirmText.innerText = '비밀번호가 일치하지 않습니다'
 				confirmText.style.color = 'red';
 			}else{
-				confirmText.innerText = '확인되었습니다.';
-				confirmText.style.color = 'green';
+				if(this.value != ''){
+					confirmText.innerText = '확인되었습니다.';
+					confirmText.style.color = 'green';
+				}
 			}
 		})
 			
-		window.onload = () =>{
-			// 엔터 입력시 폼 제출
-			const inputIdPwd = document.getElementsByTagName('input');
-			for(const input of inputIdPwd){
-				input.addEventListener('keyup', e =>{
-					if(e.key == 'Enter'){
-						doSignUp();
-					}
-				})
-			}
-			
-			// 아이디 중복 체크(비동기 방식 통신 : 페이지 이동없이 실시간)
-			document.getElementById('id').addEventListener('focusout', function(){
-				const id = this.value;
-				const idConfirmText = document.getElementById("idConfirmText");
-				if(id.trim() == ''){
-					
-				}else{
-					$.ajax({ 
-						type: "post",
-						url: '${contextPath}/checkId.me',
-						data: {'id':id},  
-						success:function(data){ 
-							console.log(00);	
-							const result = data.result;
-							if(data == 0){
-								idConfirmText.innerText = '사용 가능한 아이디 입니다.';
-								idConfirmText.style.color = 'green';
-							}else{
-								idConfirmText.innerText = '중복된 아이디 입니다.';
-								idConfirmText.style.color = 'red';
-							}
-						},
-						error: data =>console.log("에러")	
-					});
+		// 엔터 입력시 폼 제출
+		const inputIdPwd = document.getElementsByTagName('input');
+		for(const input of inputIdPwd){
+			input.addEventListener('keyup', e =>{
+				if(e.key == 'Enter'){
+					doSignUp();
 				}
-			});
+			})
 		}
+		
+		// 아이디 중복 체크(비동기 방식 통신 : 페이지 이동없이 실시간)
+		document.getElementById('id').addEventListener('focusout', function(){
+			const id = this.value;
+			const idConfirmText = document.getElementById("idConfirmText");
+			if(id.trim() == ''){
+				
+			}else{
+				$.ajax({ 
+					type: "post",
+					url: '${contextPath}/checkId.me',
+					data: {'id':id},  
+					success:function(data){ 
+						const result = data.result;
+						if(data == 0){
+							idConfirmText.innerText = '사용 가능한 아이디 입니다.';
+							idConfirmText.style.color = 'green';
+						}else{
+							idConfirmText.innerText = '중복된 아이디 입니다.';
+							idConfirmText.style.color = 'red';
+						}
+					},
+					error: data =>console.log("에러")	
+				});
+			}
+		});
+		
+		//정규표현식을 통한 핸드폰번호 숫자만 받기
+		document.getElementById('phone').addEventListener('focusout', function(){
+			const reg = /^(010|011)\d{8}$/;
+			if(!reg.test(this.value)){
+				alert("정확한 핸드폰 번호를 입력해주세요");
+				this.focus();
+			}
+		})
+		
+		//정규표현식을 통한 비밀번호 유효성 검사
+		document.getElementById('pwd').addEventListener('focusout', function(){
+			const reg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
+			if(!reg.test(this.value)){
+				alert("비밀번호는 숫자, 영어, 특수문자 포함 8자 이상 15자 미만으로 생성해주세요");
+				this.focus();
+			}
+		})
+		
 	</script>
 	
 </body>
