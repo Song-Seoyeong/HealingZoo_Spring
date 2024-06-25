@@ -1,13 +1,53 @@
 package com.semiproject.healingzoo.menu.controller;
 
+import java.util.ArrayList;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.semiproject.healingzoo.board.model.exception.BoardException;
+import com.semiproject.healingzoo.board.model.service.BoardService;
+import com.semiproject.healingzoo.board.model.vo.Board;
+import com.semiproject.healingzoo.board.model.vo.PageInfo;
+import com.semiproject.healingzoo.common.Pagination;
+import com.semiproject.healingzoo.menu.model.service.MenuService;
 
 @Controller
 public class MenuController {
+
+	@Autowired
+	private MenuService mService;
+	
+	@Autowired
+	private BoardService bService;
+
 	// FAQ 이동
 	@RequestMapping("FAQ.menu")
-	public String FAQ() {
-		return "FAQ";
+	public String selectFAQ(Model model) {
+		ArrayList<Board> FAQList = mService.selectFAQ();
+
+		if (FAQList != null) {
+			model.addAttribute("FAQList", FAQList);
+			return "FAQ";
+		}else {
+			throw new BoardException("FAQ 리스트를 불러올 수 없습니다.");
+		}
+	}
+	
+	// 문의게시판 이동
+	@RequestMapping("questionList.menu")
+	public String selectAllQuestionList(@RequestParam(value="page", defaultValue="1") Integer currentPage, Model model) {
+	// 파라미터로 넘긴 현재 페이지, 처음 페이지로 진입시 값이 없기때문에 defaultValue를 넣어 1로 지정해줌
+	// int가 아닌 Integer로 받는 이유 : 값이 들어오지않을 때 null값으로 비교하기 위해
+		
+		int listCount = bService.getListCount(101);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+		
+		ArrayList<Board> quesionList = bService.selectAllQueBookList(pi, 101);
+		
+		return null;
 	}
 }

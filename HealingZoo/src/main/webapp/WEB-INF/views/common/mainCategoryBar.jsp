@@ -90,7 +90,7 @@
 				<div class="subCategory" id='csSub'>
 			    	<ul>
 					  <li style='width: 150px;'><a href='${ contextPath }/FAQ.menu'>자주 묻는 Q&A</a></li>
-					  <li style='width: 120px;'><a href='${ contextPath }/question.menu'>문의 게시판</a></li>
+					  <li style='width: 120px;'><a href='${ contextPath }/questionList.menu'>문의 게시판</a></li>
 					</ul>
 				</div>
 			</div>

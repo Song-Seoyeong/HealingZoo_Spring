@@ -16,12 +16,15 @@ import lombok.ToString;
 public class Board {
 	private int boardNo;
 	private int cateNo;
-	private int writerNo;
-	private String writerName;
-	private String title;
-	private String content;
-	private String active;
-	private int count;
-	private Date createDate;
-	private Date modifyDate;
+	private int boardWriterNo;
+	private String boardWriterName;
+	private String boardTitle;
+	private String boardContent;
+	private String boardActive;
+	private int boardCount;
+	private Date boardCreateDate;
+	private Date boardModifyDate;
+	private String writerPhone;
+	private int boPwd;
+	private String noSubject;
 }
