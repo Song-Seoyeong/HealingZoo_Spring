@@ -23,8 +23,8 @@ public class BoardController {
 	}
 	
 	@RequestMapping("write.bo")
-	public String writeBoard(Board b) {
-		System.out.println(b);
+	public String writeBoard(Board b ) {
+		
 		return null;
 	}
 }

@@ -67,7 +67,7 @@
 		    <div class="col  ">
 		    	<br><br>
 		    	<a href='${ contextPath }/views/animalInfo/family.jsp' class='mainCateName' id='animalInfo'>동물 소개</a>
-		    	<div class="subCategory" id='animalInfoSub'>
+		    	<div class="subCategory justisfy-content-center" id='animalInfoSub'>
 			    	<ul>
 					  <li><a href='${ contextPath }/views/animalInfo/family.jsp'>가족 소개</a></li>
 					  <li style='width: 120px;'><a href='${ contextPath }/views/animalInfo/mascot.jsp'>마스코트</a></li>
@@ -80,17 +80,17 @@
 				<div class="subCategory" id='communitySub'>
 				    <ul>
 					  <li><a href='${ contextPath }/views/community/review.jsp'>후기 게시판</a></li>
-					  <li style='width: 120px;'><a href='${ contextPath }/views/community/book.jsp'>예약 게시판</a></li>
+					  <li style='width: 120px;'><a href='${ contextPath }/book.menu'>예약 게시판</a></li>
 					</ul>
 				</div>
 			</div>
 		    <div class="col">
 		    	<br><br>
-				<a href='${ contextPath }/views/cs/FAQ.jsp' class='mainCateName' id='cs'>고객 센터</a>
+				<a href='${ contextPath }/FAQ.menu' class='mainCateName' id='cs'>고객 센터</a>
 				<div class="subCategory" id='csSub'>
 			    	<ul>
 					  <li style='width: 150px;'><a href='${ contextPath }/FAQ.menu'>자주 묻는 Q&A</a></li>
-					  <li style='width: 120px;'><a href='${ contextPath }/questionList.menu'>문의 게시판</a></li>
+					  <li style='width: 120px;'><a href='${ contextPath }/question.menu'>문의 게시판</a></li>
 					</ul>
 				</div>
 			</div>
