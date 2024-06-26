@@ -46,8 +46,18 @@ public class MenuController {
 		int listCount = bService.getListCount(101);
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 		
-		ArrayList<Board> quesionList = bService.selectAllQueBookList(pi, 101);
-		
-		return null;
+		ArrayList<Board> questionList = bService.selectAllQueBookList(pi, 101);
+		for(Board b : questionList) {
+			String writerName = b.getBoardWriterName();
+			writerName = writerName.charAt(0) + "*" + writerName.charAt(writerName.length() - 1);
+			b.setBoardWriterName(writerName);
+		}
+		if(questionList != null) {
+			model.addAttribute("questionList", questionList);
+			model.addAttribute("pi", pi);
+			return "question";
+		}else {
+			throw new BoardException("게시글 리스트를 불러올 수 없습니다.");
+		}
 	}
 }

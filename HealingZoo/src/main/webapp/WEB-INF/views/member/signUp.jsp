@@ -279,7 +279,7 @@
 		document.getElementById('phone').addEventListener('focusout', function(){
 			const reg = /^(010|011)\d{8}$/;
 			if(!reg.test(this.value)){
-				alert("정확한 핸드폰 번호를 입력해주세요");
+				alert("핸드폰 번호를 정확히 입력해주세요");
 				this.focus();
 			}
 		})
@@ -289,6 +289,7 @@
 			const reg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
 			if(!reg.test(this.value)){
 				alert("비밀번호는 숫자, 영어, 특수문자 포함 8자 이상 15자 미만으로 생성해주세요");
+				this.value = "";
 				this.focus();
 			}
 		})

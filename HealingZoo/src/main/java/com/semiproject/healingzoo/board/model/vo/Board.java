@@ -26,5 +26,6 @@ public class Board {
 	private Date boardModifyDate;
 	private String writerPhone;
 	private int boPwd;
+	private String quBoBoardStatus;
 	private String noSubject;
 }
