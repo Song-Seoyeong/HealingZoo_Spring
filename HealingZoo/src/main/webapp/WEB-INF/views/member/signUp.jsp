@@ -200,6 +200,8 @@
 			const email = document.getElementById('email');
 			const pwdComfirm = document.getElementById('pwdComfirm');
 			const phone = document.getElementById('phone');
+			const regPhone = /^(010|011)\d{8}$/;
+			const regPwd = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
 			
 			if(name.value.trim() == ''){
 				alert('이름를 입력하세요.');
@@ -219,7 +221,14 @@
 			}else if(phone.value.trim() == ''){
 				alert('핸드폰 번호를 입력하세요.');
 				phone.focus();
+			}else if(!regPhone.test(phone.value)){
+				alert("핸드폰 번호를 정확히 입력해주세요");
+				pwd.focus();
+			}else if(!regPwd.test(pwd.value)){
+				alert("비밀번호는 숫자, 영어, 특수문자 포함 8자 이상 15자 미만으로 생성해주세요");
+				pwd.focus();
 			}else{
+			}
 				document.getElementById('signUpFrom').submit();
 			}
 		}
@@ -275,24 +284,7 @@
 			}
 		});
 		
-		//정규표현식을 통한 핸드폰번호 숫자만 받기
-		document.getElementById('phone').addEventListener('focusout', function(){
-			const reg = /^(010|011)\d{8}$/;
-			if(!reg.test(this.value)){
-				alert("핸드폰 번호를 정확히 입력해주세요");
-				this.focus();
-			}
-		})
 		
-		//정규표현식을 통한 비밀번호 유효성 검사
-		document.getElementById('pwd').addEventListener('focusout', function(){
-			const reg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
-			if(!reg.test(this.value)){
-				alert("비밀번호는 숫자, 영어, 특수문자 포함 8자 이상 15자 미만으로 생성해주세요");
-				this.value = "";
-				this.focus();
-			}
-		})
 		
 	</script>
 	

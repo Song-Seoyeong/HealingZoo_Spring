@@ -113,9 +113,12 @@
 								<option selected>-----</option>
 								<option value="title">제목</option>
 								<option value="writer">핸드폰 번호</option>
-							</select> &nbsp;&nbsp; <input type='text' size='30'
-								placeholder='제목/핸드폰번호로 검색이 가능합니다' /> &nbsp;&nbsp; <img
-								src="resources/image/search.svg" id='searchIcon'>
+							</select>
+							&nbsp;&nbsp; 
+							
+							<input type='text' size='30' placeholder='제목/핸드폰번호로 검색이 가능합니다' />
+							&nbsp;&nbsp; 
+							<img src="resources/image/search.svg" id='searchIcon'>
 						</div>
 						<div class="col"></div>
 					</div>
@@ -134,24 +137,22 @@
 
 
 	<script>
-		window.onload = () =>{
-			// 상세 글 페이지 이동
-			const tds = document.querySelectorAll('td');
-			for(const td of tds){
-				const parent = td.parentElement;
-				
-				td.addEventListener('click', ()=>{
-					const boardNo = parent.children[1].innerText;
-					location.href = '${contextPath}/views/cs/csBoardDetail.jsp';
-					//?category=question
-				})
-			}
+		// 상세 글 페이지 이동
+		const tds = document.querySelectorAll('td');
+		for(const td of tds){
+			const parent = td.parentElement;
 			
-			// 글쓰기 페이지 이동
-			document.getElementById('writeBoard').addEventListener('click', () =>{
-				location.href = '${contextPath}/writeView.bo?category=' + 'question';
+			td.addEventListener('click', ()=>{
+				const boardNo = parent.children[1].innerText;
+				location.href = '${contextPath}/views/cs/csBoardDetail.jsp';
+				//?category=question
 			})
 		}
+		
+		// 글쓰기 페이지 이동
+		document.getElementById('writeBoard').addEventListener('click', () =>{
+			location.href = '${contextPath}/writeView.bo?category=' + 'question';
+		})
 	</script>
 </body>
 </html>

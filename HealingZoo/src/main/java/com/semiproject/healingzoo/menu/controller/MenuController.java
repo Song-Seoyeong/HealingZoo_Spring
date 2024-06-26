@@ -38,7 +38,7 @@ public class MenuController {
 	}
 	
 	// 문의게시판 이동
-	@RequestMapping("questionList.menu")
+	@RequestMapping("question.menu")
 	public String selectAllQuestionList(@RequestParam(value="page", defaultValue="1") Integer currentPage, Model model) {
 	// 파라미터로 넘긴 현재 페이지, 처음 페이지로 진입시 값이 없기때문에 defaultValue를 넣어 1로 지정해줌
 	// int가 아닌 Integer로 받는 이유 : 값이 들어오지않을 때 null값으로 비교하기 위해
@@ -47,12 +47,14 @@ public class MenuController {
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 		
 		ArrayList<Board> questionList = bService.selectAllQueBookList(pi, 101);
-		for(Board b : questionList) {
-			String writerName = b.getBoardWriterName();
-			writerName = writerName.charAt(0) + "*" + writerName.charAt(writerName.length() - 1);
-			b.setBoardWriterName(writerName);
-		}
 		if(questionList != null) {
+			
+			// 작성자 이름 * 처리
+			for(Board b : questionList) {
+				String writerName = b.getBoardWriterName();
+				writerName = writerName.charAt(0) + "*" + writerName.charAt(writerName.length() - 1);
+				b.setBoardWriterName(writerName);
+			}
 			model.addAttribute("questionList", questionList);
 			model.addAttribute("pi", pi);
 			return "question";
@@ -60,4 +62,53 @@ public class MenuController {
 			throw new BoardException("게시글 리스트를 불러올 수 없습니다.");
 		}
 	}
+	
+	// 예약 게시판 이동
+	@RequestMapping("book.menu")
+	public String selectAllBookList(@RequestParam(value="page", defaultValue="1") Integer currentPage, Model model) {
+		int listCount = bService.getListCount(103);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+		
+		ArrayList<Board> bookList = bService.selectAllQueBookList(pi, 103);
+		if(bookList != null) {
+			for(Board b : bookList) {
+				String writerName = b.getBoardWriterName();
+				writerName = writerName.charAt(0) + "*" + writerName.charAt(writerName.length() - 1);
+				b.setBoardWriterName(writerName);
+			}
+			model.addAttribute("bookList", bookList);
+			model.addAttribute("pi", pi);
+			
+			return "book";
+		}else {
+			throw new BoardException("게시글 리스트를 불러올 수 없습니다.");
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
