@@ -19,7 +19,7 @@ public class Member {
 	private String memPwd;
 	private String memName;
 	private String memEmail;
-	private int memPhone;
+	private String memPhone;
 	private Date enrollDate;
 	private Date updateDate;
 	private String memActive;
