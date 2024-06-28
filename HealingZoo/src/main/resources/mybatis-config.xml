@@ -9,7 +9,8 @@
 
 	<typeAliases>
 		<typeAlias type="com.semiproject.healingzoo.member.model.vo.Member" alias="Member"/>
-		<typeAlias type="com.semiproject.healingzoo.board.model.vo.Board" alias="Board"/>		
+		<typeAlias type="com.semiproject.healingzoo.board.model.vo.Board" alias="Board"/>	
+		<typeAlias type="com.semiproject.healingzoo.board.model.vo.Image" alias='Image'/>	
 	</typeAliases>
 	<mappers>
 		<mapper resource='mappers/member-mapper.xml'/>

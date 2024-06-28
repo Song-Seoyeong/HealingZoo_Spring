@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.semiproject.healingzoo.board.model.vo.Board;
+import com.semiproject.healingzoo.board.model.vo.Image;
 import com.semiproject.healingzoo.board.model.vo.PageInfo;
 
 @Repository
@@ -24,6 +25,46 @@ public class BoardDAO {
 	RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 									// 건너뛸 게시글 수, 선택할 게시글 수
 		return (ArrayList)sqlSession.selectList("boardMapper.selectAllQueBookList", i, rowBounds);
+	}
+
+
+	public int insertBoard(SqlSession sqlSession, Board b) {
+		return sqlSession.insert("boardMapper.insertBoard", b);
+	}
+
+
+	public int insertImg(SqlSession sqlSession, ArrayList<Image> list) {
+		return sqlSession.insert("boardMapper.insertImg", list);
+	}
+
+
+	public int insertQuBo(SqlSession sqlSession, Board b) {
+		return sqlSession.insert("boardMapper.insertQuBo", b);
+	}
+
+
+	public Board seletBoard(SqlSession sqlSession, int bId) {
+		return sqlSession.selectOne("boardMapper.selectBoard", bId);
+	}
+
+
+	public int updateCount(SqlSession sqlSession, int bId) {
+		return sqlSession.update("boardMapper.updateCount", bId);
+	}
+
+
+	public ArrayList<Image> selectImg(SqlSession sqlSession, int bId) {
+		return (ArrayList)sqlSession.selectList("boardMapper.selectImg", bId);
+	}
+
+
+	public int deleteBaord(SqlSession sqlSession, int boardNo) {
+		return sqlSession.update("boardMapper.deleteBoard", boardNo);
+	}
+
+
+	public int deleteImg(SqlSession sqlSession, int boardNo) {
+		return sqlSession.update("boardMapper.deleteImg", boardNo);
 	}
 
 }

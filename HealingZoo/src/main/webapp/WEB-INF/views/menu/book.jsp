@@ -130,10 +130,10 @@
 		const tds = document.querySelectorAll('td');
 		for(const td of tds){
 			const parent = td.parentElement;
+			
 			td.addEventListener('click', ()=>{
-				const boardNo = parent.children[1].innerText;
-				location.href = '${contextPath}/views/common/boardDetail.jsp';
-				//?category=book
+				const boardNo = parent.children[0].innerText;
+				location.href = '${contextPath}/pwdConfirm.bo?bId=' + boardNo + "&page=" + ${pi.currentPage} + "&category=102";
 			})
 		}
 		

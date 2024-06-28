@@ -58,14 +58,14 @@
 				    <label for="inputId" class="form-label loginName">아이디 <span style='font-size:0.8rem; color: red;'> *필수*</span></label>
 				  </div>
 				  <div class="col-5">
-				    <input type="text" class="form-control form-control-lg" id="id" name='memId' placeholder="아이디를 입력하세요" required>
+				    <input type="text" class="form-control form-control-lg" id="id" name='memId' placeholder="아이디를 입력하세요" onchange='checkIdReg();' required>
 				  </div>
 				  <div class="col-7"></div>
 				</div>
 				<div class="row g-3 align-items-center">
 				  <div class="col-3"></div>
 				  <div class="col-9 text-start" id='idConfirmText' style='font: 10px; color: #595959;'>
-				  	아이디를 입력하세요
+				  	아이디를 영문/숫자 조합으로 입력하세요
 				  </div>
 				  <div class="col"></div>
 				</div>
@@ -93,7 +93,7 @@
 				    <label for="inputPassword" class="form-label loginName">비밀번호 <span style='font-size:0.8rem; color: red;'> *필수*</span></label>
 				  </div>
 				  <div class="col-7">
-				    <input type="password" id="pwd" name='memPwd' class="form-control form-control-lg" aria-describedby="passwordHelpInline" required placeholder="비밀번호를 입력하세요" size='50'>
+				    <input type="password" id="pwd" name='memPwd' class="form-control form-control-lg" onchange='checkPwdReg()' aria-describedby="passwordHelpInline" required placeholder="비밀번호를 입력하세요" size='50'>
 				  </div>
 				  <div class="col-auto"></div>
 				</div>
@@ -130,7 +130,7 @@
 				    <label for="inputPhone" class="form-label loginName">핸드폰 번호 <span style='font-size:0.8rem; color: red;'> *필수*</span></label>
 				  </div>
 				  <div class="col-7">
-				    <input type='text' class="form-control form-control-lg" id="phone" name='memPhone' placeholder='핸드폰 번호를 입력하세요' required size='10'>
+				    <input type='text' class="form-control form-control-lg" onchange='checkPhoneRef()' id="phone" name='memPhone' placeholder='핸드폰 번호를 입력하세요' required size='10'>
 				  </div>
 				  <div class="col-auto">
 				  </div>
@@ -143,29 +143,6 @@
 				  <div class="col"></div>
 				</div>
 				
-				<!-- 사진 -->
-				<div class="row g-3 align-items-center marginDiv" style='margin-bottom: 20px;'>
-				  <div class="col-3 text-end">
-				    <label for="inputPhone" class="form-label loginName">프로필 사진</label>
-				  </div>
-				  <div class="col-7">
-				    <input class="form-control" type="file" id="memImg" name='memImg' accept='image/*'>
-				  </div>
-				  <div class="col-auto">
-				  </div>
-				</div>
-				
-				<!-- 소개글 -->
-				<div class="row g-3 align-items-center  marginDiv">
-				  <div class="col-3 text-end">
-				    <label for="inputPhone" class="form-label loginName">프로필 소개글</label>
-				  </div>
-				  <div class="col-7">
-				    <textArea cols='48' rows='4' id='memIntro' name='memIntro'></textArea>
-				  </div>
-				  <div class="col-auto">
-				  </div>
-				</div>
 				
 				<!-- 버튼 -->
 				<div class="row g-3">
@@ -192,16 +169,15 @@
 	
 	
 	<script>
+		const id = document.getElementById('id');
+		const pwd = document.getElementById('pwd');
+		const phone = document.getElementById('phone');
+			
 		// 필수 항목 빈칸 제출시 알림창
 		const doSignUp = () =>{
 			const name = document.getElementById('name');
-			const id = document.getElementById('id');
-			const pwd = document.getElementById('pwd');
 			const email = document.getElementById('email');
 			const pwdComfirm = document.getElementById('pwdComfirm');
-			const phone = document.getElementById('phone');
-			const regPhone = /^(010|011)\d{8}$/;
-			const regPwd = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
 			
 			if(name.value.trim() == ''){
 				alert('이름를 입력하세요.');
@@ -221,15 +197,58 @@
 			}else if(phone.value.trim() == ''){
 				alert('핸드폰 번호를 입력하세요.');
 				phone.focus();
-			}else if(!regPhone.test(phone.value)){
-				alert("핸드폰 번호를 정확히 입력해주세요");
-				pwd.focus();
-			}else if(!regPwd.test(pwd.value)){
+			}else{
+				document.getElementById('signUpFrom').submit();
+			}
+		}
+		
+		// 비밀번호 정규화 체크
+		function checkPwdReg(){
+			const reg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
+			
+			if(!reg.test(pwd.value)){
 				alert("비밀번호는 숫자, 영어, 특수문자 포함 8자 이상 15자 미만으로 생성해주세요");
 				pwd.focus();
-			}else{
 			}
-				document.getElementById('signUpFrom').submit();
+		}
+		
+		// 핸드폰 번호 정규화 체크
+		function checkPhoneRef(){
+			const reg = /^(010|011)\d{8}$/;
+			
+			if(!reg.test(phone.value)){
+				alert("핸드폰 번호를 정확히 입력해주세요");
+				phone.focus();
+			}
+		}
+		
+		// 아이디 정규화 체크
+		function checkIdReg(){
+			const reg = /^[a-zA-Z0-9]{6,}$/;
+			console.log(reg.test(id.value));
+			if(!reg.test(id.value)){
+				alert("아이디는 영문/숫자 조합으로 입력해주세요");
+				id.focus();
+			}else{
+				// 아이디 중복 체크(비동기 방식 통신 : 페이지 이동없이 실시간)
+				const inputId = id.value;
+				const idConfirmText = document.getElementById("idConfirmText");
+				$.ajax({ 
+					type: "post",
+					url: '${contextPath}/checkId.me',
+					data: {'id':inputId},  
+					success:function(data){ 
+						const result = data.result;
+						if(data == 0){
+							idConfirmText.innerText = '사용 가능한 아이디 입니다.';
+							idConfirmText.style.color = 'green';
+						}else{
+							idConfirmText.innerText = '중복된 아이디 입니다.';
+							idConfirmText.style.color = 'red';
+						}
+					},
+					error: data =>console.log("에러")	
+				});
 			}
 		}
 		
@@ -258,31 +277,6 @@
 			})
 		}
 		
-		// 아이디 중복 체크(비동기 방식 통신 : 페이지 이동없이 실시간)
-		document.getElementById('id').addEventListener('focusout', function(){
-			const id = this.value;
-			const idConfirmText = document.getElementById("idConfirmText");
-			if(id.trim() == ''){
-				
-			}else{
-				$.ajax({ 
-					type: "post",
-					url: '${contextPath}/checkId.me',
-					data: {'id':id},  
-					success:function(data){ 
-						const result = data.result;
-						if(data == 0){
-							idConfirmText.innerText = '사용 가능한 아이디 입니다.';
-							idConfirmText.style.color = 'green';
-						}else{
-							idConfirmText.innerText = '중복된 아이디 입니다.';
-							idConfirmText.style.color = 'red';
-						}
-					},
-					error: data =>console.log("에러")	
-				});
-			}
-		});
 		
 		
 		

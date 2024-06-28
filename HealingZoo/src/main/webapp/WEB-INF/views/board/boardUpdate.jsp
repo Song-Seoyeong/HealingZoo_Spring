@@ -23,6 +23,7 @@
 		
 		<!-- 글쓰기 폼 -->
 		<form action='${ contextPath }/write.bo' method='post' enctype='multipart/form-data'>
+			<input type='hidden' name='boardNo' value='${ boardNo }'>
 			<div class="container text-center" style='margin-top: 70px;'>
 			  <div class="row">
 			    <div class="col"></div>
@@ -30,50 +31,51 @@
 			    	<br>
 			    	
 			    	<!-- 카테고리별 헤더 -->
-			    	<c:if test="${ category == 'notice' }">
+			    	<c:if test="${ b.cateNo == 100 }">
 				    	<div class='text-start'>
 				    		<input type='hidden' value='100' name='cateNo'/>
-				    		&nbsp;&nbsp;&nbsp;&nbsp;<h3 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;"> 공지사항 남기기</h3>
+				    		&nbsp;&nbsp;&nbsp;&nbsp;<h3 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;"> 공지사항 수정하기</h3>
 				    	</div>
 			    	</c:if>
-			    	<c:if test="${ category == 'book' }">
+			    	<c:if test="${ b.cateNo == 103 }">
 				    	<div class='text-start'>
 				    		<input type='hidden' value='103' name='cateNo'/>
-				    		&nbsp;&nbsp;&nbsp;&nbsp;<h3 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;"> 예약글 남기기</h3>
+				    		&nbsp;&nbsp;&nbsp;&nbsp;<h3 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;"> 예약글 수정하기</h3>
 				    	</div>
 			    	</c:if>
-			    	<c:if test="${ category == 'question' }">
+			    	<c:if test="${ b.cateNo == 101 }">
 				    	<div class='text-start'>
 				    		<input type='hidden' value='101' name='cateNo'/>
-				    		&nbsp;&nbsp;&nbsp;&nbsp;<h3 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;"> 문의사항 남기기</h3>
+				    		&nbsp;&nbsp;&nbsp;&nbsp;<h3 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;"> 문의사항 수정하기</h3>
 				    	</div>
 			    	</c:if>
-			    	<c:if test="${ category == 'review' }">
+			    	<c:if test="${ b.cateNo == 102 }">
 				    	<div class='text-start'>
 				    		<input type='hidden' value='102' name='cateNo'/>
-				    		&nbsp;&nbsp;&nbsp;&nbsp;<h3 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;"> 후기 남기기</h3>
+				    		&nbsp;&nbsp;&nbsp;&nbsp;<h3 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;"> 후기 수정하기</h3>
 				    	</div>
 			    	</c:if>
+			    	<!-- 카테고리별 헤더 -->
 			    	
 			    	<hr>
 			    	<div class='row'>
 			    		<div class='col-1'></div>
 				    	<div  class='col-7 text-center'>
-					    	<input type='text' name='boardTitle' placeholder='제목을 입력해주세요' id='inputBoardTitle'size='50' class='inputBoard' autofocus>
+					    	<input type='text' name='boardTitle' placeholder='제목을 입력해주세요' id='inputBoardTitle' size='50' class='inputBoard' autofocus value='${ b.boardTitle }'>
 					    </div>
 					    <div class='col-3'>
-					    	<input  type='text' name='boardWriterName' placeholder='이름을 입력해주세요' id='inputBoardWriter' size='20'  class='inputBoard' value='${ !empty loginUser ? loginUser.memName : "" }'>
+					    	<input  type='text' name='boardWriterName' placeholder='이름을 입력해주세요' id='inputBoardWriter' size='20'  class='inputBoard' value='${ b.boardWriterName }'>
 						</div>
 						<div class='col-1'></div>
 					</div>
 					<!-- 카테고리별 헤더 -->
 					
 					<!-- 문의/예약글쓰기일시 핸드폰 입력창 -->
-					<c:if test="${ category == 'book' || category == 'question' }">
+					<c:if test="${ b.cateNo == 103 || b.cateNo == 101 }">
 						<div class='row'>
 							<div class='col-1'></div>
 							<div class='col-5 text-start'>
-								<input type='text' name='writerPhone' placeholder='핸드폰 번호를 입력해주세요' id='writerPhone' size='30' class='inputBoard' onchange='checkPhoneReg()' value='${ !empty loginUser ? loginUser.memPhone : "" }' required>
+								<input type='text' name='writerPhone' placeholder='핸드폰 번호를 입력해주세요' id='writerPhone' size='30' class='inputBoard' onchange='checkPhoneReg()' value='${ b.writerPhone }' required>
 							</div>
 							<div class='col-6 text-start' id='phoneConfirm'>(-)를 제외하고 입력해주세요</div>
 						</div>
@@ -89,7 +91,18 @@
 					
 					<br>
 					<div  class='text-center'>
-				    	<textArea id='inputBoardContent' name='boardContent' cols='70' rows="20" style="resize: none;"  class='inputBoard'></textArea>
+				    	<textArea id='inputBoardContent' name='boardContent' cols='70' rows="20" style="resize: none;"  class='inputBoard'>${ b.boarContent }</textArea>
+				    	
+				    	<!-- 기존 사진 영역 -->
+				    	<c:forEach items="${ imgList }" var='img'>
+							<div style='margin: 15px 15px;'>
+								<img alt="${ img.imgName }" src="${ contextPath }/resources/uploadImg/${img.imgRename}" width='60%'>
+								<input type='hidden' name='checkDelete' id='checkDelete' value='none'/>
+								<button type="button" class="btn btn-sm" style='background: #DD5353; color: white;' id='checkDeleteButton'>삭제</button>
+							</div>
+						</c:forEach>
+						<!-- 기존 사진 영역 -->
+						
 					</div>
 					
 					<div class='row' style='margin:5px;'>
@@ -119,9 +132,11 @@
 		</form>
 			
 		<div class='margin'></div>
+		
 	<!-- 푸터 -->
 	<%@ include file='../common/footer.jsp' %>
 	<!-- /푸터 -->
+	
 	
 	<script>
 		// 핸드폰 번호 입력확인
