@@ -25,50 +25,43 @@
 	<!-- /헤더 -->
 	
 	<!-- 여백용 -->
-	<div style='margin: 3%'></div> 
-	<div id='loginImg'>
-		<br>
-		<p>로그인</p>
-	</div>
-	
+	<div style='margin: 3%'></div>
 	<!-- 여백용 -->
 	<div style='margin: 5%'></div>
 	
-	<!-- 로그인폼 -->
-	<form action='${ contextPath }/login.me' method='post' id='loginForm'>
+	
+	<div id='loginImg'>
+		<br>
+		<p>${ category == 102 ? '예약' : '문의'} 게시글 비밀번호 확인</p>
+	</div>
+	
+	
+	<!-- 비밀번호 확인 폼 -->
+	<form action='${ contextPath }/boardView.bo' method='post' id='pwdForm'>
+		<input type='hidden' name='bId' value='${ bId }'>
+		<input type='hidden' name='page' value='${ page }'>
 		<div class="container-fluid">
 		  <div class="row">
 		    <div class="col"></div>
 		    <div class="col-5">
-		    	<div class="row g-3 align-items-center">
-				  <div class="col-3">
-				    <label for="inputId" class="form-label loginName">아이디</label>
-				  </div>
-				  <div class="col-7">
-				    <input type="text" class="form-control-lg" id="id" name='memId' placeholder="아이디를 입력하세요" size='30' required>
-				  </div>
-				  <div class="col-auto">
-				  </div>
-				</div>
 				<div style='margin: 3%'></div>
 				<div class="row g-3 align-items-center">
 				  <div class="col-3">
 				    <label for="inputPassword" class="form-label loginName">비밀번호</label>
 				  </div>
 				  <div class="col-7">
-				    <input type="password" id="pwd" class="form-control-lg" name='memPwd' aria-describedby="passwordHelpInline" placeholder="비밀번호를 입력하세요" size='30' required>
+				    <input type="password" id="pwd" class="form-control-lg" name='pwd' aria-describedby="passwordHelpInline" placeholder="비밀번호를 입력하세요" size='30' required>
 				  </div>
 				  <div class="col-auto">
 				  </div>
 				</div>
 				<div style='margin: 6%'></div>
 				
-				
 				<div class="row g-3 align-items-center">
 				  <div class="col-5">
 				  </div>
 				  <div class="col-2">
-				  	<button onclick='doLogin();' class="btn" style='background: #60A869; color: white;'>로그인</button>
+				  	<button type='button' id='pwdConfirm' class="btn" style='background: #60A869; color: white;'>확인</button>
 				  </div>
 				  <div class="col-5">
 				  </div>
@@ -86,28 +79,17 @@
 	<!-- /푸터 -->	
 	
 	<script>
-		const doLogin = ()=>{
-			const id = document.getElementById('id');
+		document.getElementById("pwdConfirm").addEventListener("click", () =>{
 			const pwd = document.getElementById('pwd');
-			if(id.value.trim() == ''){
-				alert('아이디를 입력하세요.');
-				id.focus();
-			}else if(pwd.value.trim() == ''){
-				alert('비밀번호를 입력하세요.');
-				pwd.focus();
+			const pwdForm = document.getElementById('pwdForm');
+			
+			if(pwd.value == ''){
+				alert('비밀번호를 확인해주세요');
+				pwd.focus;	
 			}else{
-				document.getElementById('loginForm').submit();
+				pwdForm.submit();
 			}
-		}	
-		
-		const inputIdPwd = document.getElementsByTagName('input');
-		for(const input of inputIdPwd){
-			input.addEventListener('keyup', e =>{
-				if(e.key == 'Enter'){
-					doLogin();
-				}
-			})
-		}
+		})
 	</script>
 </body>
 </html>

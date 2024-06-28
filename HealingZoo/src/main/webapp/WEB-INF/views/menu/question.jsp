@@ -143,15 +143,15 @@
 			const parent = td.parentElement;
 			
 			td.addEventListener('click', ()=>{
-				const boardNo = parent.children[1].innerText;
-				location.href = '${contextPath}/views/cs/csBoardDetail.jsp';
-				//?category=question
+				const boardNo = parent.children[0].innerText;
+				location.href = '${contextPath}/pwdConfirm.bo?bId=' + boardNo + "&page=" + ${pi.currentPage} + "&category=101";
 			})
 		}
 		
 		// 글쓰기 페이지 이동
 		document.getElementById('writeBoard').addEventListener('click', () =>{
 			location.href = '${contextPath}/writeView.bo?category=' + 'question';
+														//?category=question
 		})
 	</script>
 </body>
