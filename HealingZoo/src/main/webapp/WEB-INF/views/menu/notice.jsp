@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix='c' uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +15,7 @@
 		width: 200px;
 	}
 </style>
-<title>Insert title here</title>
+<title>공지사항</title>
 </head>
 <body>
 	<!-- 헤더 -->
@@ -56,107 +57,70 @@
 			    </tr>
 			  </thead>
 			  <tbody class='table-group-divider'>
-			  	<tr>
-			      <td scope="row">10</td>
-			      <td>새소식</td>
-			      <td id='noticeTitle'>새로운 가족 탄생adfafdfadfadfadfadfadadfafadfs</td>
-			      <td>관리자</td>
-			      <td>24/05/24</td>
-			      <td>2131</td>
-			    </tr>
-			    <tr>
-			      <td scope="row">9</td>
-			      <td>새소식</td>
-			      <td>새로운 가족 탄생</td>
-			      <td>관리자</td>
-			      <td>24/05/24</td>
-			      <td>2131</td>
-			    </tr>
-			    <tr>
-			      <td scope="row">8</td>
-			      <td>새소식</td>
-			      <td>새로운 가족 탄생</td>
-			      <td>관리자</td>
-			      <td>24/05/24</td>
-			      <td>2131</td>
-			    </tr>
-			    <tr>
-			      <td scope="row">7</td>
-			      <td>새소식</td>
-			      <td>새로운 가족 탄생</td>
-			      <td>관리자</td>
-			      <td>24/05/24</td>
-			      <td>2131</td>
-			    </tr>
-			    <tr>
-			      <td scope="row">6</td>
-			      <td>새소식</td>
-			      <td>새로운 가족 탄생</td>
-			      <td>관리자</td>
-			      <td>24/05/24</td>
-			      <td>2131</td>
-			    </tr>
-			    <tr>
-			      <td scope="row">5</td>
-			      <td>새소식</td>
-			      <td>새로운 가족 탄생</td>
-			      <td>관리자</td>
-			      <td>24/05/24</td>
-			      <td>2131</td>
-			    </tr>
-			    <tr>
-			      <td scope="row">5</td>
-			      <td>새소식</td>
-			      <td>새로운 가족 탄생</td>
-			      <td>관리자</td>
-			      <td>24/05/24</td>
-			      <td>2131</td>
-			    </tr>
-			    <tr>
-			      <td scope="row">4</td>
-			      <td>새소식</td>
-				  <td>새로운 가족 탄생</td>
-			      <td>관리자</td>
-			      <td>24/05/24</td>
-			      <td>2131</td>
-			    </tr>
-			    <tr>
-			      <td scope="row">3</td>
-			      <td>새소식</td>
-			      <td>새로운 가족 탄생</td>
-			      <td>관리자</td>
-			      <td>24/05/24</td>
-			      <td>2131</td>
-			    </tr>
-			    <tr>
-			      <td scope="row">2</td>
-			      <td>새소식</td>
-			      <td>새로운 가족 탄생</td>
-			      <td>관리자</td>
-			      <td>24/05/24</td>
-			      <td>2131</td>
-			    </tr>
-			    <tr>
-			      <td scope="row">1</td>
-			      <td>새소식</td>
-			      <td>새로운 가족 탄생</td>
-			      <td>관리자</td>
-			      <td>24/05/24</td>
-			      <td>2131</td>
-			    </tr>
+			  	<c:forEach items="${ noList }" var='no'>
+				  	<tr>
+				      <td scope="row">${ no.boardNo }</td>
+				      <c:if test="${ no.noSubject == 'EVENT' }">
+				     	 <td>이벤트</td>
+				      </c:if>
+				      <c:if test="${ no.noSubject == 'NEWS' }">
+				     	 <td>새소식</td>
+				      </c:if>
+				      <c:if test="${ no.noSubject == 'NOTICE' }">
+				     	 <td>공지</td>
+				      </c:if>
+				      <td id='noticeTitle'>${ no.boardTitle }</td>
+				      <td>${ no.boardWriterName }</td>
+				      <td>${ no.boardModifyDate }</td>
+				      <td>${ no.boardCount }</td>
+				    </tr>
+			    </c:forEach>
 			  </tbody>
 			</table>
-			<div class="container text-center">
-			  <div class="row">
-			    <div class="col"></div>
-			    <div class="col-2">
-			      &lt;&nbsp;&nbsp;1&nbsp;2&nbsp;3&nbsp;4&nbsp;5&nbsp;&nbsp;&gt;
-			    </div>
-			    <div class="col text-end">
-			    	<a href='${ contextPath }/views/common/writeBoard.jsp'><button type="button" class="btn" style='background: #60A869; color: white;'>글쓰기</button></a>
-			    </div>
-			  </div>
-			</div>
+			
+			<!-- 페이지네이션 -->
+				<div class="container" style='margin-top: 30px;'>
+					<div class="row">
+						<div class="col-3"></div>
+						<div class="col-6">
+							<nav aria-label="Standard pagination">
+								<ul class="pagination justify-content-center">
+									<li class="page-item">
+										<c:url var='goBack' value="${ loc }">
+											<c:param name='page' value="${ pi.currentPage -1 }" />
+										</c:url>
+										<a class="page-link" href="${ goBack }" aria-label="Previous">
+											<span aria-hidden="true" style='color: black;'>&laquo;</span>
+										</a>
+									</li>
+									<c:forEach begin="${ pi.startPage }" end="${ pi.endPage }" var="p">
+										<c:url var='goNum' value='${ loc }'>
+											<c:param name="page" value="${ p }" />
+										</c:url>
+										<li class="page-item">
+											<a class="page-link" href="${ goNum }" style='color: black;'>${ p }</a>
+										</li>
+									</c:forEach>
+									<li class="page-item">
+										<c:url var='goNext' value='${ loc }'>
+											<c:param name="page" value="${ pi.currentPage +1 }" />
+										</c:url>
+										<a class="page-link" href="${ goNext }" aria-label="Next">
+											<span aria-hidden="true" style='color: black;'>&raquo;</span>
+										</a>
+									</li>
+								</ul>
+							</nav>
+						</div>
+						<c:if test="${ loginUser.memGrade == 'MANAGER' || loginUser.memGrade == 'WORKER' }">
+							<div class="col-3 text-end">
+								<button id='writeBoard' class="btn" style='background: #60A869; color: white;'>글쓰기</button>
+							</div>
+						</c:if>
+					</div>
+				</div>
+				<!-- 페이지네이션 -->	
+
 			<div class="container text-center" style='margin: 1%;'>
 			  <div class="row">
 			    <div class="col"></div>
@@ -169,7 +133,7 @@
 					&nbsp;&nbsp;
 			    	<input type='text' size='30' placeholder='제목/핸드폰번호로 검색이 가능합니다'/>
 			    	&nbsp;&nbsp;
-			    	<img src="${contextPath }/image/search.svg" id='searchIcon'>
+			    	<img src="resources/image/search.svg" id='searchIcon'>
 			    </div>
 			    <div class="col"></div>
 			  </div>
@@ -185,16 +149,24 @@
 	<!-- /푸터 -->
 	
 	<script>
-		window.onload = () =>{
-			const tds = document.querySelectorAll('td');
-			for(const td of tds){
-				const parent = td.parentElement;
-				td.addEventListener('click', ()=>{
-					const boardNo = parent.children[1].innerText;
-					location.href = '${contextPath}/views/common/boardDetail.jsp';
-					//?category=question
-				})
-			}
+		// 상세 글 페이지 이동
+		const tds = document.querySelectorAll('td');
+		for(const td of tds){
+			const parent = td.parentElement;
+			
+			td.addEventListener('click', ()=>{
+				
+				const boardNo = parent.children[0].innerText;
+				location.href = '${contextPath}/boardView.bo?bId=' + boardNo + "&page=" + ${pi.currentPage} + "&category=100";
+			})
+		}
+		
+		// 글쓰기 페이지 이동
+		const writeBoard = document.getElementById('writeBoard')
+		if(writeBoard != null){
+			writeBoard.addEventListener('click', () =>{
+				location.href = '${contextPath}/writeView.bo?category=' + 'notice';
+			})
 		}
 	</script>
 </body>

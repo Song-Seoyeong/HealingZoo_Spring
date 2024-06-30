@@ -47,7 +47,7 @@ public class MenuController {
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 		
 		ArrayList<Board> questionList = bService.selectAllQueBookList(pi, 101);
-		if(questionList != null) {
+		if(!questionList.isEmpty()) {
 			
 			// 작성자 이름 * 처리
 			for(Board b : questionList) {
@@ -70,7 +70,7 @@ public class MenuController {
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 		
 		ArrayList<Board> bookList = bService.selectAllQueBookList(pi, 103);
-		if(bookList != null) {
+		if(!bookList.isEmpty()) {
 			for(Board b : bookList) {
 				String writerName = b.getBoardWriterName();
 				writerName = writerName.charAt(0) + "*" + writerName.charAt(writerName.length() - 1);
@@ -85,11 +85,43 @@ public class MenuController {
 		}
 	}
 	
+	// 공지사항 게시판 이동
+	@RequestMapping("notice.menu")
+	public String selectNoticeList(@RequestParam(value="page", defaultValue="1") Integer currentPage, Model model) {
+		int listCount = bService.getListCount(100);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+		
+		
+		ArrayList<Board> noticeList = bService.selectNoBoardList(pi, 100);
+		for(Board b : noticeList) {
+			b.setBoardWriterName("관리자");
+		}
+		if(!noticeList.isEmpty()) {
+			model.addAttribute("noList", noticeList);
+			model.addAttribute("pi", pi);
+			return "notice";
+		}else {
+			throw new BoardException("게시판 리스트를 불러오는데 실패했습니다.");
+		}
+	}
 	
-	
-	
-	
-	
+	// 후기 게시판 이동
+		@RequestMapping("review.menu")
+		public String selectReviewList(@RequestParam(value="page", defaultValue="1") Integer currentPage, Model model) {
+			int listCount = bService.getListCount(102);
+			PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+			
+			
+			ArrayList<Board> reviewList = bService.selectReBoardList(pi, 102);
+
+			if(!reviewList.isEmpty()) {
+				model.addAttribute("reList", reviewList);
+				model.addAttribute("pi", pi);
+				return "review";
+			}else {
+				throw new BoardException("게시판 리스트를 불러오는데 실패했습니다.");
+			}
+		}
 	
 	
 	

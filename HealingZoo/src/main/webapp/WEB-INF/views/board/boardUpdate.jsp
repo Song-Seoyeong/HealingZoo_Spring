@@ -5,13 +5,20 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>글 수정 페이지</title>
 <style>
 	.inputBoard{
 		border-radius: 3px;
 		border-shadow: none;
 		border: 1px solid #B5B5B5;
 		margin-bottom: 10px;
+	}
+	#boardContent{
+		border-radius: 3px;
+		border-shadow: none;
+		margin-bottom: 10px;
+		resize: none;
+		border: 1px solid white;
 	}
 </style>
 </head>
@@ -22,8 +29,9 @@
 	<!-- /헤더 -->
 		
 		<!-- 글쓰기 폼 -->
-		<form action='${ contextPath }/write.bo' method='post' enctype='multipart/form-data'>
-			<input type='hidden' name='boardNo' value='${ boardNo }'>
+		<form action='${ contextPath }/updateBoard.bo' method='post' enctype='multipart/form-data'>
+			<input type='hidden' name='boardNo' value='${ b.boardNo }'>
+			<input type='hidden' name='page' value='${ page }'>
 			<div class="container text-center" style='margin-top: 70px;'>
 			  <div class="row">
 			    <div class="col"></div>
@@ -90,15 +98,15 @@
 					<!-- 문의/예약글쓰기일시 핸드폰 입력창 -->
 					
 					<br>
-					<div  class='text-center'>
-				    	<textArea id='inputBoardContent' name='boardContent' cols='70' rows="20" style="resize: none;"  class='inputBoard'>${ b.boarContent }</textArea>
+					<div  class='text-center' style='border: 1px solid #B5B5B5;'>
+				    	<textArea id='boardContent' name='boardContent' cols='70' rows="10">${ b.boardContent }</textArea>
 				    	
 				    	<!-- 기존 사진 영역 -->
 				    	<c:forEach items="${ imgList }" var='img'>
 							<div style='margin: 15px 15px;'>
 								<img alt="${ img.imgName }" src="${ contextPath }/resources/uploadImg/${img.imgRename}" width='60%'>
-								<input type='hidden' name='checkDelete' id='checkDelete' value='none'/>
-								<button type="button" class="btn btn-sm" style='background: #DD5353; color: white;' id='checkDeleteButton'>삭제</button>
+								<input type='hidden' name='checkDelete' value='none'/>
+								<button type="button" class="btn btn-sm deleteImg" style='background: #DD5353; color: white;' id='img-${ img.imgRename }'>삭제</button>
 							</div>
 						</c:forEach>
 						<!-- 기존 사진 영역 -->
@@ -180,6 +188,48 @@
 			
 			fileArea.append(newFileArea);
 		})
+		
+		// 기존 이미지 삭제 버튼
+		const btns = document.getElementsByClassName('deleteImg');
+		for(btn of btns){
+			btn.addEventListener('click', function(){
+				const hidden = this.previousElementSibling;
+				const img = hidden.previousElementSibling;
+				
+				if(hidden.value == 'none'){
+					this.innerText = '취소';
+					this.style.background = '#60A869';
+					hidden.value = this.id.split('-')[1];
+					img.style.opacity = '0.5'
+				}else{
+					this.innerText = '삭제';
+					this.style.background = '#DD5353';
+					hidden.value = 'none';
+					img.style.opacity = '1';
+				}
+			})
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	</script>
 </body>
 </html>

@@ -24,7 +24,26 @@ public interface BoardService {
 
 	int deleteBoard(int boardNo);
 
-	int deleteImg(int boardNo);
+	int updateImgStatus(int boardNo);
 
+	int deleteImg(ArrayList<String> deleteImg);
+
+	int updateBoard(Board b);
+
+	int updateQuBo(Board b);
+	
+	ArrayList<Board> selectNoBoardList(PageInfo pi, int i);
+
+	ArrayList<Board> selectReBoardList(PageInfo pi, int i);
+	
+	ArrayList<Board> selectBoardList(PageInfo pi, int i);
+
+	Board selectReBoard(int bId, Integer userNo);
+	
+	Board selectNoBoard(int bId, Integer userNo);
+
+	ArrayList<Board> selectQuBoardList(PageInfo pi, int i);
+
+	ArrayList<Board> selectReMenuList(PageInfo pi, int i);
 
 }

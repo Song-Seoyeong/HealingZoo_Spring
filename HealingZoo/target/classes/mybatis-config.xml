@@ -10,8 +10,10 @@
 	<typeAliases>
 		<typeAlias type="com.semiproject.healingzoo.member.model.vo.Member" alias="Member"/>
 		<typeAlias type="com.semiproject.healingzoo.board.model.vo.Board" alias="Board"/>	
-		<typeAlias type="com.semiproject.healingzoo.board.model.vo.Image" alias='Image'/>	
+		<typeAlias type="com.semiproject.healingzoo.board.model.vo.Image" alias='Image'/>
+		<typeAlias type="com.semiproject.healingzoo.board.model.vo.Reply" alias="Reply"/>	
 	</typeAliases>
+	
 	<mappers>
 		<mapper resource='mappers/member-mapper.xml'/>
 		<mapper resource='mappers/board-mapper.xml'/>

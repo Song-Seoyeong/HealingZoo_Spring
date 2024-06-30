@@ -33,4 +33,54 @@
 			where mem_id = #{memId}
 	</select>
 
+	<update id="updatePwd">
+		update member
+		 set mem_pwd = #{newPwd}
+		 where mem_id = #{id}
+	</update>
+	
+	<select id="selectBoard" resultMap="selBoard">
+		select *
+		from board
+			join member using(board_writer_name = mem_name)
+		where board_active = 'Y' and cate_no = #{i}
+		order by create_date desc
+	</select>
+	
+	
+	<resultMap type="Board" id="selBoard">
+		<result column="CREATE_DATE" property="boardCreateDate"/>
+	</resultMap>
+	
+	<select id="getListCount" resultType="_int">
+		select count(*)
+		from board
+		where board_active='Y' and board_writer_no = #{memNo}
+	</select>
+	
+	<select id="myBoardList" resultMap="selBoard">
+		select cate_no, board_title, board_writer_name, create_date
+		from board
+		where board_active='Y' and board_writer_no = #{memNo}
+	</select>
+	
+	<select id="getListCommentCount" resultType="_int">
+		select count(*)
+		from reply
+		where mem_no = #{memNo}
+	</select>
+	
+	<select id="myCommentList" resultMap="selMyComment">
+		select *
+		from reply
+		where mem_no = #{memNo}
+	</select>
+	
+	<resultMap type="Reply" id="selMyComment">
+		<result column="RE_CONTENT" property="reContent"/>
+		<result column="MEM_NO" property="memNo"/>
+	</resultMap>
+	
+	
+	
 </mapper>

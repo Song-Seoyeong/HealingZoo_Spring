@@ -14,7 +14,7 @@
 	cursor: pointer;
 }
 </style>
-<title>Insert title here</title>
+<title>문의 게시판</title>
 </head>
 <body>
 	<!-- 헤더 -->
@@ -150,7 +150,7 @@
 		
 		// 글쓰기 페이지 이동
 		document.getElementById('writeBoard').addEventListener('click', () =>{
-			location.href = '${contextPath}/writeView.bo?category=' + 'question';
+			location.href = '${contextPath}/writeView.bo?category=question';
 														//?category=question
 		})
 	</script>
