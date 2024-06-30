@@ -223,26 +223,24 @@
 
 	<script>
 		// 삭제 버튼 클릭시
-		const deleteBoard = document.getElementById('deleteBoard');
-		if(deleteBoard != null){
-			deleteBoard.addEventListener('click', ()=>{
-				$('#modalChoice').modal('show');
-			})
-		}
+		document.getElementById('deleteBoard').addEventListener('click', ()=>{
+			$('#modalChoice').modal('show');
+		})
 		
 		// 목록 버튼 클릭시
 		document.getElementById('goToBack').addEventListener('click', ()=>{
 			if(${b.cateNo} == 100){
-				location.href = '${contextPath}/notice.menu?page=' + ${ page };
+				location.href = '${contextPath}/notice.admin?page=' + ${ page };
 			}else if(${b.cateNo} == 101){
-				location.href = '${contextPath}/question.menu?page=' + ${ page };
+				location.href = '${contextPath}/question.admin?page=' + ${ page };
 			}else if(${b.cateNo} == 102){
-				location.href = '${contextPath}/review.menu?page=' + ${ page };
+				location.href = '${contextPath}/review.admin?page=' + ${ page };
 			}else{
-				location.href = '${contextPath}/book.menu?page=' + ${ page };
+				location.href = '${contextPath}/book.admin?page=' + ${ page };
 			}
 		})
 		
+	
 		// 삭제 버튼 '예'클릭시
 		document.getElementById('delete').addEventListener('click', () =>{
 			let category;

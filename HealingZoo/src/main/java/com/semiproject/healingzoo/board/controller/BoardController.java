@@ -41,7 +41,6 @@ public class BoardController {
 							 @RequestParam("file") ArrayList<MultipartFile> imgList,
 							 HttpServletRequest request,
 							 Model model) {
-		
 		ArrayList<Image> list = new ArrayList<Image>();
 		
 		for(MultipartFile img : imgList) {
@@ -66,8 +65,7 @@ public class BoardController {
 		if(b.getCateNo() == 100) {
 			
 		}else if(b.getCateNo() == 101 || b.getCateNo() == 103) {
-			int result = bService.insertQuBo(b);
-			System.out.println(result);
+			bService.insertQuBo(b);
 		}
 		
 		//이미지가 있다면 DB 넣기
@@ -78,12 +76,12 @@ public class BoardController {
 			resultImg = bService.insertImg(list);
 		}
 		
+		
+		
 		if(resultBoard + resultImg == 1 + list.size()) {
-			ArrayList<Image> pringList = bService.selectImg(b.getBoardNo());
 			
-			model.addAttribute("b", b);
-			model.addAttribute("imgList", pringList);
 			model.addAttribute("bId", b.getBoardNo());
+			model.addAttribute("category", b.getCateNo());
 			model.addAttribute("page", 1);
 			return "redirect:boardView.bo";
 		}else {
@@ -151,6 +149,7 @@ public class BoardController {
 	@RequestMapping("boardView.bo")
 	public String selectBoard(@RequestParam("bId") int bId,
 							  @RequestParam("page") int page,
+							  @RequestParam("category") int category,
 							  HttpSession session,
 							  Model model) {
 		Member loginUser = (Member)session.getAttribute("loginUser");
@@ -160,7 +159,17 @@ public class BoardController {
 			userNo = (Integer)loginUser.getMemNo();
 		}
 		
-		Board b = bService.selectBoard(bId, userNo);
+		// 카테고리별 상세 글 불러오는 메소드 나뉨
+		Board b = null;
+		
+		if(category == 100) {
+			b = bService.selectNoBoard(bId, userNo);
+		}else if(category == 101 || category == 103){
+			b = bService.selectBoard(bId, userNo);
+		}else {
+			b = bService.selectReBoard(bId, userNo);
+		}
+		
 		ArrayList<Image> imgList = bService.selectImg(bId);
 		
 		if(b.getCateNo() == 100) {
@@ -184,7 +193,7 @@ public class BoardController {
 							  @RequestParam("list") int listSize,
 							  @RequestParam("category") String category) {
 		int deleteBoardResult = bService.deleteBoard(boardNo);
-		int deleteImgResult = bService.deleteImg(boardNo);
+		int deleteImgResult = bService.updateImgStatus(boardNo);
 		
 		if(deleteBoardResult + deleteImgResult == 1 + listSize) {
 			return "redirect:" + category + ".menu";
@@ -195,7 +204,7 @@ public class BoardController {
 	
 	// 게시글 수정 페이지 이동
 	@RequestMapping("updateView.bo")
-	public String updateBoard(@ModelAttribute Board b,
+	public String updateView(@ModelAttribute Board b,
 							  @RequestParam("page") int page,
 							  Model model) {
 		b = bService.selectBoard(b.getBoardNo(), null);
@@ -208,7 +217,84 @@ public class BoardController {
 		return "boardUpdate";
 	}
 	
+	// 게시글 수정
+	@RequestMapping("updateBoard.bo")
+	public String updateBoard(@ModelAttribute Board b,
+							  @RequestParam(value="checkDelete", defaultValue="none") ArrayList<String> checkDeletes,
+							  @RequestParam("file") ArrayList<MultipartFile> imgs,
+							  @RequestParam("page") int page,
+							  HttpServletRequest request,
+							  Model model) {
+		// 추가 이미지 등록
+		ArrayList<Image> imgList = new ArrayList<Image>();
+		
+		for(MultipartFile img : imgs) {
+			if(!img.isEmpty() && img != null) {
+				String[] returnArr = saveImg(img, request);
+				
+				Image a = new Image();
+				a.setImgName(img.getOriginalFilename());
+				a.setImgRename(returnArr[1]);
+				a.setImgPath(returnArr[1]);
+				a.setImgRefType("BOARD");
+				a.setImgRefNum(b.getBoardNo());
+				
+				imgList.add(a);
+			}
+		}
+		
+		
+		// 기존 이미지 삭제
+		ArrayList<String> deleteImg = new ArrayList<String>();
 	
+		if(checkDeletes != null) {
+			for(String checkDelete : checkDeletes) {
+				if(!checkDelete.equals("none")) {
+					deleteImg.add(checkDelete);
+				}
+			}
+		}
+		System.out.println(deleteImg);
+		
+		int deleteImgResult = 0;
+		if(!deleteImg.isEmpty()) {
+			deleteImgResult = bService.deleteImg(deleteImg);
+			
+			if(deleteImgResult > 0) {
+				for(String deleteImgRename : deleteImg) {
+					delete(deleteImgRename, request);
+				}
+			}else {
+				throw new BoardException("게시판 수정에 실패했습니다.");
+				
+			}
+		}
+		
+		// 문의/예약 글일 경우
+		if(b.getCateNo() == 101 || b.getCateNo() == 103) {
+			int quBoBoardResult = bService.updateQuBo(b);
+			if(quBoBoardResult < 0) {
+				throw new BoardException("게시판 수정에 실패했습니다.");
+			}
+		}
+		
+		
+		int boardResult = bService.updateBoard(b);
+		
+		// 추가 이미지가 있을 때만
+		int imgResult = 0;
+		if(!imgList.isEmpty()) {
+			imgResult = bService.insertImg(imgList);
+		}
+		if(boardResult + imgResult == 1 + imgList.size()) {
+			model.addAttribute("bId", b.getBoardNo());
+			model.addAttribute("page", page);
+			
+			return "redirect:boardView.bo";
+		}else {
+			throw new BoardException("게시판 수정에 실패했습니다.");
+		}
+	}
 	
 	
 	

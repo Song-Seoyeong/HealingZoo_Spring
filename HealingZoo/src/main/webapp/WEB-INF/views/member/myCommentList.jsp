@@ -36,7 +36,7 @@
 	}
 	
 	
-	#delete_button{ background-color: #DD5353; width: 80px; border: none;}
+	#delete_button{ background-color: #DD5353; width: 80px; height:35px; border: none;}
 	#write_button{ background-color: #65B741; width: 80px; border: none; margin-right: 5px;}
 	
 	.pagination-container {
@@ -71,73 +71,49 @@
 		    </tr>
 		  </thead>
 		  <tbody class="table-group-divider">
-		    <tr>
-		    	<td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-				<td scope="row">맞습니다</td>
-				<td>동물원이 너무 좋아요</td>
-			</tr>
-		    <tr>
-		    	<td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-				<td scope="row">신청합니다</td>
-				<td>이벤트입니다</td>
-			</tr>
-		    <tr>
-		    	<td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-				<td scope="row">서현규 입니다</td>
-				<td>소개 이벤트입니다</td>
-			</tr>
-		    <tr>
-		    	<td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-				<td scope="row">4</td>
-				<td>Mark</td>
-			</tr>
-		    <tr>
-		    	<td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-				<td scope="row">5</td>
-				<td>Mark</td>
-			</tr>
-		    <tr>
-		    	<td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-				<td scope="row">6</td>
-				<td>Mark</td>
-			</tr>
-		    <tr>
-		    	<td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-				<td scope="row">7</td>
-				<td>Mark</td>
-			</tr>
-		    <tr>
-		    	<td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-				<td scope="row">8</td>
-				<td>Mark</td>
-			</tr>
-		    <tr>
-		    	<td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-				<td scope="row">9</td>
-				<td>Mark</td>
-			</tr>
-		    <tr>
-		    	<td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-				<td scope="row">10</td>
-				<td>Mark</td>
-			</tr>
+		    <c:forEach items="${ list }" var="list">
+			    <tr>
+			    	<td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
+					<td scope="row">${ list.reContent }</td>
+					<td>${ list.boardNo }</td>
+				</tr>
+			</c:forEach>
 		  </tbody>
 		</table>
-		<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+		<div class="d-grid gap-2 d-md-flex justify-content-md-end" >
+			<!-- 페이지네이션 -->
+			<div class="container">
+			   <nav aria-label="Standard pagination" >
+	        	<ul class="pagination justify-content-center">
+		            <li class="page-item" >
+		            	<c:url var="goBack" value="${loc}">
+		            		<c:param name="oage" value="${pi.currentPage - 1}"></c:param>
+		            	</c:url> <!-- loc : 현재 url -->
+		            	<a class="page-link" href="${goBack}" aria-label="Previous" style="color:black;">
+		            		<span aria-hidden="true">&laquo;</span>
+		              	</a>
+		            </li>
+					<c:forEach begin="${pi.startPage}" end="${pi.endPage}" var="p">
+						<c:url var="goNum" value="${loc}">
+							<c:param name="page" value="${p}"/>
+						</c:url>	            
+		            	<li class="page-item"><a class="page-link" href="${ goNum }" style="color:black;">${p}</a></li>
+		            </c:forEach>
+		            <li class="page-item">
+		            	<c:url var="goNext" value="${loc}">
+		            		<c:param name="page" value="${pi.currentPage + 1}"/>
+		            	</c:url>
+		            	<a class="page-link" href="${ goNext }" aria-label="Next" style="color:black;">
+		            		<span aria-hidden="true">&raquo;</span>
+		            	</a>
+		            </li>
+		    	</ul>
+	        	</nav>
+			</div>	
+		
 			<button class="btn btn-primary" type="button" id="delete_button">삭제</button>
 		</div>
-		<!-- 페이지네이션 -->>
-		<div class="container">
-		    <div class="pagination-container" style="margin-bottom: 20px;">
-		      <div class="prev-button" style="padding:10px;">&lt;</div>
-		      <div class="number-button-wrapper"><span class="number-button">1</span></div>
-		      <div class="number-button-wrapper"><span class="number-button">2</span></div>
-		      <div class="number-button-wrapper"><span class="number-button">3</span></div>
-		      <div class="number-button-wrapper"><span class="number-button">4</span></div>
-		      <div class="number-button-wrapper"><span class="number-button">5</span></div>
-		      <div class="next-button" style="padding:10px;">&gt;</div>
-		    </div>
-		</div>
+		
 		
 		<!-- 검색 -->
 		<div class="row justify-content-center" style="margin-bottom: 100px;">

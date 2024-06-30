@@ -11,7 +11,7 @@
 	#community{font-weight: bold;}
 	#communitySub{visibility: visible;}
 </style>
-<title>Insert title here</title>
+<title>예약 게시판</title>
 </head>
 <body>
 	<!-- 헤더 -->

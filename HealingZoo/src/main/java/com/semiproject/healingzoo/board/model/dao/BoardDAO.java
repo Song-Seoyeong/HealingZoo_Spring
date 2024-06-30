@@ -63,8 +63,68 @@ public class BoardDAO {
 	}
 
 
-	public int deleteImg(SqlSession sqlSession, int boardNo) {
-		return sqlSession.update("boardMapper.deleteImg", boardNo);
+	public int updateImgStatus(SqlSession sqlSession, int boardNo) {
+		return sqlSession.update("boardMapper.updateImgStatus", boardNo);
+	}
+
+
+	public int deleteImg(SqlSession sqlSession, ArrayList<String> deleteImg) {
+		return sqlSession.delete("boardMapper.deleteImg", deleteImg);
+	}
+
+
+	public int updateBoard(SqlSession sqlSession, Board b) {
+		return sqlSession.update("boardMapper.updateBoard", b);
+	}
+
+
+	public int updateQuBo(SqlSession sqlSession, Board b) {
+		return sqlSession.update("boardMapper.updateQuBo", b);
+	}
+	
+	public ArrayList<Board> selectNoBoardList(SqlSession sqlSession, PageInfo pi, int i) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		
+		return (ArrayList)sqlSession.selectList("boardMapper.selectNoBoardList", i, rowBounds);
+	}
+
+	public ArrayList<Board> selectBoardList(SqlSession sqlSession, PageInfo pi, int i) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return (ArrayList)sqlSession.selectList("boardMapper.selectBoardList", i, rowBounds);
+	}
+
+	public ArrayList<Board> selectReBoardList(SqlSession sqlSession, PageInfo pi, int i) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		
+		return (ArrayList)sqlSession.selectList("boardMapper.selectReBoardList", i, rowBounds);
+	}
+
+	public Board seletNoBoard(SqlSession sqlSession, int bId) {
+		return sqlSession.selectOne("boardMapper.selectNoBoard", bId);
+	}
+
+
+	public Board seletReBoard(SqlSession sqlSession, int bId) {
+		return sqlSession.selectOne("boardMapper.selectReBoard", bId);
+	}
+
+
+	public ArrayList<Board> selectQuBoardList(SqlSession sqlSession, PageInfo pi, int i) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		
+		return (ArrayList)sqlSession.selectList("boardMapper.selectAllQueBookList", i, rowBounds);
+	}
+
+
+	public ArrayList<Board> selectReMenuList(SqlSession sqlSession, PageInfo pi, int i) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		
+		return (ArrayList)sqlSession.selectList("boardMapper.selectReBoardList", i, rowBounds);
 	}
 
 }

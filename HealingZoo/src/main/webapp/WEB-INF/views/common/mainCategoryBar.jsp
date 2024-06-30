@@ -60,7 +60,7 @@
 					  <li><a href='${ contextPath }/views/zooInfo/way.jsp'>오시는 길</a></li>
 					  <li><a href='${ contextPath }/views/zooInfo/programInfo.jsp'>프로그램 안내</a></li>
 					  <li><a href='${ contextPath }/views/zooInfo/operating.jsp'>운영시간 및 입장금액 안내</a></li>
-					  <li style='width: 80px;'><a href='${ contextPath }/views/zooInfo/notice.jsp'>공지사항</a></li>
+					  <li style='width: 80px;'><a href='${ contextPath }/notice.menu'>공지사항</a></li>
 					</ul>
 				</div>
 		    </div>
@@ -76,10 +76,10 @@
 		    </div>
 		    <div class="col">
 		    	<br><br>
-				<a href='${ contextPath }/views/community/review.jsp' class='mainCateName' id='community'>커뮤니티</a>
+				<a href='${ contextPath }/review.menu' class='mainCateName' id='community'>커뮤니티</a>
 				<div class="subCategory" id='communitySub'>
 				    <ul>
-					  <li><a href='${ contextPath }/views/community/review.jsp'>후기 게시판</a></li>
+					  <li><a href='${ contextPath }/review.menu'>후기 게시판</a></li>
 					  <li style='width: 120px;'><a href='${ contextPath }/book.menu'>예약 게시판</a></li>
 					</ul>
 				</div>

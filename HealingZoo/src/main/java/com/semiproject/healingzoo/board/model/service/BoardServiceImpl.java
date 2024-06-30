@@ -72,8 +72,81 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public int deleteImg(int boardNo) {
-		return bDAO.deleteImg(sqlSession, boardNo);
+	public int updateImgStatus(int boardNo) {
+		return bDAO.updateImgStatus(sqlSession, boardNo);
 	}
 
+	@Override
+	public int deleteImg(ArrayList<String> deleteImg) {
+		return bDAO.deleteImg(sqlSession, deleteImg);
+	}
+
+	@Override
+	public int updateBoard(Board b) {
+		return bDAO.updateBoard(sqlSession, b);
+	}
+
+	@Override
+	public int updateQuBo(Board b) {
+		return bDAO.updateQuBo(sqlSession, b);
+	}
+	
+	@Override
+	public ArrayList<Board> selectNoBoardList(PageInfo pi, int i) {
+		return bDAO.selectNoBoardList(sqlSession, pi, i);
+	}
+
+	@Override
+	public ArrayList<Board> selectBoardList(PageInfo pi, int i) {
+		return bDAO.selectBoardList(sqlSession, pi, i);
+	}
+
+	@Override
+	public ArrayList<Board> selectReBoardList(PageInfo pi, int i) {
+		return bDAO.selectReBoardList(sqlSession, pi, i);
+	}
+	
+	
+	@Override
+	public Board selectNoBoard(int bId, Integer userNo) {
+		Board b = bDAO.seletNoBoard(sqlSession, bId);
+		
+		if(b != null) {
+			if(userNo != null && userNo != b.getBoardWriterNo()) {
+				int result = bDAO.updateCount(sqlSession, bId);
+				
+				if(result >0) {
+					b.setBoardCount(b.getBoardCount() + 1);
+				}
+			}
+		}
+		return b;
+	}
+
+	@Override
+	public Board selectReBoard(int bId, Integer userNo) {
+		Board b = bDAO.seletReBoard(sqlSession, bId);
+		
+		if(b != null) {
+			if(userNo != null && userNo != b.getBoardWriterNo()) {
+				int result = bDAO.updateCount(sqlSession, bId);
+				
+				if(result >0) {
+					b.setBoardCount(b.getBoardCount() + 1);
+				}
+			}
+		}
+		return b;
+	}
+
+	@Override
+	public ArrayList<Board> selectQuBoardList(PageInfo pi, int i) {
+		return bDAO.selectQuBoardList(sqlSession, pi, i);
+	}
+
+	@Override
+	public ArrayList<Board> selectReMenuList(PageInfo pi, int i) {
+		return bDAO.selectReMenuList(sqlSession, pi, i);
+	}
+	
 }
