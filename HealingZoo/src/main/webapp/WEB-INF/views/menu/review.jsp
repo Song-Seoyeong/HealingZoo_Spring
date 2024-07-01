@@ -102,9 +102,10 @@
                       <option selected>-----</option>
                       <option value="title">제목</option>
                       <option value="writer">작성자</option>
+                      <option value="content">내용</option>
                     </select>
                     &nbsp;&nbsp;
-                    <input type='text' size='30' placeholder='제목/작성자로 검색이 가능합니다'/>
+                    <input type='text' name='search' size='30' placeholder='제목/작성자/내용으로 검색이 가능합니다'/>
                     &nbsp;&nbsp;
                     <img src="${contextPath}/resources/image/search.svg" id='searchIcon'>
                 </div>
@@ -134,9 +135,19 @@
         }
         
         // 글쓰기 이동
-        document.getElementById('writeButton').addEventListener('click', () =>{
-        	location.href = '${contextPath}/writeView.bo?category=review';
-        });
+        if(document.getElementById('writeButton') != null){
+	        document.getElementById('writeButton').addEventListener('click', () =>{
+	        	location.href = '${contextPath}/writeView.bo?category=review';
+	        });
+        }
+        
+     	// 검색창 검색
+		document.getElementById('searchIcon').addEventListener('click', function(){
+			const condition = this.parentElement.children[0].value;
+			const search = this.parentElement.children[1].value;
+			
+			location.href = "${contextPath}/searchReview.menu?condition=" + condition + "&search=" + search + "&page=" + ${pi.currentPage};
+		})
     </script>
 </body>
 </html>

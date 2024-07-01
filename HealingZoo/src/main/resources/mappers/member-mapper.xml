@@ -1,86 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace='memberMapper'>
-
-	<select id="login" resultMap='memberResult'>
+	<!-- 로그인 -->
+	<select id="login" resultType='Member'>
 		select *
 		from member
 		where MEM_ID = #{memId} and MEM_ACTIVE = 'Y'
 	</select>
+	<!-- 로그인 -->
 	
-	<resultMap type="Member" id="memberResult">
-		<id column="MEM_NO" property="memNo"/>
-		<result column="MEM_ID" property="memId"/>
-		<result column="MEM_PWD" property="memPwd"/>
-		<result column="MEM_NAME" property="memName"/>
-		<result column="MEM_EMAIL" property="memEmail"/>
-		<result column="MEM_PHONE" property="memPhone"/>
-		<result column="ENROLL_DATE" property="enrollDate"/>
-		<result column="UPDATE_DATE" property="updateDate"/>
-		<result column="MEM_ACTIVE" property="memActive"/>
-		<result column="MEM_GRADE" property="memGrade"/>
-		<result column="MEM_INTRO" property="memIntro"/>
-	</resultMap>
-	
+	<!-- 회원가입 -->
 	<insert id='signUp'>
 		insert into member
 			values(seq_mem.nextval, #{memName}, #{memId}, #{memPwd}, #{memEmail}, #{memPhone}, sysdate, sysdate, default, default, #{memIntro})
 	</insert>
+	<!-- 회원가입 -->
 	
+	<!-- id 중복 확인 -->
 	<select id="checkId" resultType='_int'>
 		select count(*)
 			from member
 			where mem_id = #{memId}
 	</select>
-
+	<!-- id 중복 확인 -->
+	
+	<!-- 비밀번호 수정 -->
 	<update id="updatePwd">
 		update member
 		 set mem_pwd = #{newPwd}
 		 where mem_id = #{id}
 	</update>
-	
-	<select id="selectBoard" resultMap="selBoard">
-		select *
-		from board
-			join member using(board_writer_name = mem_name)
-		where board_active = 'Y' and cate_no = #{i}
-		order by create_date desc
-	</select>
-	
+	<!-- 비밀번호 수정 -->
 	
 	<resultMap type="Board" id="selBoard">
 		<result column="CREATE_DATE" property="boardCreateDate"/>
 	</resultMap>
 	
+	<!-- 내 게시글 수 조회 -->
 	<select id="getListCount" resultType="_int">
 		select count(*)
 		from board
 		where board_active='Y' and board_writer_no = #{memNo}
 	</select>
+	<!-- 내 게시글 수 조회 -->
 	
+	<!-- 내 게시글 리스트 조회 -->	
 	<select id="myBoardList" resultMap="selBoard">
 		select cate_no, board_title, board_writer_name, create_date
 		from board
 		where board_active='Y' and board_writer_no = #{memNo}
 	</select>
+	<!-- 내 게시글 리스트 조회 -->	
 	
+	<!-- 내 댓글 수 조회 -->	
 	<select id="getListCommentCount" resultType="_int">
 		select count(*)
 		from reply
 		where mem_no = #{memNo}
 	</select>
+	<!-- 내 댓글 수 조회 -->
 	
+	<!-- 내 댓글 리스트 조회 -->
 	<select id="myCommentList" resultMap="selMyComment">
 		select *
 		from reply
 		where mem_no = #{memNo}
 	</select>
+	<!-- 내 댓글 리스트 조회 -->
 	
 	<resultMap type="Reply" id="selMyComment">
 		<result column="RE_CONTENT" property="reContent"/>
 		<result column="MEM_NO" property="memNo"/>
 	</resultMap>
 	
-	
+	<!-- 아이디 찾기 -->
+	<select id="searchId" resultType='string'>
+		select mem_Id
+		from member
+		where mem_Name = #{memName} and mem_phone = #{memPhone}
+	</select>
+	<!-- 아이디 찾기 -->
 	
 </mapper>

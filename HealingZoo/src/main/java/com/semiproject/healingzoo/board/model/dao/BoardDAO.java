@@ -1,6 +1,7 @@
 package com.semiproject.healingzoo.board.model.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
@@ -126,5 +127,46 @@ public class BoardDAO {
 		
 		return (ArrayList)sqlSession.selectList("boardMapper.selectReBoardList", i, rowBounds);
 	}
+
+
+	public int checkPwdBoard(SqlSession sqlSession, Board b) {
+		return sqlSession.selectOne("boardMapper.checkPwdBoard", b);
+	}
+
+	public int listSubjectCount(SqlSession sqlSession, String noSubject) {
+		return sqlSession.selectOne("boardMapper.listSubjectCount", noSubject);
+	}
+
+	public ArrayList<Board> searchFilter(SqlSession sqlSession, String noSubject, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		
+		return (ArrayList)sqlSession.selectList("boardMapper.searchFilter", noSubject, rowBounds);
+	}
+
+	public int listSearchCount(SqlSession sqlSession, HashMap<String, Object> map) {
+		return sqlSession.selectOne("boardMapper.listSearchCount", map);
+	}
+
+	public ArrayList<Board> searchNoReBoard(SqlSession sqlSession, HashMap<String, Object> map, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		
+		return (ArrayList)sqlSession.selectList("boardMapper.searchNoReBoard", map, rowBounds);
+	}
+
+
+	public int listSearchQuBoCount(SqlSession sqlSession, HashMap<String, Object> map) {
+		return sqlSession.selectOne("boardMapper.listSearchQuBoCount", map);
+	}
+
+
+	public ArrayList<Board> searchQuBoBoard(SqlSession sqlSession, HashMap<String, Object> map, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return (ArrayList)sqlSession.selectList("boardMapper.searchQuBoBoard", map, rowBounds);
+	}
+
+
 
 }

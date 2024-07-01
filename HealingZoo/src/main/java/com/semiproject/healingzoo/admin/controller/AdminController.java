@@ -7,10 +7,10 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.semiproject.healingzoo.board.model.exception.BoardException;
 import com.semiproject.healingzoo.board.model.service.BoardService;
@@ -31,6 +31,7 @@ public class AdminController {
 	// 사이트관리 - 메인 페이지 이동
 	@RequestMapping("mainPage.admin")
 	public String mainPageAdmin() {
+		
 		return "mainPage";
 	}
 	
@@ -213,4 +214,49 @@ public class AdminController {
 				throw new BoardException("게시글을 불러 오는데 실패했습니다.");
 			}
 		}
+		
+		// 메인 배너 링크 + 사진 추가
+		@RequestMapping("insertBanner.admin")
+		public String insertBanner(@RequestParam("bannerLink") ArrayList<String> bannerLinks,
+								   @RequestParam("file") ArrayList<MultipartFile> files) {
+			System.out.println(bannerLinks);
+			return null;
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 }

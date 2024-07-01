@@ -4,6 +4,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -14,17 +15,21 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.semiproject.healingzoo.board.model.exception.BoardException;
 import com.semiproject.healingzoo.board.model.service.BoardService;
 import com.semiproject.healingzoo.board.model.vo.Board;
 import com.semiproject.healingzoo.board.model.vo.Image;
+import com.semiproject.healingzoo.board.model.vo.PageInfo;
+import com.semiproject.healingzoo.common.Pagination;
 import com.semiproject.healingzoo.member.model.vo.Member;
 
 @Controller
 public class BoardController {
 	
+	private static final int String = 0;
 	@Autowired
 	private BoardService bService;
 	
@@ -135,7 +140,7 @@ public class BoardController {
 	@RequestMapping("pwdConfirm.bo")
 	public String pwdConfirm(@RequestParam("bId") int bId,
 							 @RequestParam("page") int page,
-							 @RequestParam("category") String category,
+							 @RequestParam("category") int category,
 							 Model model) {
 		model.addAttribute("category", category);
 		model.addAttribute("bId", bId);
@@ -143,6 +148,23 @@ public class BoardController {
 		return "boardPwdConfirm";
 	}
 	
+	
+	// 예약/문의글 비밀번호 체크
+	@RequestMapping("checkPwd.bo")
+	public String checkPwdBoard(@ModelAttribute Board b,
+								@RequestParam("page") int page,
+								Model model) {
+		int result = bService.checkPwdBoard(b);
+		
+		if(result > 0 ) {
+			model.addAttribute("category", b.getCateNo());
+			model.addAttribute("bId", b.getBoardNo());
+			model.addAttribute("page", page);
+			return "redirect:boardView.bo";
+		}else {
+			throw new BoardException("게시글을 불러올 수 없습니다.");
+		}
+	}
 	
 	
 	// 상세 글 보기 + 조회수 증가
@@ -295,6 +317,15 @@ public class BoardController {
 			throw new BoardException("게시판 수정에 실패했습니다.");
 		}
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

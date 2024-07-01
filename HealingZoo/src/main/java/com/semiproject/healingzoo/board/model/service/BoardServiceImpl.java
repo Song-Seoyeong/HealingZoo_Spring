@@ -1,17 +1,19 @@
 package com.semiproject.healingzoo.board.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 
 import com.semiproject.healingzoo.board.model.dao.BoardDAO;
 import com.semiproject.healingzoo.board.model.vo.Board;
 import com.semiproject.healingzoo.board.model.vo.Image;
 import com.semiproject.healingzoo.board.model.vo.PageInfo;
 
-@Controller
+@Service("bService")
 public class BoardServiceImpl implements BoardService{
 	
 	@Autowired
@@ -148,5 +150,42 @@ public class BoardServiceImpl implements BoardService{
 	public ArrayList<Board> selectReMenuList(PageInfo pi, int i) {
 		return bDAO.selectReMenuList(sqlSession, pi, i);
 	}
+
+	@Override
+	public int checkPwdBoard(Board b) {
+		return bDAO.checkPwdBoard(sqlSession, b);
+	}
+
+	@Override
+	public int listSubjectCount(String noSubject) {
+		return bDAO.listSubjectCount(sqlSession, noSubject);
+	}
+
+	@Override
+	public ArrayList<Board> searchFilter(String noSubject, PageInfo pi) {
+		return bDAO.searchFilter(sqlSession, noSubject, pi);
+	}
+
+
+	@Override
+	public int listSearchCount(HashMap<String, Object> map) {
+		return bDAO.listSearchCount(sqlSession, map);
+	}
+
+	@Override
+	public ArrayList<Board> searchNoReBoard(HashMap<String, Object> map, PageInfo pi) {
+		return bDAO.searchNoReBoard(sqlSession, map, pi);
+	}
+
+	@Override
+	public int listSearchQuBoCount(HashMap<String, Object> map) {
+		return bDAO.listSearchQuBoCount(sqlSession, map);
+	}
+
+	@Override
+	public ArrayList<Board> searchQuBoBoard(HashMap<String, Object> map, PageInfo pi) {
+		return bDAO.searchQuBoBoard(sqlSession, map, pi);
+	}
+
 	
 }

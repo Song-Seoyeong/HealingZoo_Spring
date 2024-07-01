@@ -54,5 +54,9 @@ public class MemberDAO {
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return (ArrayList)sqlSession.selectList("memberMapper.myCommentList",memNo, rowBounds);
 	}
+
+	public String searchId(SqlSession sqlSession, Member m) {
+		return sqlSession.selectOne("memberMapper.searchId", m);
+	}
 	
 }

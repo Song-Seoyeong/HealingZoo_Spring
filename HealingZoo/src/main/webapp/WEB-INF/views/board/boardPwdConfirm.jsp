@@ -37,9 +37,10 @@
 	
 	
 	<!-- 비밀번호 확인 폼 -->
-	<form action='${ contextPath }/boardView.bo' method='post' id='pwdForm'>
-		<input type='hidden' name='bId' value='${ bId }'>
+	<form action='${ contextPath }/checkPwd.bo' method='post' id='pwdForm'>
+		<input type='hidden' name='boardNo' value='${ bId }'>
 		<input type='hidden' name='page' value='${ page }'>
+		<input type='hidden' name='cateNo' value='${ category }'/>
 		<div class="container-fluid">
 		  <div class="row">
 		    <div class="col"></div>
@@ -50,7 +51,7 @@
 				    <label for="inputPassword" class="form-label loginName">비밀번호</label>
 				  </div>
 				  <div class="col-7">
-				    <input type="password" id="pwd" class="form-control-lg" name='pwd' aria-describedby="passwordHelpInline" placeholder="비밀번호를 입력하세요" size='30' required>
+				    <input type="password" id="pwd" class="form-control-lg" name='boPwd' aria-describedby="passwordHelpInline" placeholder="비밀번호를 입력하세요" size='30' required>
 				  </div>
 				  <div class="col-auto">
 				  </div>

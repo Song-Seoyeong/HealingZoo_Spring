@@ -66,5 +66,10 @@ public class MemberServiceImpl implements MemberService {
 	public ArrayList<Reply> selectMyComment(PageInfo pi, int memNo) {
 		return mDAO.selectMyComment(sqlSession, pi, memNo);
 	}
+
+	@Override
+	public String searchId(Member m) {
+		return mDAO.searchId(sqlSession, m);
+	}
 	
 }
