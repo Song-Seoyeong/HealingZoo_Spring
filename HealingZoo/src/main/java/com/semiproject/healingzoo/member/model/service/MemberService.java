@@ -27,4 +27,6 @@ public interface MemberService {
 	ArrayList<Reply> selectMyComment(PageInfo pi, int memNo);
 
 	int getListCommentCount(int memNo);
+
+	String searchId(Member m);
 }

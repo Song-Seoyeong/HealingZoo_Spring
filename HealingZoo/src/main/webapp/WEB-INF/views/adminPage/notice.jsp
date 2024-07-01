@@ -191,6 +191,6 @@ tr {
 														//?category=question
 		})
 	</script>
-	<!— 한 행 모두 클릭 가능하게 —>
+	<!-- 한 행 모두 클릭 가능하게 -->
 </body>
 </html>

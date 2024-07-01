@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>로그인</title>
+<title>비밀번호 찾기</title>
 <style>
 	#loginImg{
 		background: url(resources/image/loginImg.jpg) fixed;
@@ -17,7 +17,6 @@
 	}
 	.loginName{font: 20px bold;}
 	#searchId:hover{cursor:pointer}
-	#searchPwd:hover{cursor:pointer}
 </style>
 </head>
 <body>
@@ -30,21 +29,21 @@
 	<div style='margin: 3%'></div> 
 	<div id='loginImg'>
 		<br>
-		<p>로그인</p>
+		<p>비밀번호 찾기</p>
 	</div>
 	
 	<!-- 여백용 -->
 	<div style='margin: 5%'></div>
 	
 	<!-- 로그인폼 -->
-	<form action='${ contextPath }/login.me' method='post' id='loginForm'>
+	<form action='${ contextPath }/searchPwd.me' method='post' id='searchPwdForm'>
 		<div class="container-fluid">
 		  <div class="row">
 		    <div class="col"></div>
 		    <div class="col-5">
 		    	<div class="row g-3 align-items-center">
 				  <div class="col-3">
-				    <label for="inputId" class="form-label loginName">아이디</label>
+				    <label for="id" class="form-label loginName">아이디</label>
 				  </div>
 				  <div class="col-7">
 				    <input type="text" class="form-control-lg" id="id" name='memId' placeholder="아이디를 입력하세요" size='30' required>
@@ -53,12 +52,23 @@
 				  </div>
 				</div>
 				<div style='margin: 3%'></div>
-				<div class="row g-3 align-items-center">
+		    	<div class="row g-3 align-items-center">
 				  <div class="col-3">
-				    <label for="inputPassword" class="form-label loginName">비밀번호</label>
+				    <label for="name" class="form-label loginName">이름</label>
 				  </div>
 				  <div class="col-7">
-				    <input type="password" id="pwd" class="form-control-lg" name='memPwd' aria-describedby="passwordHelpInline" placeholder="비밀번호를 입력하세요" size='30' required>
+				    <input type="text" class="form-control-lg" id="name" name='memName' placeholder="이름를 입력하세요" size='30' required>
+				  </div>
+				  <div class="col-auto">
+				  </div>
+				</div>
+				<div style='margin: 3%'></div>
+				<div class="row g-3 align-items-center">
+				  <div class="col-3">
+				    <label for="phone" class="form-label loginName">핸드폰 번호</label>
+				  </div>
+				  <div class="col-7">
+				    <input type="text" class="form-control-lg" id="phone" name='memPhone' placeholder="핸드폰 번호를 입력하세요" size='30' required>
 				  </div>
 				  <div class="col-auto">
 				  </div>
@@ -67,17 +77,14 @@
 				
 				
 				<div class="row g-3 align-items-center">
-				  <div class="col-4"></div>
-				  <div class="col-2">
-				  	<button onclick='doLogin();' class="btn" style='background: #60A869; color: white;'>로그인</button>
+				  <div class="col-3"></div>
+				  <div class="col-3">
+				  	<button onclick='doLogin();' class="btn" style='background: #60A869; color: white;'>비밀번호 찾기</button>
 				  </div>
-				  <div class="col-2">
+				  <div class="col-3">
 				  	<label id='searchId'>아이디 찾기</label>
 				  </div>
-				  <div class="col-2">
-				  	<label id='searchPwd'>비밀번호 찾기</label>
-				  </div>
-				  <div class="col-2"></div>
+				  <div class="col-3"></div>
 				</div>
 		    </div>
 		    <div class="col"></div>
@@ -92,24 +99,26 @@
 	<!-- /푸터 -->	
 	
 	<script>
-		// 입력창 비었을 때 알림창
 		const doLogin = ()=>{
 			const id = document.getElementById('id');
-			const pwd = document.getElementById('pwd');
+			const name = document.getElementById('name');
+			const phone = document.getElementById('phone');
 			if(id.value.trim() == ''){
 				alert('아이디를 입력하세요.');
 				id.focus();
-			}else if(pwd.value.trim() == ''){
-				alert('비밀번호를 입력하세요.');
-				pwd.focus();
+			}else if(name.value.trim() == ''){
+				alert('이름를 입력하세요.');
+				name.focus();
+			}else if(phone.value.trim() == ''){
+				alert('핸드폰 번호를 입력하세요.');
+				phone.focus();
 			}else{
-				document.getElementById('loginForm').submit();
+				document.getElementById('searchPwdForm').submit();
 			}
 		}	
 		
-		// 엔터 입력시 폼 제출
-		const inputIdPwd = document.getElementsByTagName('input');
-		for(const input of inputIdPwd){
+		const inputNamePhone = document.getElementsByTagName('input');
+		for(const input of inputNamePhone){
 			input.addEventListener('keyup', e =>{
 				if(e.key == 'Enter'){
 					doLogin();
@@ -117,14 +126,8 @@
 			})
 		}
 		
-		// 아이디 찾기 창 이동
 		document.getElementById('searchId').addEventListener('click', () =>{
 			location.href = '${contextPath}/searchIdView.me';
-		})
-		
-		// 비밀번호 찾기 창 이동
-		document.getElementById('searchPwd').addEventListener('click', () =>{
-			location.href = '${contextPath}/searchPwdView.me';
 		})
 	</script>
 </body>

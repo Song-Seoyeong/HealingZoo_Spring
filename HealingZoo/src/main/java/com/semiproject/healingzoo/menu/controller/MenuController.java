@@ -1,6 +1,7 @@
 package com.semiproject.healingzoo.menu.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,7 +48,7 @@ public class MenuController {
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 		
 		ArrayList<Board> questionList = bService.selectAllQueBookList(pi, 101);
-		if(!questionList.isEmpty()) {
+		if(questionList != null) {
 			
 			// 작성자 이름 * 처리
 			for(Board b : questionList) {
@@ -70,7 +71,7 @@ public class MenuController {
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 		
 		ArrayList<Board> bookList = bService.selectAllQueBookList(pi, 103);
-		if(!bookList.isEmpty()) {
+		if(bookList != null) {
 			for(Board b : bookList) {
 				String writerName = b.getBoardWriterName();
 				writerName = writerName.charAt(0) + "*" + writerName.charAt(writerName.length() - 1);
@@ -96,7 +97,7 @@ public class MenuController {
 		for(Board b : noticeList) {
 			b.setBoardWriterName("관리자");
 		}
-		if(!noticeList.isEmpty()) {
+		if(noticeList != null) {
 			model.addAttribute("noList", noticeList);
 			model.addAttribute("pi", pi);
 			return "notice";
@@ -106,30 +107,182 @@ public class MenuController {
 	}
 	
 	// 후기 게시판 이동
-		@RequestMapping("review.menu")
-		public String selectReviewList(@RequestParam(value="page", defaultValue="1") Integer currentPage, Model model) {
-			int listCount = bService.getListCount(102);
-			PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
-			
-			
-			ArrayList<Board> reviewList = bService.selectReBoardList(pi, 102);
+	@RequestMapping("review.menu")
+	public String selectReviewList(@RequestParam(value="page", defaultValue="1") Integer currentPage, Model model) {
+		int listCount = bService.getListCount(102);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+		
+		
+		ArrayList<Board> reviewList = bService.selectReBoardList(pi, 102);
 
-			if(!reviewList.isEmpty()) {
-				model.addAttribute("reList", reviewList);
-				model.addAttribute("pi", pi);
-				return "review";
-			}else {
-				throw new BoardException("게시판 리스트를 불러오는데 실패했습니다.");
-			}
+		if(reviewList != null) {
+			model.addAttribute("reList", reviewList);
+			model.addAttribute("pi", pi);
+			return "review";
+		}else {
+			throw new BoardException("게시판 리스트를 불러오는데 실패했습니다.");
 		}
+	}
+
+	 // 공지사항 말머리 검색 필터
+	@RequestMapping("searchFilter.menu")
+	public String searchFilter(@RequestParam("noSubject") String noSubject,
+							   @RequestParam(value="page", defaultValue="1") Integer currentPage,
+							   Model model) {
+		
+		if(noSubject.equals("전체")) {
+			return "redirect:notice.menu";
+		}
+		
+		// 말머리 필터 게시글 수 조회
+		int listSubjectCount = bService.listSubjectCount(noSubject);
+		
+		PageInfo pi = Pagination.getPageInfo(currentPage, listSubjectCount, 10);
+		
+		
+		// 말머리 필터 게시글 조회
+		ArrayList<Board> noList = bService.searchFilter(noSubject, pi);
+		if(noList != null) {
+			model.addAttribute("noList", noList);
+			model.addAttribute("pi", pi);
+			
+			return "notice";
+		}else {
+			throw new BoardException("말머리 검색 중 에러가 발생했습니다.");
+		}
+	}
 	
+	// 공지사항 검색어 리스트 검색
+	@RequestMapping("searchNotice.menu")
+	public String searchNotice(@RequestParam("condition") String condition,
+							   @RequestParam("search") String search,
+							   @RequestParam(value="page", defaultValue="1") Integer currentPage,
+							   Model model) {
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("condition", condition);
+		map.put("search", search);
+		map.put("cateNo", 100);
+		
+		// 검색어 게시글 수 조회
+		int listSearchCount = bService.listSearchCount(map);
+		
+		PageInfo pi = Pagination.getPageInfo(currentPage, listSearchCount, 10);	
+		
+		ArrayList<Board> searchList = bService.searchNoReBoard(map, pi);
+		
+		if(searchList != null) {
+			model.addAttribute("noList", searchList);
+			model.addAttribute("pi", pi);
+			
+			return "notice";
+		}else {
+			throw new BoardException("검색에 실패했습니다.");
+		}
+	}
 	
+	// 후기 게시판 검색어 리스트 조회
+	@RequestMapping("searchReview.menu")
+	public String searchReview(@RequestParam("condition") String condition,
+							   @RequestParam("search") String search,
+							   @RequestParam(value="page", defaultValue="1") Integer currentPage,
+							   Model model) {
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("condition", condition);
+		map.put("search", search);
+		map.put("cateNo", 102);
+		
+		// 검색어 게시글 수 조회
+		int listSubjectCount = bService.listSearchCount(map);
+		
+		PageInfo pi = Pagination.getPageInfo(currentPage, listSubjectCount, 10);	
+		
+		ArrayList<Board> searchList = bService.searchNoReBoard(map, pi);
+
+		if(searchList != null) {
+			model.addAttribute("reList", searchList);
+			model.addAttribute("pi", pi);
+			
+			return "review";
+		}else {
+			throw new BoardException("검색에 실패했습니다.");
+		}
+	}
 	
+	// 예약 게시판 검색어 리스트 조회
+	@RequestMapping("searchBook.menu")
+	public String searchBook(@RequestParam("condition") String condition,
+						     @RequestParam("search") String search,
+						     @RequestParam(value="page", defaultValue="1") Integer currentPage,
+						     Model model) {
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("condition", condition);
+		map.put("search", search);
+		map.put("cateNo", 103);
+		
+
+		// 검색어 게시글 수 조회 (예약/문의)
+		int listSearchQuBoCount = bService.listSearchQuBoCount(map);
+		
+		PageInfo pi = Pagination.getPageInfo(currentPage, listSearchQuBoCount, 10);
+
+		ArrayList<Board> searchList = bService.searchQuBoBoard(map, pi);
+		
+		if(searchList != null) {
+			// 작성자 이름 * 처리
+			for(Board b : searchList) {
+				String writerName = b.getBoardWriterName();
+				writerName = writerName.charAt(0) + "*" + writerName.charAt(writerName.length() - 1);
+				b.setBoardWriterName(writerName);
+			}
+			
+			model.addAttribute("bookList", searchList);
+			model.addAttribute("pi", pi);
+			
+			return "book";
+		}else {
+			throw new BoardException("검색에 실패했습니다.");
+		}
+	}
 	
-	
-	
-	
-	
+	// 문의 게시판 검색어 리스트 조회
+	@RequestMapping("searchQuestion.menu")
+	public String searchQuestion(@RequestParam("condition") String condition,
+						     @RequestParam("search") String search,
+						     @RequestParam(value="page", defaultValue="1") Integer currentPage,
+						     Model model) {
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("condition", condition);
+		map.put("search", search);
+		map.put("cateNo", 101);
+		
+
+		// 검색어 게시글 수 조회 (예약/문의)
+		int listSearchQuBoCount = bService.listSearchQuBoCount(map);
+		
+		PageInfo pi = Pagination.getPageInfo(currentPage, listSearchQuBoCount, 10);
+
+		ArrayList<Board> searchList = bService.searchQuBoBoard(map, pi);
+		
+		if(searchList != null) {
+			// 작성자 이름 * 처리
+			for(Board b : searchList) {
+				String writerName = b.getBoardWriterName();
+				writerName = writerName.charAt(0) + "*" + writerName.charAt(writerName.length() - 1);
+				b.setBoardWriterName(writerName);
+			}
+			
+			model.addAttribute("questionList", searchList);
+			model.addAttribute("pi", pi);
+			
+			return "question";
+		}else {
+			throw new BoardException("검색에 실패했습니다.");
+		}
+	}
 	
 	
 	

@@ -142,22 +142,20 @@
 
 	<!-- 한 행 모두 클릭 가능하게 -->
 	<script>
-		window.onload = () =>{
-			const tds = document.querySelectorAll('td');
-			for(const td of tds){
-				const parent = td.parentElement;
-				td.addEventListener('click', ()=>{
-					const boardNo = parent.children[1].innerText;
-					location.href = '${contextPath}/views/adminPage/noticeAdminBoardWrite.jsp';
-				})
-			}
+		const tds = document.querySelectorAll('td');
+		for(const td of tds){
+			const parent = td.parentElement;
+			td.addEventListener('click', ()=>{
+				const boardNo = parent.children[1].innerText;
+				location.href = '${contextPath}/views/adminPage/noticeAdminBoardWrite.jsp';
+			})
 		}
 	</script>
 	<!-- 한 행 모두 클릭 가능하게 -->
 
 
-	<!— 하단 푸터 —>
+	<!-- 하단 푸터 -->
 	<%@ include file='../common/footer.jsp'%>
-	<!— 하단 푸터 —>
+	<!-- 하단 푸터 -->
 </body>
 </html>

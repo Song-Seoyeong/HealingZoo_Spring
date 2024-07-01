@@ -65,7 +65,7 @@
 	<!-- 글 목록 -->
 	<div class="container" style="width: 900px; margin-top: 100px;  ">
 		  <h2 style="border-left: 10px solid #65B741; padding-left: 15px; display: inline-block; margin-bottom: 15px;">메인페이지</h2>
-		  <form id="bannerData">
+		  <form id="bannerData" action='insertBanner.admin'>
 			  <div id="banner" style="width:900px; height:50px; margin-top:25px" >
 				 <h4 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;">배너관리</h4>
 				 <!-- 배너관리 -->
@@ -81,34 +81,84 @@
 					  <tbody class="table-group-divider">
 					    <tr>
 					    	<td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-							<td scope="row">1</td>
-							<td><input type="text" value="https://" name="bLink1" style="border:none;" ></td>
-							<td><input type="file" accept="image/*" name="bImg1" style="border:none;"></td>
+							<td scope="row">
+								1
+							</td>
+							<td>
+								<select aria-label="말머리 선택" name='bannerLink'id='bannerLink1' style="border-style: none;  text-align: center; background-color: #fff; font-family: 'NanumSquareRound';">
+									<option selected value=''>링크 선택</option>
+									<option value='greeting'>인사말</option>
+									<option value='way'>오시는 길</option>
+									<option value='programInfo'>프로그램 소개</option>
+									<option value='operating'>운영시간</option>
+									<option value='notice'>공지사항</option>
+									<option value='family'>가족 소개</option>
+									<option value='mascot'>마스코트</option>
+									<option value='review'>후기 게시판</option>
+									<option value='book'>예약 게시판</option>
+									<option value='FAQ'>자주 묻는 Q&A</option>
+									<option value='question'>문의 게시판</option>
+								</select>
+							</td>
+							<td><input type="file" accept="image/*" name="file" style="border:none;"></td>
 						</tr>
 					    <tr>
 					    	<td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-							<td scope="row">2</td>
-							<td><input type="text" value="https://" name="bLink2" style="border:none;"></td>
-							<td><input type="file" accept="image/*" name="bImg2" style="border:none;"></td>
+							<td scope="row">
+								2
+							</td>
+							<td>
+								<select aria-label="말머리 선택" name='bannerLink' id='bannerLink2' style="border-style: none;  text-align: center; background-color: #fff; font-family: 'NanumSquareRound';">
+									<option selected value=''>링크 선택</option>
+									<option value='greeting'>인사말</option>
+									<option value='way'>오시는 길</option>
+									<option value='programInfo'>프로그램 소개</option>
+									<option value='operating'>운영시간</option>
+									<option value='notice'>공지사항</option>
+									<option value='family'>가족 소개</option>
+									<option value='mascot'>마스코트</option>
+									<option value='review'>후기 게시판</option>
+									<option value='book'>예약 게시판</option>
+									<option value='FAQ'>자주 묻는 Q&A</option>
+									<option value='question'>문의 게시판</option>
+								</select>
+							</td>
+							<td><input type="file" accept="image/*" name="file" style="border:none;"></td>
 						</tr>
 						  <tr>
 					    	<td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-							<td scope="row">3</td>
-							<td><input type="text" value="https://" name="bLink3" style="border:none;"></td>
-							<td><input type="file" accept="image/*" name="bImg3" style="border:none;"></td>
+							<td scope="row">
+								3
+							</td>
+							<td>
+								<select aria-label="말머리 선택" name='bannerLink' id='bannerLink3' style="border-style: none;  text-align: center; background-color: #fff; font-family: 'NanumSquareRound';">
+									<option selected value=''>링크 선택</option>
+									<option value='greeting'>인사말</option>
+									<option value='way'>오시는 길</option>
+									<option value='programInfo'>프로그램 소개</option>
+									<option value='operating'>운영시간</option>
+									<option value='notice'>공지사항</option>
+									<option value='family'>가족 소개</option>
+									<option value='mascot'>마스코트</option>
+									<option value='review'>후기 게시판</option>
+									<option value='book'>예약 게시판</option>
+									<option value='FAQ'>자주 묻는 Q&A</option>
+									<option value='question'>문의 게시판</option>
+								</select>
+							</td>
+							<td><input type="file" accept="image/*" name="file" style="border:none;"></td>
 						</tr>
 					  </tbody>
 				 </table>
 				   <div class="revision">
 						<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-							<button class="btn btn-primary" type="button" id="write_button" style="background-color:orange;">수정</button>
+							<button class="btn btn-primary" id="insertBannerbutton" style="background-color:orange;">수정</button>
 							<button class="btn btn-primary" type="button" id="delete_button" >삭제</button>
 						</div>
 					</div>
 			  </div>
 		  </form>
-		  <form id="oneEyeData"> 
-			  <div id="oneEye" style="width:900px; height:50px; margin-top:300px" >
+			  <div id="oneEye" style="width:900px; height:50px; margin:300px 0px; " >
 				 <h4 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;">한눈에 보기</h4>
 					  <!-- 한눈에 보기 -->
 					 <table class="table">
@@ -124,13 +174,43 @@
 						    <tr>
 						    	<td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
 								<td scope="row">1</td>
-								<td><input type="text" value="https://" class="link" style="border:none;"></td>
+								<td>
+									<select aria-label="말머리 선택" id='oneEyeLink1' style="border-style: none;  text-align: center; background-color: #fff; font-family: 'NanumSquareRound';">
+										<option selected value=''>링크 선택</option>
+										<option value='greeting'>인사말</option>
+										<option value='way'>오시는 길</option>
+										<option value='programInfo'>프로그램 소개</option>
+										<option value='operating'>운영시간</option>
+										<option value='notice'>공지사항</option>
+										<option value='family'>가족 소개</option>
+										<option value='mascot'>마스코트</option>
+										<option value='review'>후기 게시판</option>
+										<option value='book'>예약 게시판</option>
+										<option value='FAQ'>자주 묻는 Q&A</option>
+										<option value='question'>문의 게시판</option>
+									</select>
+								</td>
 								<td><input type="file" accept="image/*" class="img" style="border:none;"></td>
 							</tr>
 						    <tr>
 						    	<td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
 								<td scope="row">2</td>
-								<td><input type="text" value="https://" class="link" style="border:none;"></td>
+								<td>
+									<select aria-label="말머리 선택" id='oneEyeLink2' style="border-style: none;  text-align: center; background-color: #fff; font-family: 'NanumSquareRound';">
+										<option selected value=''>링크 선택</option>
+										<option value='greeting'>인사말</option>
+										<option value='way'>오시는 길</option>
+										<option value='programInfo'>프로그램 소개</option>
+										<option value='operating'>운영시간</option>
+										<option value='notice'>공지사항</option>
+										<option value='family'>가족 소개</option>
+										<option value='mascot'>마스코트</option>
+										<option value='review'>후기 게시판</option>
+										<option value='book'>예약 게시판</option>
+										<option value='FAQ'>자주 묻는 Q&A</option>
+										<option value='question'>문의 게시판</option>
+									</select>
+								</td>
 								<td><input type="file" accept="image/*" class="img" style="border:none;"></td>
 							</tr>
 						  </tbody>
@@ -143,30 +223,18 @@
 					 </div>
 				 </div>
 			 </div>
-		  </form>
+			 
 		<!-- -------- -->
 		
-		<div id=subCotainer style="margin-top:180px">
-			<!-- 페이지네이션 -->
-			<div class="container">
-			    <div class="pagination-container" style="margin-bottom: 20px;">
-			      <div class="prev-button" style="padding:10px;">&lt;</div>
-			      <div class="number-button-wrapper"><span class="number-button">1</span></div>
-			      <div class="number-button-wrapper"><span class="number-button">2</span></div>
-			      <div class="number-button-wrapper"><span class="number-button">3</span></div>
-			      <div class="number-button-wrapper"><span class="number-button">4</span></div>
-			      <div class="number-button-wrapper"><span class="number-button">5</span></div>
-			      <div class="next-button" style="padding:10px;">&gt;</div>
-			    </div>
-			</div>
-			
-			<!-- 검색 -->
-		   
-			<div class="row justify-content-center" style="margin-bottom: 100px;">
-			</div>
-		</div>
 	</div>
 	
 	<%@ include file='../common/footer.jsp' %>
+	
+	<script>
+	
+	
+	
+	
+	</script>
 </body>
 </html>

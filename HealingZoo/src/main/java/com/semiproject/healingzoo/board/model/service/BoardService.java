@@ -1,6 +1,7 @@
 package com.semiproject.healingzoo.board.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.semiproject.healingzoo.board.model.vo.Board;
 import com.semiproject.healingzoo.board.model.vo.Image;
@@ -45,5 +46,20 @@ public interface BoardService {
 	ArrayList<Board> selectQuBoardList(PageInfo pi, int i);
 
 	ArrayList<Board> selectReMenuList(PageInfo pi, int i);
+
+	int checkPwdBoard(Board b);
+
+	ArrayList<Board> searchFilter(String noSubject, PageInfo pi);
+
+	int listSubjectCount(String noSubject);
+
+	int listSearchCount(HashMap<String, Object> map);
+	
+	ArrayList<Board> searchNoReBoard(HashMap<String, Object> map, PageInfo pi);
+
+	int listSearchQuBoCount(HashMap<String, Object> map);
+
+	ArrayList<Board> searchQuBoBoard(HashMap<String, Object> map, PageInfo pi);
+
 
 }

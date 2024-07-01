@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -196,4 +197,61 @@ public class MemberController {
 		}
 	}
 
+	// 아이디 찾기 페이지 이동
+	@RequestMapping("searchIdView.me")
+	public String searchIdView() {
+		return "searchId";
+	}
+	
+	// 비번 찾기 페이지 이동
+	@RequestMapping("searchPwdView.me")
+	public String searchPwdView() {
+		return "searchPwd";
+	}
+	
+	// 아이디 찾기
+	@RequestMapping("searchId.me")
+	public String searchId(@ModelAttribute Member m,
+							Model model) {
+		String searchId = mService.searchId(m);
+		
+		if(searchId != null) {
+			String[] idArr = searchId.split("");
+			String id = "";
+			for(int i = 0; i < idArr.length; i++) {
+				if(i >= 3) {
+					idArr[i] = "*";
+				}
+				id += idArr[i];
+			}
+			
+			model.addAttribute("id", id);
+			model.addAttribute("memName", m.getMemName());
+
+			return "searchIdResult";
+		}else {
+			throw new MemberException("아이디 찾기에 실패했습니다.");
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

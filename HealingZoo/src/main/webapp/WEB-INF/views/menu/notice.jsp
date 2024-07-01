@@ -42,11 +42,11 @@
 			    <tr>
 			      <th scope="col" width='8%'>글 번호</th>
 			      <th style='width:14%;'>
-			      	<select aria-label="말머리 선택"
-						style="border-style: none;  text-align: center; background-color: #fff; font-family: 'NanumSquareRound';">
+			      	<select aria-label="말머리 선택" id='searchFilter' name='noSubject' style="border-style: none;  text-align: center; background-color: #fff; font-family: 'NanumSquareRound';">
 							<option selected>말머리</option>
+							<option value="전체">전체</option>
 							<option value="NEWS">새소식</option>
-							<option value="NOTIFY">공지사항</option>
+							<option value="NOTICE">공지사항</option>
 							<option value="EVENT">이벤트</option>
 					</select>
 			      </th>
@@ -128,10 +128,10 @@
 			    	<select name='searchOption'>
 					  <option selected>-----</option>
 					  <option value="title">제목</option>
-					  <option value="writer">핸드폰 번호</option>
+					  <option value="content">내용</option>
 					</select>
 					&nbsp;&nbsp;
-			    	<input type='text' size='30' placeholder='제목/핸드폰번호로 검색이 가능합니다'/>
+			    	<input type='text' name='search' size='30' placeholder='제목/핸드폰번호로 검색이 가능합니다'/>
 			    	&nbsp;&nbsp;
 			    	<img src="resources/image/search.svg" id='searchIcon'>
 			    </div>
@@ -168,6 +168,20 @@
 				location.href = '${contextPath}/writeView.bo?category=' + 'notice';
 			})
 		}
+		
+		// 말머리 검색
+		document.getElementById('searchFilter').addEventListener('change', function(){
+			location.href = '${contextPath}/searchFilter.menu?noSubject=' + this.value + "&page=" + ${pi.currentPage};
+		})
+		
+		// 검색창 검색
+		document.getElementById('searchIcon').addEventListener('click', function(){
+			const condition = this.parentElement.children[0].value;
+			const search = this.parentElement.children[1].value;
+			
+			location.href = "${contextPath}/searchNotice.menu?condition=" + condition + "&search=" + search + "&page=" + ${pi.currentPage};
+		})
+		
 	</script>
 </body>
 </html>
