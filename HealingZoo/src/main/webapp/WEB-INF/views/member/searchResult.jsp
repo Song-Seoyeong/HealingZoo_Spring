@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix='c' uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -42,19 +43,26 @@
 	    <div class="col-5">
 	    	<div class="row g-3 align-items-center">
 			  <div class="col-2"></div>
-			  <div class="col-8">
-			  	<h3>${ memName }님의 아이디는 ${ id }입니다.</h3>
+			  <div class="col-8 text-center">
+			  	<c:if test="${ !empty id }">
+			  		<h3>${ memName }님의 아이디는 ${ id }입니다.</h3>
+			  	</c:if>
+			  	<c:if test="${ !empty m }">
+			  		<h3>${ m.memName }님의 정보가 수정되었습니다.</h3>
+			  	</c:if>
 			  </div>
 			  <div class="col-2"></div>
 			</div>
 			<div style='margin: 10% 0%'></div>
 			<div class="row g-3 align-items-center">
-			  <div class="col-4"></div>
-			  <div class="col-2">
+			  <div class="col-3"></div>
+			  <div class="col-3 text-center">
 			  	<button id='login' class="btn" style='background: #60A869; color: white;'>로그인</button>
 			  </div>
-			  <div class="col-3">
-			  	<label id='searchPwd'>비밀번호 찾기</label>
+			  <div class="col-3 text-center">
+			  	<c:if test="${ !empty id }">
+			  		<label id='searchPwd'>비밀번호 찾기</label>
+			  	</c:if>
 			  </div>
 			  <div class="col-3"></div>
 			</div>
@@ -76,9 +84,11 @@
 		})
 		
 		// 비밀번호 찾기 페이지 이동
-		document.getElementById('searchPwd').addEventListener('click', () =>{
-			location.href = '${contextPath}/searchPwdView.me';
-		})
+		if(document.getElementById('searchPwd') != null){
+			document.getElementById('searchPwd').addEventListener('click', () =>{
+				location.href = '${contextPath}/searchPwdView.me';
+			})
+		}
 	</script>
 </body>
 </html>

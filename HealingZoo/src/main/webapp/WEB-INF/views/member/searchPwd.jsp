@@ -79,7 +79,7 @@
 				<div class="row g-3 align-items-center">
 				  <div class="col-3"></div>
 				  <div class="col-3">
-				  	<button onclick='doLogin();' class="btn" style='background: #60A869; color: white;'>비밀번호 찾기</button>
+				  	<button onclick='doSearchPwd();' class="btn" style='background: #60A869; color: white;'>비밀번호 찾기</button>
 				  </div>
 				  <div class="col-3">
 				  	<label id='searchId'>아이디 찾기</label>
@@ -99,7 +99,7 @@
 	<!-- /푸터 -->	
 	
 	<script>
-		const doLogin = ()=>{
+		const doSearchPwd = ()=>{
 			const id = document.getElementById('id');
 			const name = document.getElementById('name');
 			const phone = document.getElementById('phone');
@@ -121,7 +121,7 @@
 		for(const input of inputNamePhone){
 			input.addEventListener('keyup', e =>{
 				if(e.key == 'Enter'){
-					doLogin();
+					doSearchPwd();
 				}
 			})
 		}

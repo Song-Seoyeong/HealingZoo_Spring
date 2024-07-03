@@ -69,6 +69,13 @@
 	</insert>
 	<!-- 문의/예약 등록 -->
 	
+	<!-- 공지사항 등록 -->
+	<insert id="insertNotice">
+		insert into notice
+			values(#{boardNo}, #{noSubject})
+	</insert>
+	<!-- 공지사항 등록 -->
+	
 	<!-- 상세 글 조회 -->
 	<select id="selectBoard" resultMap='quBoBoard'>
 		select *
@@ -170,8 +177,6 @@
 	</select>
 	
 	<resultMap type="Board" id="reBoard">
-		<result column="BOARD_WRITER_NO" property="boardWriterNo"/>
-		<result column="BOARD_WRITER_NAME" property="boardWriterName"/>
 		<result column="MODIFY_DATE" property="boardModifyDate"/>
 		<result column="CREATE_DATE" property="boardCreateDate"/>
 	</resultMap>
@@ -276,5 +281,65 @@
 		 </if>
 	</select>
 	<!-- 검색어에 맞는 글 리스트 조회(문의/예약) -->
+	
+	<!-- 댓글 리스트 수 조회 -->
+	<select id="replyListCount" resultType='_int'>
+		select count(*)
+			from reply
+			where board_no = #{bId} and re_active = 'Y'
+	</select>
+	<!-- 댓글 리스트 수 조회 -->
+	
+	<!-- 댓글 리스트 조회 -->
+	<select id="selectReply" resultType='Reply'>
+		select *
+			from reply
+			join member on(mem_no = re_writer_no)
+			where board_no = ${bId} and re_active = 'Y'
+	</select>
+	<!-- 댓글 리스트 조회 -->
+	
+	<!-- 공지사항 수정 -->
+	<update id="updateNotice">
+		update notice
+			set no_sebject = #{noSubject}
+		where board_no = #{boardNo}
+	</update>
+	<!-- 공지사항 수정 -->
+	
+	<!-- 댓글 등록 -->
+	<insert id="insertReply">
+		insert into reply
+			values(seq_reply.nextval, #{boardNo}, #{memNo}, #{reContent}, sysdate, sysdate, default)
+	</insert>
+	<!-- 댓글 등록 -->
+	
+	<!-- 댓글 완전 삭제 -->
+	<delete id="deleteReply">
+		delete from reply
+			where re_no = #{reId}
+	</delete>
+	<!-- 댓글 완전 삭제 -->
+	
+	<!-- (글 삭제시)댓글 삭제 -->
+	<update id="updateReplyStatus">
+		update reply
+			set re_active = 'N'
+			where board_no = #{boardNo}
+	</update>
+	<!-- (글 삭제시)댓글 삭제 -->
+	
+	<!--  댓글 수정 -->
+	<update id="updateReply">
+		update reply
+			set re_content = #{reContent}
+			where re_no = #{reNo}
+	</update>
+	<!--  댓글 수정 -->
+	
+	
+	
+	
+	
 	
 </mapper>

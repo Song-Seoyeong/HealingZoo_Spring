@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -145,12 +146,13 @@ public class MemberController {
 	// 마이페이지>비밀번호 수정
 	@RequestMapping("updateMember.me")
 	public String updateMember(@RequestParam("newPwd") String newPwd, Model model, SessionStatus status) {
-		Member m = (Member) model.getAttribute("loginUser");
-		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("id", m.getMemId());
-		map.put("newPwd", bcrypt.encode(newPwd));
+		Member m = (Member)model.getAttribute("loginUser");
 
-		int result = mService.updatePassword(map);
+		m.setMemId(m.getMemId());
+		m.setMemPwd(bcrypt.encode(newPwd));
+
+		int result = mService.updatePassword(m);
+		
 		if (result < 0) {
 			throw new MemberException("정보수정에 실패하셨습니다.");
 		} else {
@@ -228,15 +230,45 @@ public class MemberController {
 			model.addAttribute("id", id);
 			model.addAttribute("memName", m.getMemName());
 
-			return "searchIdResult";
+			return "searchResult";
 		}else {
 			throw new MemberException("아이디 찾기에 실패했습니다.");
 		}
 	}
 	
+	// 비밀번호 찾기 > 새 비밀번호 등록으로 이동
+	@RequestMapping("searchPwd.me")
+	public String searchPwd(@ModelAttribute Member m,
+							Model model) {
+		
+		int result = mService.searchPwd(m);
+		
+		if(result > 0) {
+			model.addAttribute("m", m);
+			
+			return "searchPwdResult";
+		}else {
+			throw new MemberException("비밀번호 찾기에 실패했습니다.");
+		}
+	}
 	
-	
-	
+	// 비밀번호 찾기 > 새 비밀번호 수정
+	@RequestMapping("newPwd.me")
+	public String newPwdUpdate(@ModelAttribute Member m,
+								Model model) {
+		
+		m.setMemPwd(bcrypt.encode(m.getMemPwd()));
+		
+		int result = mService.updatePassword(m);
+		
+		if(result > 0) {
+			model.addAttribute("m", m);
+			
+			return "searchResult";
+		}else {
+			throw new MemberException("정보 수정에 실패했습니다");
+		}
+	}
 	
 	
 	

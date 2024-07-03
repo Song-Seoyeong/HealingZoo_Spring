@@ -1,12 +1,13 @@
 package com.semiproject.healingzoo.board.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +19,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonIOException;
 import com.semiproject.healingzoo.board.model.exception.BoardException;
 import com.semiproject.healingzoo.board.model.service.BoardService;
 import com.semiproject.healingzoo.board.model.vo.Board;
 import com.semiproject.healingzoo.board.model.vo.Image;
 import com.semiproject.healingzoo.board.model.vo.PageInfo;
+import com.semiproject.healingzoo.board.model.vo.Reply;
 import com.semiproject.healingzoo.common.Pagination;
 import com.semiproject.healingzoo.member.model.vo.Member;
 
@@ -65,10 +70,11 @@ public class BoardController {
 		int resultBoard = 0;
 		int resultImg = 0;
 		
-		//공지, 예약/문의 게시글 분리
 		resultBoard = bService.insertBoard(b);
+		
+		//공지, 예약/문의 게시글 분리
 		if(b.getCateNo() == 100) {
-			
+			bService.insertNotice(b);
 		}else if(b.getCateNo() == 101 || b.getCateNo() == 103) {
 			bService.insertQuBo(b);
 		}
@@ -192,16 +198,29 @@ public class BoardController {
 			b = bService.selectReBoard(bId, userNo);
 		}
 		
+		// 이미지 리스트 조회
 		ArrayList<Image> imgList = bService.selectImg(bId);
 		
-		if(b.getCateNo() == 100) {
-			b.setBoardWriterName("관리자");
-		}
 		
-		if(b != null && imgList != null) {
+		// 댓글 리스트 조회
+		ArrayList<Reply> replyList = bService.selectReply(bId);
+		
+		
+		
+		if(b != null && imgList != null && replyList != null) {
+			
+			if(b.getCateNo() == 100) {
+				b.setBoardWriterName("관리자");
+			}
+			
+			for(Reply r : replyList) {
+				r.setModifyDate(r.getModifyDate().split(" ")[0]);
+			}
+			
 			model.addAttribute("b", b);
 			model.addAttribute("imgList", imgList);
 			model.addAttribute("page", page);
+			model.addAttribute("replyList", replyList);
 			
 			return "boardDetail";
 		}else {
@@ -213,13 +232,15 @@ public class BoardController {
 	@RequestMapping("delete.bo")
 	public String deleteBoard(@RequestParam("bId") int boardNo,
 							  @RequestParam("list") int listSize,
+							  @RequestParam("relist") int relistSize,
 							  @RequestParam("category") String category) {
 		int deleteBoardResult = bService.deleteBoard(boardNo);
 		int deleteImgResult = bService.updateImgStatus(boardNo);
+		int deleteReplyResult = bService.updateReplyStatus(boardNo);
 		
-		if(deleteBoardResult + deleteImgResult == 1 + listSize) {
+		if(deleteBoardResult + deleteImgResult + deleteReplyResult == 1 + listSize + relistSize) {
 			return "redirect:" + category + ".menu";
-		}else {
+		}else {	
 			throw new BoardException("게시글 삭제 중 에러 발생");
 		}
 	}
@@ -229,12 +250,21 @@ public class BoardController {
 	public String updateView(@ModelAttribute Board b,
 							  @RequestParam("page") int page,
 							  Model model) {
-		b = bService.selectBoard(b.getBoardNo(), null);
+		Board updateBoard = null;
+		
+		if(b.getCateNo() == 100) {
+			updateBoard = bService.selectNoBoard(b.getBoardNo(), null);
+		}else if(b.getCateNo() == 101 || b.getCateNo() == 103){
+			updateBoard = bService.selectBoard(b.getBoardNo(), null);
+		}else {
+			updateBoard = bService.selectReBoard(b.getBoardNo(), null);
+		}
+
 		ArrayList<Image> imgList = bService.selectImg(b.getBoardNo());
 		
 		model.addAttribute("imgList", imgList);
 		model.addAttribute("bId", b.getBoardNo());
-		model.addAttribute("b", b);
+		model.addAttribute("b", updateBoard);
 		model.addAttribute("page", page);
 		return "boardUpdate";
 	}
@@ -292,10 +322,15 @@ public class BoardController {
 			}
 		}
 		
-		// 문의/예약 글일 경우
+		// 공지  문의/예약 글일 경우
 		if(b.getCateNo() == 101 || b.getCateNo() == 103) {
 			int quBoBoardResult = bService.updateQuBo(b);
 			if(quBoBoardResult < 0) {
+				throw new BoardException("게시판 수정에 실패했습니다.");
+			}
+		}else if(b.getCateNo() == 100) {
+			int noResult = bService.updateNotice(b);
+			if(noResult < 0) {
 				throw new BoardException("게시판 수정에 실패했습니다.");
 			}
 		}
@@ -318,12 +353,53 @@ public class BoardController {
 		}
 	}
 	
+	// 댓글 작성
+	@RequestMapping("insertReply.bo")
+	@ResponseBody
+	public void insertReply(@ModelAttribute Reply r,
+							HttpServletResponse response) {
+		
+		int result = bService.insertReply(r);
+		
+		if(result > 0) {
+			// 댓글 리스트 조회
+			ArrayList<Reply> replyList = bService.selectReply(r.getBoardNo());
+			
+			GsonBuilder gb = new GsonBuilder().setDateFormat("yyyy-MM-dd");
+			Gson gson = gb.create();
+			response.setContentType("application/json; charset=UTF-8");
+			
+			try {
+				gson.toJson(replyList, response.getWriter());
+			} catch (JsonIOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}else {
+			throw new BoardException("댓글 작성에 실패했습니다.");
+		}
+	}
 	
+	// 댓글 완전 삭제
+	@RequestMapping("deleteReply.bo")
+	@ResponseBody
+	public String deleteReply(@RequestParam("reId") int reId) {
+		int result = bService.deleteReply(reId);
+		
+		return result == 1 ? "success" : "fail";
+	}
 	
-	
-	
-	
-	
+	// 댓글 수정
+	@RequestMapping("updateReply.bo")
+	@ResponseBody
+	public String updateReply(@ModelAttribute Reply r) {
+		int result = bService.updateReply(r);
+		return result == 1 ? "success":"fail";
+	}
 	
 	
 	

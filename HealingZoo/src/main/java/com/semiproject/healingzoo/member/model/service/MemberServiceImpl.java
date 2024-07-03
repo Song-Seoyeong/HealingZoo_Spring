@@ -38,8 +38,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 	
 	@Override
-	public int updatePassword(HashMap<String, String> map) {
-		return mDAO.updatePassword(sqlSession, map);
+	public int updatePassword(Member m) {
+		return mDAO.updatePassword(sqlSession, m);
 	}
 
 	@Override
@@ -70,6 +70,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public String searchId(Member m) {
 		return mDAO.searchId(sqlSession, m);
+	}
+
+	@Override
+	public int searchPwd(Member m) {
+		return mDAO.searchPwd(sqlSession, m);
 	}
 	
 }

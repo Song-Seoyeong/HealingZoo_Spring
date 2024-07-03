@@ -15,7 +15,9 @@ public class Reply {
 	private int reNo;
 	private int boardNo;
 	private int memNo;
+	private String memName;
 	private String reContent;
 	private String createDate;
 	private String modifyDate;
+	private String reActive;
 }

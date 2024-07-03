@@ -5,13 +5,13 @@ import java.util.HashMap;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
 import com.semiproject.healingzoo.board.model.dao.BoardDAO;
 import com.semiproject.healingzoo.board.model.vo.Board;
 import com.semiproject.healingzoo.board.model.vo.Image;
 import com.semiproject.healingzoo.board.model.vo.PageInfo;
+import com.semiproject.healingzoo.board.model.vo.Reply;
 
 @Service("bService")
 public class BoardServiceImpl implements BoardService{
@@ -186,6 +186,42 @@ public class BoardServiceImpl implements BoardService{
 	public ArrayList<Board> searchQuBoBoard(HashMap<String, Object> map, PageInfo pi) {
 		return bDAO.searchQuBoBoard(sqlSession, map, pi);
 	}
+
+	@Override
+	public ArrayList<Reply> selectReply(int bId) {
+		return bDAO.selectReply(sqlSession, bId);
+	}
+
+	@Override
+	public void insertNotice(Board b) {
+		bDAO.insertNotice(sqlSession, b);
+	}
+
+	@Override
+	public int updateNotice(Board b) {
+		return bDAO.updateNotice(sqlSession, b);
+	}
+
+	@Override
+	public int insertReply(Reply r) {
+		return bDAO.insertReply(sqlSession, r);
+	}
+
+	@Override
+	public int deleteReply(int reId) {
+		return bDAO.deleteReply(sqlSession, reId);
+	}
+
+	@Override
+	public int updateReplyStatus(int boardNo) {
+		return bDAO.updateReplyStatus(sqlSession, boardNo);
+	}
+
+	@Override
+	public int updateReply(Reply r) {
+		return bDAO.updateReply(sqlSession, r);
+	}
+
 
 	
 }
