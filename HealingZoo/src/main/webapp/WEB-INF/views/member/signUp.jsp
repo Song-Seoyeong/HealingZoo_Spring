@@ -259,11 +259,12 @@
 			if(this.value != pwd.value){
 				confirmText.innerText = '비밀번호가 일치하지 않습니다'
 				confirmText.style.color = 'red';
+			}else if(this.value == pwd.value){
+				confirmText.innerText = '확인되었습니다.';
+				confirmText.style.color = 'green';
 			}else{
-				if(this.value != ''){
-					confirmText.innerText = '확인되었습니다.';
-					confirmText.style.color = 'green';
-				}
+				confirmText.innerText = '비밀번호를 확인하세요.';
+				confirmText.style.color = 'black';
 			}
 		})
 			

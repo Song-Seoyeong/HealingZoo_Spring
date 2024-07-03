@@ -25,8 +25,8 @@
 		<form action='${ contextPath }/write.bo' method='post' enctype='multipart/form-data'>
 			<div class="container text-center" style='margin-top: 70px;'>
 			  <div class="row">
-			    <div class="col"></div>
-			    <div class="col-8" style='background: white; border-radius: 25px;'>
+			    <div class="col-1"></div>
+			    <div class="col-10" style='background: white; border-radius: 25px;'>
 			    	<br>
 			    	
 			    	<!-- 카테고리별 헤더 -->
@@ -54,42 +54,64 @@
 				    		&nbsp;&nbsp;&nbsp;&nbsp;<h3 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;"> 후기 남기기</h3>
 				    	</div>
 			    	</c:if>
+			    	<!-- 카테고리별 헤더 -->
 			    	
 			    	<hr>
-			    	<div class='row'>
-			    		<div class='col-1'></div>
-				    	<div  class='col-7 text-center'>
-					    	<input type='text' name='boardTitle' placeholder='제목을 입력해주세요' id='inputBoardTitle'size='50' class='inputBoard' autofocus>
-					    </div>
-					    <div class='col-3'>
-					    	<input  type='text' name='boardWriterName' placeholder='이름을 입력해주세요' id='inputBoardWriter' size='20'  class='inputBoard' value='${ !empty loginUser ? loginUser.memName : "" }'>
+			    	<!-- 카테고리별 제목 입력창 -->
+			    	<c:if test="${ category == 'notice'}">
+				    	<div class='row'>
+				    		<div class='col-3'>
+				    			<select name='noSubject'>
+				    				<option value='NEWS' selected>새소식</option>
+				    				<option value='EVENT'>이벤트</option>
+				    				<option value='NOTICE'>공지</option>
+				    			</select>
+				    		</div>
+					    	<div  class='col-6 text-center'>
+						    	<input type='text' name='boardTitle' placeholder='제목을 입력해주세요' id='inputBoardTitle'size='50' class='inputBoard' autofocus>
+						    </div>
+						    <div class='col-2'>
+						    	<input  type='text' name='boardWriterName' placeholder='이름을 입력해주세요' id='inputBoardWriter' size='20'  class='inputBoard' value='${ !empty loginUser ? loginUser.memName : "" }'>
+							</div>
+							<div class='col-1'></div>
 						</div>
-						<div class='col-1'></div>
-					</div>
-					<!-- 카테고리별 헤더 -->
+					</c:if>
+					<c:if test="${ category != 'notice'}">
+				    	<div class='row'>
+				    		<div class='col-1'></div>
+					    	<div  class='col-7 text-center'>
+						    	<input type='text' name='boardTitle' placeholder='제목을 입력해주세요' id='inputBoardTitle'size='50' class='inputBoard' autofocus>
+						    </div>
+						    <div class='col-3'>
+						    	<input  type='text' name='boardWriterName' placeholder='이름을 입력해주세요' id='inputBoardWriter' size='20'  class='inputBoard' value='${ !empty loginUser ? loginUser.memName : "" }'>
+							</div>
+							<div class='col-1'></div>
+						</div>
+					</c:if>
+					<!-- 카테고리별 제목 입력창 -->
 					
 					<!-- 문의/예약글쓰기일시 핸드폰 입력창 -->
 					<c:if test="${ category == 'book' || category == 'question' }">
 						<div class='row'>
 							<div class='col-1'></div>
-							<div class='col-5 text-start'>
+							<div class='col-5 text-center'>
 								<input type='text' name='writerPhone' placeholder='핸드폰 번호를 입력해주세요' id='writerPhone' size='30' class='inputBoard' onchange='checkPhoneReg()' value='${ !empty loginUser ? loginUser.memPhone : "" }' required>
 							</div>
-							<div class='col-6 text-start' id='phoneConfirm'>(-)를 제외하고 입력해주세요</div>
+							<div class='col-6 text-center' id='phoneConfirm'>(-)를 제외하고 입력해주세요</div>
 						</div>
 						<div class='row'>
 							<div class='col-1'></div>
-							<div class='col-5 text-start'>
+							<div class='col-5 text-center'>
 								<input type='password' id='boPwd' name='boPwd' class='inputBoard contain-fluid' size='30' placeholder='글 비밀번호를 입력해주세요' onchange='checkPwdReg()' required/>
 							</div>
-							<div class='col-6 text-start' id='pwdConfirm'>비밀번호는 숫자 6자리로 입력해주세요</div>
+							<div class='col-6 text-center' id='pwdConfirm'>비밀번호는 숫자 6자리로 입력해주세요</div>
 						</div>
 					</c:if>
 					<!-- 문의/예약글쓰기일시 핸드폰 입력창 -->
 					
 					<br>
 					<div  class='text-center'>
-				    	<textArea id='inputBoardContent' name='boardContent' cols='70' rows="20" style="resize: none;"  class='inputBoard'></textArea>
+				    	<textArea id='inputBoardContent' name='boardContent' cols='80' rows="20" style="resize: none;"  class='inputBoard'></textArea>
 					</div>
 					
 					<div class='row' style='margin:5px;'>
@@ -112,7 +134,7 @@
 					</div>
 					<br>
 			   	 </div>
-			    <div class="col"></div>
+			    <div class="col-1"></div>
 			  </div>
 			</div>
 			<br>

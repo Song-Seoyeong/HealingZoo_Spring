@@ -66,17 +66,38 @@
 			    	<!-- 카테고리별 헤더 -->
 			    	
 			    	<hr>
-			    	<div class='row'>
-			    		<div class='col-1'></div>
-				    	<div  class='col-7 text-center'>
-					    	<input type='text' name='boardTitle' placeholder='제목을 입력해주세요' id='inputBoardTitle' size='50' class='inputBoard' autofocus value='${ b.boardTitle }'>
-					    </div>
-					    <div class='col-3'>
-					    	<input  type='text' name='boardWriterName' placeholder='이름을 입력해주세요' id='inputBoardWriter' size='20'  class='inputBoard' value='${ b.boardWriterName }'>
+			    	<!-- 카테고리별 제목 입력창 -->
+			    	<c:if test="${ b.cateNo == 100 }">
+				    	<div class='row'>
+				    		<div class='col-3'>
+				    			<select name='noSubject'>
+				    				<option value='NEWS' ${ b.noSubject == 'NEWS' ? "selected" :""}>새소식</option>
+				    				<option value='EVENT' ${ b.noSubject == 'EVENT' ? "selected" :""}>이벤트</option>
+				    				<option value='NOTICE' ${ b.noSubject == 'NOTICE' ? "selected" :""}>공지</option>
+				    			</select>
+				    		</div>
+					    	<div  class='col-6 text-center'>
+						    	<input type='text' name='boardTitle' placeholder='제목을 입력해주세요' id='inputBoardTitle'size='50' class='inputBoard' autofocus value='${ b.boardTitle }'>
+						    </div>
+						    <div class='col-2'>
+						    	<input  type='text' name='boardWriterName' placeholder='이름을 입력해주세요' id='inputBoardWriter' size='20'  class='inputBoard' value='${ b.boardWriterName }'>
+							</div>
+							<div class='col-1'></div>
 						</div>
-						<div class='col-1'></div>
-					</div>
-					<!-- 카테고리별 헤더 -->
+					</c:if>
+					<c:if test="${ b.cateNo != 100 }">
+				    	<div class='row'>
+				    		<div class='col-1'></div>
+					    	<div  class='col-7 text-center'>
+						    	<input type='text' name='boardTitle' placeholder='제목을 입력해주세요' id='inputBoardTitle'size='50' class='inputBoard' autofocus value='${ b.boardTitle }'>
+						    </div>
+						    <div class='col-3'>
+						    	<input  type='text' name='boardWriterName' placeholder='이름을 입력해주세요' id='inputBoardWriter' size='20'  class='inputBoard' value='${ b.boardWriterName }'>
+							</div>
+							<div class='col-1'></div>
+						</div>
+					</c:if>
+					<!-- 카테고리별 제목 입력창 -->
 					
 					<!-- 문의/예약글쓰기일시 핸드폰 입력창 -->
 					<c:if test="${ b.cateNo == 103 || b.cateNo == 101 }">

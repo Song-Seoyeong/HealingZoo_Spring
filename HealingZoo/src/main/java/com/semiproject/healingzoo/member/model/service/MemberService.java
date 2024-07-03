@@ -16,7 +16,7 @@ public interface MemberService {
 
 	int checkId(String id);
 	
-	int updatePassword(HashMap<String, String> map);
+	int updatePassword(Member m);
 
 	ArrayList<Board> selectBoard(int i);
 
@@ -29,4 +29,6 @@ public interface MemberService {
 	int getListCommentCount(int memNo);
 
 	String searchId(Member m);
+
+	int searchPwd(Member m);
 }

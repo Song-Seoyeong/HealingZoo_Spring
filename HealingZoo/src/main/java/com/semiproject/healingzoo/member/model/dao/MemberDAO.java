@@ -27,8 +27,8 @@ public class MemberDAO {
 		return sqlSession.selectOne("memberMapper.checkId", id);
 	}
 	
-	public int updatePassword(SqlSession sqlSession, HashMap<String, String> map) {
-		return sqlSession.update("memberMapper.updatePwd", map);
+	public int updatePassword(SqlSession sqlSession, Member m) {
+		return sqlSession.update("memberMapper.updatePwd", m);
 	}
 
 	public ArrayList<Board> selectBoard(SqlSession sqlSession, int i) {
@@ -57,6 +57,10 @@ public class MemberDAO {
 
 	public String searchId(SqlSession sqlSession, Member m) {
 		return sqlSession.selectOne("memberMapper.searchId", m);
+	}
+
+	public int searchPwd(SqlSession sqlSession, Member m) {
+		return sqlSession.selectOne("memberMapper.searchPwd", m);
 	}
 	
 }

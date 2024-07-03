@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.semiproject.healingzoo.board.model.vo.Board;
 import com.semiproject.healingzoo.board.model.vo.Image;
 import com.semiproject.healingzoo.board.model.vo.PageInfo;
+import com.semiproject.healingzoo.board.model.vo.Reply;
 
 @Repository
 public class BoardDAO {
@@ -166,6 +167,43 @@ public class BoardDAO {
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return (ArrayList)sqlSession.selectList("boardMapper.searchQuBoBoard", map, rowBounds);
 	}
+
+
+	public ArrayList<Reply> selectReply(SqlSession sqlSession, int bId) {
+		return (ArrayList)sqlSession.selectList("boardMapper.selectReply", bId);
+	}
+
+
+	public void insertNotice(SqlSession sqlSession, Board b) {
+		sqlSession.insert("boardMapper.insertNotice", b);
+	}
+
+
+	public int updateNotice(SqlSession sqlSession, Board b) {
+		return sqlSession.update("boardMapper.updateNotice", b);
+	}
+
+
+	public int insertReply(SqlSession sqlSession, Reply r) {
+		return sqlSession.insert("boardMapper.insertReply", r);
+	}
+
+
+	public int deleteReply(SqlSession sqlSession, int reId) {
+		return sqlSession.delete("boardMapper.deleteReply", reId);
+	}
+
+
+	public int updateReplyStatus(SqlSession sqlSession, int boardNo) {
+		return sqlSession.update("boardMapper.updateReplyStatus", boardNo);
+	}
+
+
+	public int updateReply(SqlSession sqlSession, Reply r) {
+		return sqlSession.update("boardMapper.updateReply", r);
+	}
+
+
 
 
 

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import com.semiproject.healingzoo.board.model.vo.Board;
 import com.semiproject.healingzoo.board.model.vo.Image;
 import com.semiproject.healingzoo.board.model.vo.PageInfo;
+import com.semiproject.healingzoo.board.model.vo.Reply;
 
 public interface BoardService {
 
@@ -60,6 +61,22 @@ public interface BoardService {
 	int listSearchQuBoCount(HashMap<String, Object> map);
 
 	ArrayList<Board> searchQuBoBoard(HashMap<String, Object> map, PageInfo pi);
+
+	
+	ArrayList<Reply> selectReply(int bId);
+
+	void insertNotice(Board b);
+
+	int updateNotice(Board b);
+
+	int insertReply(Reply r);
+
+	int deleteReply(int reId);
+
+	int updateReplyStatus(int boardNo);
+
+	int updateReply(Reply r);
+
 
 
 }

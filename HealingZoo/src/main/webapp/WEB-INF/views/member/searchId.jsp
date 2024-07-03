@@ -88,6 +88,7 @@
 	<!-- /푸터 -->	
 	
 	<script>
+		// 입력칸 빈칸 제출 확인
 		const doLogin = ()=>{
 			const name = document.getElementById('name');
 			const phone = document.getElementById('phone');
@@ -102,6 +103,7 @@
 			}
 		}	
 		
+		// 엔터 입력시 폼 제출
 		const inputNamePhone = document.getElementsByTagName('input');
 		for(const input of inputNamePhone){
 			input.addEventListener('keyup', e =>{
@@ -111,6 +113,7 @@
 			})
 		}
 		
+		// 비밀번호 찾기 페이지 이동
 		document.getElementById('searchPwd').addEventListener('click', () =>{
 			location.href = '${contextPath}/searchPwdView.me';
 		})
