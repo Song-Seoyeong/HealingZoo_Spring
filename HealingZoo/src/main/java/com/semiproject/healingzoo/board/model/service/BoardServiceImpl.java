@@ -2,13 +2,16 @@ package com.semiproject.healingzoo.board.model.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.semiproject.healingzoo.board.model.dao.BoardDAO;
+import com.semiproject.healingzoo.board.model.vo.Animal;
 import com.semiproject.healingzoo.board.model.vo.Board;
+import com.semiproject.healingzoo.board.model.vo.Goods;
 import com.semiproject.healingzoo.board.model.vo.Image;
 import com.semiproject.healingzoo.board.model.vo.PageInfo;
 import com.semiproject.healingzoo.board.model.vo.Reply;
@@ -222,6 +225,73 @@ public class BoardServiceImpl implements BoardService{
 		return bDAO.updateReply(sqlSession, r);
 	}
 
+	@Override
+	public Image checkBanner(int i) {
+		return bDAO.checkBanner(sqlSession, i);
+	}
+
+	@Override
+	public ArrayList<Board> searchReBoard(HashMap<String, Object> map, PageInfo pi) {
+		return bDAO.searchReBoard(sqlSession, map, pi);
+	}
+
+	@Override
+	public ArrayList<Animal> selectFamilyList(PageInfo pi) { // +수정+
+		return bDAO.selectFamilyList(sqlSession,pi);
+	}
 
 	
+	@Override public int getAnimalCount() { // +수정+ 
+		return bDAO.getAnimalCount(sqlSession); 
+	}
+
+	@Override
+	public ArrayList<Goods> selectMascotList() {
+		return bDAO.selectMascotList(sqlSession);
+	}
+
+	@Override
+	public int insertAnimal(Animal animal) {
+		return bDAO.insertAnimal(sqlSession,animal);
+	}
+
+	@Override
+	public int deleteAnimals(List<Integer> aniNOs) {
+		return bDAO.deleteAnimal(sqlSession,aniNOs);
+	}
+
+	@Override
+	public Animal selectAnimal(int aniNO) {
+		return bDAO.selectAnimal(sqlSession,aniNO);
+	}
+
+	@Override
+	public int updateAnimal(Animal animal) {
+		return bDAO.updateAnimal(sqlSession,animal);
+	}
+
+	@Override
+	public List<Animal> getAllAnimals() {
+		return bDAO.getAllAnimals(sqlSession);
+	}
+
+	@Override
+	public Goods selectGoods(int goodsNo) {
+		return bDAO.selectGoods(sqlSession,goodsNo);
+	}
+
+	@Override
+	public void updateGoods(Goods goods) {
+		bDAO.updateGoods(sqlSession,goods);
+	}
+
+	@Override
+	public void deleteGoods(int goodsNo) {
+		bDAO.deleteGoods(sqlSession,goodsNo);
+	}
+
+	@Override
+	public void insertGoods(Goods goods) {
+		bDAO.insertGoods(sqlSession,goods);
+	}
 }

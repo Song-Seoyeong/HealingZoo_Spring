@@ -2,8 +2,11 @@ package com.semiproject.healingzoo.board.model.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import com.semiproject.healingzoo.board.model.vo.Animal;
 import com.semiproject.healingzoo.board.model.vo.Board;
+import com.semiproject.healingzoo.board.model.vo.Goods;
 import com.semiproject.healingzoo.board.model.vo.Image;
 import com.semiproject.healingzoo.board.model.vo.PageInfo;
 import com.semiproject.healingzoo.board.model.vo.Reply;
@@ -77,6 +80,31 @@ public interface BoardService {
 
 	int updateReply(Reply r);
 
+	Image checkBanner(int i);
 
+	ArrayList<Board> searchReBoard(HashMap<String, Object> map, PageInfo pi);
 
+	ArrayList<Animal> selectFamilyList(PageInfo pi);//+수정+
+
+	int getAnimalCount();
+
+	ArrayList<Goods> selectMascotList();
+
+	int insertAnimal(Animal animal);
+
+	int deleteAnimals(List<Integer> aniNOs);
+
+	Animal selectAnimal(int aniNO);
+
+	int updateAnimal(Animal animal);
+
+	List<Animal> getAllAnimals();
+
+	Goods selectGoods(int goodsNo);
+
+	void updateGoods(Goods goods);
+
+	void deleteGoods(int goodsNo);
+
+	void insertGoods(Goods goods);
 }

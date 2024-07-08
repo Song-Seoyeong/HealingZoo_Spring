@@ -86,25 +86,72 @@
 							<nav aria-label="Standard pagination">
 								<ul class="pagination justify-content-center">
 									<li class="page-item">
-										<c:url var='goBack' value="${ loc }">
-											<c:param name='page' value="${ pi.currentPage -1 }" />
-										</c:url>
+										<c:if test="${ empty noSubject and empty condition }">
+											<c:url var='goBack' value="${ loc }">
+												<c:param name='page' value="${ pi.currentPage -1 }" />
+											</c:url>
+										</c:if>
+										<c:if test="${ empty condition and !empty noSubject }">
+											<c:url var='goBack' value="${ loc }">
+												<c:param name='page' value="${ pi.currentPage -1 }" />
+												<c:param name='noSubject' value="${ noSubject }" />
+											</c:url>
+										</c:if>
+										<c:if test="${ empty noSubject and empty condition }">
+											<c:url var='goBack' value="${ loc }">
+												<c:param name='page' value="${ pi.currentPage -1 }" />
+												<c:param name='condition' value="${ condition }" />
+												<c:param name='search' value="${ search }" />
+											</c:url>
+										</c:if>
 										<a class="page-link" href="${ goBack }" aria-label="Previous">
 											<span aria-hidden="true" style='color: black;'>&laquo;</span>
 										</a>
 									</li>
+									
 									<c:forEach begin="${ pi.startPage }" end="${ pi.endPage }" var="p">
-										<c:url var='goNum' value='${ loc }'>
-											<c:param name="page" value="${ p }" />
-										</c:url>
+										<c:if test="${ empty condition and !empty noSubject }">
+											<c:url var='goNum' value='${ loc }'>
+												<c:param name="page" value="${ p }" />
+												<c:param name='noSubject' value="${ noSubject }" />
+											</c:url>
+										</c:if>
+										<c:if test="${ empty noSubject and empty condition }">
+											<c:url var='goNum' value='${ loc }'>
+												<c:param name="page" value="${ p }" />
+											</c:url>
+										</c:if>
+										<c:if test="${ empty noSubject and !empty condition }">
+											<c:url var='goNum' value='${ loc }'>
+												<c:param name="page" value="${ p }" />
+												<c:param name='condition' value="${ condition }" />
+												<c:param name='search' value="${ search }" />
+											</c:url>
+										</c:if>
 										<li class="page-item">
 											<a class="page-link" href="${ goNum }" style='color: black;'>${ p }</a>
 										</li>
 									</c:forEach>
+									
 									<li class="page-item">
+									<c:if test="${ empty noSubject and empty condition }">
 										<c:url var='goNext' value='${ loc }'>
 											<c:param name="page" value="${ pi.currentPage +1 }" />
 										</c:url>
+									</c:if>
+									<c:if test="${ empty noSubject and !empty condition }">
+										<c:url var='goNext' value='${ loc }'>
+											<c:param name="page" value="${ pi.currentPage +1 }" />
+											<c:param name='condition' value="${ condition }" />
+											<c:param name='search' value="${ search }" />
+										</c:url>
+									</c:if>
+									<c:if test="${ empty condition and !empty noSubject }">
+										<c:url var='goNext' value='${ loc }'>
+											<c:param name="page" value="${ pi.currentPage +1 }" />
+											<c:param name='noSubject' value="${ noSubject }" />
+										</c:url>
+									</c:if>
 										<a class="page-link" href="${ goNext }" aria-label="Next">
 											<span aria-hidden="true" style='color: black;'>&raquo;</span>
 										</a>
