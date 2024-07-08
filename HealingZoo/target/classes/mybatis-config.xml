@@ -11,7 +11,9 @@
 		<typeAlias type="com.semiproject.healingzoo.member.model.vo.Member" alias="Member"/>
 		<typeAlias type="com.semiproject.healingzoo.board.model.vo.Board" alias="Board"/>	
 		<typeAlias type="com.semiproject.healingzoo.board.model.vo.Image" alias='Image'/>
-		<typeAlias type="com.semiproject.healingzoo.board.model.vo.Reply" alias="Reply"/>	
+		<typeAlias type="com.semiproject.healingzoo.board.model.vo.Reply" alias="Reply"/>
+		<typeAlias type="com.semiproject.healingzoo.board.model.vo.Animal" alias="Animal"/>
+		<typeAlias type="com.semiproject.healingzoo.board.model.vo.Goods" alias="Goods"/>
 	</typeAliases>
 	
 	<mappers>

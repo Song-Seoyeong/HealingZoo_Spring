@@ -6,26 +6,7 @@
 <%@ taglib prefix='c' uri="http://java.sun.com/jsp/jstl/core"%>
 <meta charset="UTF-8">
 <style>
-.search {
-	position: relative;
-	width: 300px;
-}
 
-#searchText {
-	width: 100%;
-	border: 1px solid #bbb;
-	border-radius: 8px;
-	padding: 10px 12px;
-	font-size: 14px;
-}
-
-#search {
-	position: absolute;
-	width: 17px;
-	top: 14px;
-	right: 12px;
-	margin: 0;
-}
 
 .form-check-input {
 	transform: scale(0.5);
@@ -91,7 +72,7 @@
 			<tbody class="table-group-divider">
 				<c:forEach items="${ list }" var="q">
 					<tr>
-						<td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
+						<th><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></th>
 						<td scope="row">${ q.boardNo }</td>
 						<td>${ q.boardTitle }</td>
 						<td>${ q.boardWriterName }</td>
@@ -108,50 +89,68 @@
 		</table>
 
 		<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-			<button class="btn btn-primary" type="button" id="write_button">글쓰기</button>
 			<button class="btn btn-primary" type="button" id="delete_button">삭제</button>
 		</div>
 		
 		
 		<!-- 페이지네이션 -->
 		<%@ include file="../common/pagination.jsp" %>
+		
 		<!-- 페이지네이션 -->
 
 
 		<!-- 검색 -->
-		<div class="row justify-content-center" style="margin-bottom: 100px;">
-			<div class="col-4">
-				<select class="form-select" aria-label="Default select example"
-					style="display: inline-block; float: right; width: 200px;">
-					<option selected>----</option>
-					<option value="1">작성자</option>
-					<option value="2">제목</option>
-					<option value="3">글 번호</option>
+         <div class="container text-center" style='margin: 1%; margin-bottom: 20%; '>
+		  <div class="row">
+		    <div class="col"></div>
+		    <div class="col-8">
+		    	<select name='searchOption'>
+				  <option value="title" selected>제목</option>
+				  <option value="writer">작성자</option>
+				  <option value="phone">핸드폰 번호</option>
 				</select>
-			</div>
-			<div class="col-4">
-				<div class="search">
-					<input id="searchText" type="text" placeholder="검색어 입력"> 
-					<img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" id="search">
-				</div>
-			</div>
-		</div>
+				&nbsp;&nbsp;
+		    	<input type='text' name='search' size='30' placeholder='제목/작성자/핸드폰 번호로 검색 가능'/>
+		    	&nbsp;&nbsp;
+		    	<img src="resources/image/search.svg" id='searchIcon'>
+		    </div>
+		    <div class="col"></div>
+		  </div>
+		</div>	
+		<!-- 검색 -->
 	</div>
-	<!-- 검색 -->
-
-
-	<!-- 한 행 모두 클릭 가능하게 -->
+	
+	
 	<script>
+	
+		// 상세 글 보기 이동
 		const tds = document.querySelectorAll('td');
 		for(const td of tds){
 			const parent = td.parentElement;
 			td.addEventListener('click', ()=>{
 				const boardNo = parent.children[1].innerText;
-				location.href = '${contextPath}/views/adminPage/noticeAdminBoardWrite.jsp';
-			})
+				location.href = '${contextPath}/boardView.admin?bId=' + boardNo + "&page=" + ${pi.currentPage} + "&category=101";
+			});
 		}
-	</script>
-	<!-- 한 행 모두 클릭 가능하게 -->
+		
+		
+		// 검색창 검색
+		document.getElementById('searchIcon').addEventListener('click', function(){
+			const condition = this.parentElement.children[0].value;
+			const search = this.parentElement.children[1].value;
+			
+			location.href = "${contextPath}/searchQuestion.admin?condition=" + condition + "&search=" + search + "&page=" + ${pi.currentPage};
+		});
+		
+		// 엔터 키로 검색 실행
+		  document.querySelector('input[name="search"]').addEventListener('keyup', function(event) {
+		    if (event.key === 'Enter') {
+		      const condition = this.parentElement.children[0].value;
+		      const search = this.value;
+		      location.href = "${contextPath}/searchQuestion.admin?condition=" + condition + "&search=" + search + "&page=" + ${pi.currentPage};
+		    }
+		  });
+		</script>
 
 
 	<!-- 하단 푸터 -->

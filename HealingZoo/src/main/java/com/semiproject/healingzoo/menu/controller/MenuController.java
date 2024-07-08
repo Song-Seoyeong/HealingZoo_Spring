@@ -145,6 +145,7 @@ public class MenuController {
 		if(noList != null) {
 			model.addAttribute("noList", noList);
 			model.addAttribute("pi", pi);
+			model.addAttribute("noSubject", noSubject);
 			
 			return "notice";
 		}else {
@@ -171,9 +172,15 @@ public class MenuController {
 		
 		ArrayList<Board> searchList = bService.searchNoReBoard(map, pi);
 		
+		for(Board b : searchList) {
+			b.setBoardWriterName("관리자");
+		}
+		
 		if(searchList != null) {
 			model.addAttribute("noList", searchList);
 			model.addAttribute("pi", pi);
+			model.addAttribute("condition", condition);
+			model.addAttribute("search", search);
 			
 			return "notice";
 		}else {
@@ -203,6 +210,8 @@ public class MenuController {
 		if(searchList != null) {
 			model.addAttribute("reList", searchList);
 			model.addAttribute("pi", pi);
+			model.addAttribute("condition", condition);
+			model.addAttribute("search", search);
 			
 			return "review";
 		}else {
@@ -240,6 +249,8 @@ public class MenuController {
 			
 			model.addAttribute("bookList", searchList);
 			model.addAttribute("pi", pi);
+			model.addAttribute("condition", condition);
+			model.addAttribute("search", search);
 			
 			return "book";
 		}else {
@@ -277,6 +288,8 @@ public class MenuController {
 			
 			model.addAttribute("questionList", searchList);
 			model.addAttribute("pi", pi);
+			model.addAttribute("condition", condition);
+			model.addAttribute("search", search);
 			
 			return "question";
 		}else {

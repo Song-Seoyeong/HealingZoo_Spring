@@ -2,12 +2,15 @@ package com.semiproject.healingzoo.board.model.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import com.semiproject.healingzoo.board.model.vo.Animal;
 import com.semiproject.healingzoo.board.model.vo.Board;
+import com.semiproject.healingzoo.board.model.vo.Goods;
 import com.semiproject.healingzoo.board.model.vo.Image;
 import com.semiproject.healingzoo.board.model.vo.PageInfo;
 import com.semiproject.healingzoo.board.model.vo.Reply;
@@ -204,7 +207,78 @@ public class BoardDAO {
 	}
 
 
+	public Image checkBanner(SqlSession sqlSession, int i) {
+		return sqlSession.selectOne("boardMapper.checkBanner", i);
+	}
+
+	public ArrayList<Board> searchReBoard(SqlSession sqlSession, HashMap<String, Object> map, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		
+		return (ArrayList)sqlSession.selectList("boardMapper.searchReBoard", map, rowBounds);
+	}
+
+	public ArrayList<Animal> selectFamilyList(SqlSession sqlSession, PageInfo pi) { // + 수정 +
+        int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+        RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+        return (ArrayList) sqlSession.selectList("boardMapper.selectFamilyList",rowBounds);
+    }
 
 
+	
+	public int getAnimalCount(SqlSession sqlSession) { //+수정+ return
+		return sqlSession.selectOne("boardMapper.getAnimalCount"); 
+	}
+
+
+	public ArrayList<Goods> selectMascotList(SqlSession sqlSession) {
+		return (ArrayList)sqlSession.selectList("boardMapper.selectMascotList");
+	}
+
+
+	public int insertAnimal(SqlSession sqlSession, Animal animal) {
+		return sqlSession.insert("boardMapper.insertAnimal",animal);
+	}
+
+
+	public int deleteAnimal(SqlSession sqlSession, List<Integer> aniNOs) {
+		return sqlSession.delete("boardMapper.deleteAnimal",aniNOs);
+	}
+
+
+	public Animal selectAnimal(SqlSession sqlSession, int aniNO) {
+	    List<Animal> result = sqlSession.selectList("boardMapper.selectAnimal", aniNO);
+	    if (result != null && !result.isEmpty()) {
+	        return result.get(0);
+	    }
+	    return null;
+	}
+
+
+	public int updateAnimal(SqlSession sqlSession, Animal animal) {
+		return sqlSession.update("boardMapper.updateAnimal",animal);
+	}
+
+
+	public List<Animal> getAllAnimals(SqlSession sqlSession) {
+		return sqlSession.selectList("boardMapper.getAllAnimal");
+	}
+
+	public Goods selectGoods(SqlSession sqlSession, int goodsNo) {
+		return (Goods) sqlSession.selectOne("boardMapper.selectGoods",goodsNo);
+	}
+
+
+	public void updateGoods(SqlSession sqlSession, Goods goods) {
+	    sqlSession.update("boardMapper.updateGoods", goods);
+	}
+
+	public void deleteGoods(SqlSession sqlSession, int goodsNo) {
+	    sqlSession.delete("boardMapper.deleteGoods", goodsNo);
+	}
+
+	public void insertGoods(SqlSession sqlSession, Goods goods) {
+	    sqlSession.insert("boardMapper.insertGoods", goods);
+	}
 
 }

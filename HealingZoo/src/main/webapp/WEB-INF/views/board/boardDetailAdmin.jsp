@@ -46,7 +46,7 @@
 			<div class="row">
 				<div class="col"></div>
 					<div class="col-8 content-center" style='background: white; border-radius: 25px;'>
-						<form action="${ contextPath }/updateView.bo" method='post'>
+						<form action="${ contextPath }/updateView.admin" method='post'>
 							<br>
 							<input type='hidden' name='page' value='${ page }'>
 							<input type='hidden' name='boardNo' value='${ b.boardNo }'>
@@ -70,6 +70,7 @@
 									${ b.boardTitle }
 								</h3>
 							</div>
+							
 							<hr style='border: 2px solid'>
 							<div class='text-end'>
 								<input type='text' name=boardWriterName value='${ b.boardWriterName }' id='inputBoardWriter' size='10' class='inputBoard' readonly>
@@ -115,9 +116,15 @@
 								<button type="button" class="btn" style='background: #60A869; color: white;' id='goToBack'>목록</button>
 								
 								<!-- 로그인유저와 글쓴이가 같을 거나, 예약/문의 게시글을 비번 입력 후 들어왔을 때 -->
-								<c:if test="${ (loginUser.memNo == b.boardWriterNo) || b.cateNo == 103 || b.cateNo == 101 }">
+<%-- 								<c:if test="${ (loginUser.memNo == b.boardWriterNo) || b.cateNo == 103 || b.cateNo == 101 || b.cateNo == 100 || b.cateNo == 102 }"> --%>
+								<c:if test="${ (loginUser.memNo == b.boardWriterNo) }">
 									&nbsp;&nbsp;&nbsp;
 									<button class="btn" id='updateBoard' style='background: #EA862A; color: white;'>수정</button>
+								</c:if>
+								<c:if test="${ b.cateNo == 100 }">
+									<button class="btn" id='updateBoard' style='background: #EA862A; color: white;'>수정</button>
+								</c:if>
+								<c:if test="${ (loginUser.memNo == b.boardWriterNo) || (loingUser.memGrade == MANAGER) }">
 									&nbsp;&nbsp;&nbsp;
 									<button type="button" class="btn" id='deleteBoard' style='background: #DD5353; color: white;'>삭제</button>
 								</c:if>
@@ -150,10 +157,12 @@
 								<td>예약 완료 되었습니다</td>
 								<td>24/06/15</td>
 								<td>
+								<c:if test="${ loginUser.memNo == b.boardWriterNo }">
 									<button type="button" class="btn btn-sm" id='updateReply'
 										style='background: #EA862A; color: white;'>수정</button>&nbsp;
 									<button type="button" class="btn btn-sm" id='deleteReply'
 										style='background: #DD5353; color: white;'>삭제</button>
+								</c:if>
 								</td>
 							</tr>
 						
@@ -254,7 +263,7 @@
 				category = 'book';
 			}
 			
-			location.href = '${contextPath}/delete.bo?bId=' + ${ b.boardNo } + "&list=" + ${imgList.size()} + "&category=" + category;
+			location.href = '${contextPath}/delete.admin?bId=' + ${ b.boardNo } + "&list=" + ${imgList.size()} + "&category=" + category;
 		})
 		
 		
