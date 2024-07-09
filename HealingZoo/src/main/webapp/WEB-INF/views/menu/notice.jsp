@@ -8,11 +8,11 @@
 <style>
 	.margin{width: 100%; height: 70px;}
 	#searchIcon:hover{cursor: pointer;}
-	#noticeTitle{
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-		width: 200px;
+	.noticeTitle{
+		max-width: 200px; /* 원하는 최대 길이 설정 */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
 	}
 </style>
 <title>공지사항</title>
@@ -52,8 +52,8 @@
 			      </th>
 			      <th scope="col" width='43%'>글 제목</th>
 			      <th scope="col" width='7%'>작성자</th>
-			      <th scope="col" width='20%'>작성일</th>
-			      <th scope="col" width='6%'>조회수</th>
+			      <th scope="col" width='17%'>작성일</th>
+			      <th scope="col" width='9%'>조회수</th>
 			    </tr>
 			  </thead>
 			  <tbody class='table-group-divider'>
@@ -69,7 +69,7 @@
 				      <c:if test="${ no.noSubject == 'NOTICE' }">
 				     	 <td>공지</td>
 				      </c:if>
-				      <td id='noticeTitle'>${ no.boardTitle }</td>
+				      <td class='noticeTitle'>${ no.boardTitle }</td>
 				      <td>${ no.boardWriterName }</td>
 				      <td>${ no.boardModifyDate }</td>
 				      <td>${ no.boardCount }</td>

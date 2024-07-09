@@ -35,18 +35,18 @@
 	    	<div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
 				<div class="carousel-inner">
 					<div class="carousel-item active" data-bs-interval="2000">
-						<a href='views/zooInfo/programInfo.jsp'>
-							<img src="resources/image/banner01.png" class="d-block w-100" alt="배너01" id='banner1'>
+						<a href='${ contextPath }/${bannerLinkList[0].linkUrl}'>
+							<img alt="${ bannerList[0].imgName }" src="${ contextPath }/resources/uploadImg/${bannerList[0].imgRename}" class="d-block w-100">
 						</a>
 					</div>
 					<div class="carousel-item" data-bs-interval="2000">
-						<a href='views/animalInfo/family.jsp'>
-							<img src="resources/image/banner02.png" class="d-block w-100" alt="배너02" id='banner2'>
+						<a href='${ contextPath }/${bannerLinkList[1].linkUrl}'>
+							<img alt="${ bannerList[1].imgName }" src="${ contextPath }/resources/uploadImg/${bannerList[1].imgRename}" class="d-block w-100">
 						</a>
 					</div>
 					<div class="carousel-item">
-						<a href='views/animalInfo/mascot.jsp'>
-							<img src="resources/image/banner03.png" class="d-block w-100" alt="배너03" id='banner3'>
+						<a href='${ contextPath }/${bannerLinkList[2].linkUrl}'>
+							<img alt="${ bannerList[2].imgName }" src="${ contextPath }/resources/uploadImg/${bannerList[2].imgRename}" class="d-block w-100">
 						</a>
 					</div>
 				</div>
@@ -71,15 +71,15 @@
 	    <div class="col"></div>
 	    <div class="col-4">
 	    	<div style='height: 330px; width: 550px;'>
-	    		<a href="views/community/book.jsp">
-			 		<img src="resources/image/animalCare1.jpg" class="card-img" alt="예약게시판" name='glanceImg1' id='glanceImg1'>
+	    		<a href="${ contextPath }/${oneeyeLinkList[0].linkUrl}">
+					<img src="${ contextPath }/resources/uploadImg/${oneeyeList[0].imgRename}" class="d-block w-100" alt='${ oneeyeList[0].imgName }'>
 			 	</a>
 			</div>
 	    </div>
 	    <div class="col-4">
 	    	<div style='height: 330px; width: 550px;'>
-	    		<a href="views/animalInfo/family.jsp">
-			 		<img src="resources/image/ferret.jpg" class="card-img" alt="가족소개" name='glanceImg2' id='glanceImg2'>
+	    		<a href="${ contextPath }/${oneeyeLinkList[1].linkUrl}">
+					<img src="${ contextPath }/resources/uploadImg/${oneeyeList[1].imgRename}" class="d-block w-100" alt='${ oneeyeList[1].imgName }'>
 			 	</a>
 			</div>
 	    </div>
@@ -88,9 +88,6 @@
     
     
 	<div style='margin: 10%'></div>
-
-
-	
 	<%@ include file='common/footer.jsp' %>
 </body>
 </html>

@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
-	footer{width: 100%; height: 150px; background: #595959; margin: 0px; position: relative;}
+	footer{width: 100%; height: 150px; background: #595959; margin-top: 150px; position: relative;}
 	.footerDiv{position: absolute; display: inline-block; font-size: 11px; color: #B5B5B5;}
 	.footerDiv>a{font-size: 11px; color: #B5B5B5; text-decoration: none;}
 	#footerLogo{width: 150px; height: 75px; margin: 38px;}

@@ -7,30 +7,9 @@
 	.inputTitleName{
 		font-size: 23px;
 	}
-	.goodsInfo{
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-		width: 400px;
-	}
-	.table td:hover{cursor: pointer;}
-	.nav-item a:hover{
-	font-weight: bold;
-	}
+	
 	#sideButton{color: #65B741; font-weight: bold;}
 	
-	#delete_button {
-		background-color: #DD5353;
-		width: 80px;
-		border: none;
-	}
-
-	#write_button {
-		background-color: #65B741;
-		width: 80px;
-		border: none;
-		margin-right: 5px;
-	}
 	#revision_button{
 		background-color: orange;
 		width: 80px;
@@ -60,7 +39,6 @@
 				</div>
 				<div class='col-3'>
 					<button class="btn btn-primary" type="button" id="revision_button">수정</button>
-					<button class="btn btn-primary" type="button" id="delete_button">삭제</button>
 				</div>
 			</div>
 		</div>
@@ -78,7 +56,6 @@
 				</div>
 				<div class='col-3'>
 					<button class="btn btn-primary" type="button" id="revision_button">수정</button>
-					<button class="btn btn-primary" type="button" id="delete_button">삭제</button>
 				</div>
 			</div>
 		</div>

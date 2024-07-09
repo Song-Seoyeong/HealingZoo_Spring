@@ -89,7 +89,7 @@
 										<input type='text' id='status' value='미답변' size='8' class='inputBoard' style='color: red;' readonly>
 									</c:if>
 								</c:if>
-								<!-- 문의/예약 게시글 진행상태 -->
+								<!-- 문의 게시글 진행상태 -->
 								
 								<!-- 예약 게시글 진행상태 -->
 								<c:if test="${ b.cateNo == 103 }">
@@ -100,14 +100,14 @@
 										<input type='text' id='status' value='확인중' size='8' class='inputBoard' style='color: red;' readonly>
 									</c:if>
 								</c:if>
-								<!-- 문의/예약 게시글 진행상태 -->
+								<!-- 문의 게시글 진행상태 -->
 								
 							</div>
 							<br>
 							<div class='text-start' id='contentBox'>
-								<textArea id='boardContent' name='boardContent' cols='70' rows="10" style="resize: none; board" class='inputBoard' readonly>${ b.boardContent }</textArea>
+								<textArea id='boardContent' name='boardContent' cols='70' rows='20' style="resize: none; board" class='inputBoard' readonly>${ b.boardContent }</textArea>
 								<c:forEach items="${ imgList }" var='img'>
-									<div style='margin: 15px 15px;'>
+									<div style='margin: 15px 15px;' class='text-center'>
 										<img alt="${ img.imgName }" src="${ contextPath }/resources/uploadImg/${img.imgRename}" width='60%'>
 									</div>
 								</c:forEach>
@@ -133,78 +133,99 @@
 			</div>	
 		</div>
 		
-		<!-- 댓글 폼 -->
-		<div class="container text-center">
-			<div class="row">
-				<div class="col"></div>
-				<div class="col-8 content-center" style='background: white; border-radius: 25px;'>
-					<table class="table">
-						<thead>
-							<tr>
-								<th scope="col" width='10%'>작성자</th>
-								<th scope="col" width='60%'>댓글</th>
-								<th scope="col" width='15%'>작성일</th>
-								<th scope="col" width='15%'></th>
-							</tr>
-						</thead>
-						<tbody class='table-group-divider'>
-							<c:if test="${ !empty replyList }">
-								<c:forEach items="${ replyList }" var='r'>
-									<tr>
-										<td scope="row">${ r.memName }</td>
-										<td>${ r.reContent }</td>
-										<td>${ r.modifyDate }</td>
-										<td>
-											<input type='hidden' value='${ r.reNo }' name='reNo'>
-											<c:if test="${ r.memNo eq loginUser.memNo }">
-												<span><button type="button" class="btn btn-sm" id='updateReply' style='background: #EA862A; color: white;'>수정</button></span>
-												 <span><button type="button" class="btn btn-sm" id='deleteReply' style='background: #DD5353; color: white;'>삭제</button></span>
-											</c:if>
-											<input type='hidden' value='${ r.reContent }' name='reContent'>
-										</td>
-									</tr>
-								</c:forEach>
+		<!-- 문의 답변 폼 -->
+		<c:if test="${ b.cateNo == 101 }">
+			<div class="container" style='margin-bottom: 70px'>
+				<div class="row" height='300px'>
+					<div class="col"></div>
+						<div class="col-8 content-center" style='background: white; border-radius: 25px;'>
+							<h3 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;"> 운영자 답변</h3>
+							<c:if test='${ empty quReply }'>
+								<div class='text-center'>아직 운영자가 답변을 남기지않았습니다. 조금만 기다려주세요.</div>
 							</c:if>
-							<c:if test="${ empty replyList }">
-								<tr>
-									<td scope="row" colspan='4'>댓글이 없습니다. 댓글을 입력해주세요 :)</td>
-								</tr>
+							<c:if test='${ !empty quReply }'>
+								<div class='text-center'>${ quReply.replyContent }</div>
 							</c:if>
-						</tbody>
-					</table>
-					<div id='paginaion'></div>
-					<!-- 비회원 댓글 입력창 -->
-					<c:if test="${ empty loginUser }">
-						<div class="row">
-							<div class="col-2">댓글</div>
-							<div class="col-7 content-center" style='background: white; border-radius: 25px;'>
-								<textarea rows="3" cols="50" style='resize: none;' readonly placeholder='로그인 후 이용해주세요'></textarea>
-							</div>
-							<div class="col-3 content-center">
-								<button type="button" class="btn btn-sm" id='noLoginReply' style='background: #60A869; color: white;'>등록</button>
-							</div>
 						</div>
-					</c:if>
-					<!-- 비회원 댓글 입력창 -->
-					
-					<!-- 회원 댓글 입력창 -->
-					<c:if test="${ !empty loginUser }">
-						<div class="row">
-							<div class="col-2">댓글</div>
-							<div class="col-8 content-center" style='background: white; border-radius: 25px;'>
-								<textarea rows="3" cols="50" style='resize: none;' id='replyContent' placeholder='댓글을 작성해주세요'></textarea>
-							</div>
-							<div class="col-2 content-center">
-								<button type="button" class="btn btn-sm" id='insertReply' style='background: #60A869; color: white;'>등록</button>
-							</div>
-						</div>
-					</c:if>
-					<!-- 회원 댓글 입력창 -->
-						
-				</div>
-				<div class="col"></div>
+					<div class="col"></div>
+				</div>	
 			</div>
-		</div>
+		</c:if>
+		
+		<!-- 댓글 폼 -->
+		<c:if test="${ b.cateNo != 101 }">
+			<div class="container text-center">
+				<div class="row">
+					<div class="col"></div>
+					<div class="col-8 content-center" style='background: white; border-radius: 25px;'>
+						<table class="table">
+							<thead>
+								<tr>
+									<th scope="col" width='10%'>작성자</th>
+									<th scope="col" width='60%'>댓글</th>
+									<th scope="col" width='15%'>작성일</th>
+									<th scope="col" width='15%'></th>
+								</tr>
+							</thead>
+							<tbody class='table-group-divider'>
+								<c:if test="${ !empty replyList }">
+									<c:forEach items="${ replyList }" var='r'>
+										<tr>
+											<td scope="row">${ r.memName }</td>
+											<td>${ r.reContent }</td>
+											<td>${ r.modifyDate }</td>
+											<td>
+												<input type='hidden' value='${ r.reNo }' name='reNo'>
+												<c:if test="${ r.memNo eq loginUser.memNo }">
+													<span><button type="button" class="btn btn-sm" id='updateReply' style='background: #EA862A; color: white;'>수정</button></span>
+													 <span><button type="button" class="btn btn-sm" id='deleteReply' style='background: #DD5353; color: white;'>삭제</button></span>
+												</c:if>
+												<input type='hidden' value='${ r.reContent }' name='reContent'>
+											</td>
+										</tr>
+									</c:forEach>
+								</c:if>
+								<c:if test="${ empty replyList }">
+									<tr>
+										<td scope="row" colspan='4'>댓글이 없습니다. 댓글을 입력해주세요 :)</td>
+									</tr>
+								</c:if>
+							</tbody>
+						</table>
+						<div id='paginaion'></div>
+						<!-- 비회원 댓글 입력창 -->
+						<c:if test="${ empty loginUser }">
+							<div class="row">
+								<div class="col-2">댓글</div>
+								<div class="col-7 content-center" style='background: white; border-radius: 25px;'>
+									<textarea rows="3" cols="50" style='resize: none;' readonly placeholder='로그인 후 이용해주세요'></textarea>
+								</div>
+								<div class="col-3 content-center">
+									<button type="button" class="btn btn-sm" id='noLoginReply' style='background: #60A869; color: white;'>등록</button>
+								</div>
+							</div>
+						</c:if>
+						<!-- 비회원 댓글 입력창 -->
+						
+						<!-- 회원 댓글 입력창 -->
+						<c:if test="${ !empty loginUser }">
+							<div class="row">
+								<div class="col-2">댓글</div>
+								<div class="col-8 content-center" style='background: white; border-radius: 25px;'>
+									<textarea rows="3" cols="50" style='resize: none;' id='replyContent' placeholder='댓글을 작성해주세요'></textarea>
+								</div>
+								<div class="col-2 content-center">
+									<button type="button" class="btn btn-sm" id='insertReply' style='background: #60A869; color: white;'>등록</button>
+								</div>
+							</div>
+						</c:if>
+						<!-- 회원 댓글 입력창 -->
+							
+					</div>
+					<div class="col"></div>
+				</div>
+			</div>
+		</c:if>
 		<!-- 댓글 폼 -->
 	</form>
 		
