@@ -155,7 +155,7 @@
 						    	<td><input class="form-check-input" type="checkbox" name='checkOneEye' value="1"></td>
 								<td scope="row">1</td>
 								<td>
-									<select aria-label="말머리 선택" id='oneEyeLink' disabled style="border-style: none;  text-align: center; background-color: #fff; font-family: 'NanumSquareRound';">
+									<select aria-label="말머리 선택" name='oneEyeLink' disabled style="border-style: none;  text-align: center; background-color: #fff; font-family: 'NanumSquareRound';">
 										<option selected value=''>링크 선택</option>
 										<option value='greeting'>인사말</option>
 										<option value='way'>오시는 길</option>
@@ -170,13 +170,13 @@
 										<option value='question'>문의 게시판</option>
 									</select>
 								</td>
-								<td><input type="file" name='file' accept="image/*" disabled class="img" style="border:none;"></td>
+								<td><input type="file" name='file2' accept="image/*" disabled class="img" style="border:none;"></td>
 							</tr>
 						    <tr>
 						    	<td><input class="form-check-input" type="checkbox" value="2" name='checkOneEye'></td>
 								<td scope="row">2</td>
 								<td>
-									<select aria-label="말머리 선택" id='oneEyeLink2' disabled style="border-style: none;  text-align: center; background-color: #fff; font-family: 'NanumSquareRound';">
+									<select aria-label="말머리 선택" name='oneEyeLink' disabled style="border-style: none;  text-align: center; background-color: #fff; font-family: 'NanumSquareRound';">
 										<option selected value=''>링크 선택</option>
 										<option value='greeting'>인사말</option>
 										<option value='way'>오시는 길</option>
@@ -191,7 +191,7 @@
 										<option value='question'>문의 게시판</option>
 									</select>
 								</td>
-								<td><input type="file" name='file' accept="image/*" disabled class="img" style="border:none;"></td>
+								<td><input type="file" name='file2' accept="image/*" disabled class="img" style="border:none;"></td>
 							</tr>
 						  </tbody>
 					</table>

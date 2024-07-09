@@ -19,4 +19,5 @@ public class Image {
 	private int imgRefNum;
 	private String imgRefType;
 	private String imgActive;
+	private int imgRefHover;
 }

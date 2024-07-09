@@ -14,4 +14,5 @@ public class Link {
 	private String linkUrl;
 	private String linkInfo;
 	private String linkRefType;
+	private int linkRefNum;
 }

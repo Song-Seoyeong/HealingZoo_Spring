@@ -9,6 +9,12 @@
     #searchIcon:hover{cursor: pointer;}
     #community{font-weight: bold;}
     #communitySub{visibility: visible;}
+    .title{
+		max-width: 200px; /* 원하는 최대 길이 설정 */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+	}
 </style>
 <title>후기 게시판</title>
 </head>
@@ -46,7 +52,7 @@
                 <c:forEach items="${ reList }" var="review">
                     <tr>
                         <td>${review.boardNo}</td>
-                        <td>${review.boardTitle}</td>
+                        <td class='title'>${review.boardTitle}</td>
                         <td>${review.boardWriterName}</td>
                         <td>${review.boardModifyDate}</td>
                         <td>${review.boardCount}</td>

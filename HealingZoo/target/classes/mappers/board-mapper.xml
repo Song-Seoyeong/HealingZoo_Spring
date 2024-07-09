@@ -65,7 +65,7 @@
 	<!-- 문의/예약 등록 -->
 	<insert id="insertQuBo">
 		insert into inquiry_book
-			values(#{boardNo}, #{writerPhone}, default, #{boPwd})
+			values(#{boardNo}, #{writerPhone}, #{boPwd}, default)
 	</insert>
 	<!-- 문의/예약 등록 -->
 	
@@ -192,7 +192,9 @@
 	
 	<!--  후기 리스트 상세 글 조회  -->
 	<select id="selectReBoard" resultMap="reBoard">
-		select * from REVIEW_BOARD_VIEW where board_no = #{bId}
+		select * 
+		from Board 
+		where board_no = #{bId}
 	</select>
 	<!--  후기 리스트 상세 글 조회  -->
 	
@@ -341,112 +343,6 @@
 	</update>
 	<!--  댓글 수정 -->
 	
-	<!-- 배너 이미지 존재 여부 확인 -->
-	<select id="checkBanner" resultType='Image'>
-		select count(*)
-			from image
-			where img_ref_type = 'BANNER' and img_ref_num = #{i}
-	</select>
 	
-	<!-- 동물 -->
-	<select id="getAnimalCount" resultType="int">
-        select count(*)
-        from ANIMAL
-    </select>
-	
- 	<select id="selectFamilyList" resultMap="AnimalList">
-    SELECT *
-    FROM animal
-    ORDER BY ANI_NO ASC
-	</select>
-	
-	<resultMap type="Animal" id="AnimalList">
-        <id column="ANI_NO" property="aniNO"/>
-        <result column="ANMAL_CLASS" property="animalClass"/>
-        <result column="ANIMAL_FAMILY" property="animalFamily"/>
-        <result column="ANIMAL_NAME" property="animalName"/>
-        <result column="ENTER_DATE" property="enterDate"/>
-        <result column="EXTINCT_GRADE" property="extinctGrade"/>
-        <result column="UPLOAD_DATE" property="uploadDate"/>
-	</resultMap>
-	
-	<!-- 동물 정보 조회 -->
-    <select id="selectAnimal" resultMap="AnimalList" parameterType="int">
-	    SELECT *
-	    FROM ANIMAL
-	    WHERE ANI_NO = #{aniNO}
-	</select>
-    
-	<!--  동물 추가 -->
-	<insert id="insertAnimal"> 
-		INSERT INTO ANIMAL VALUES (seq_animal.nextval, #{animalClass}, #{animalFamily}, #{animalName}, sysdate, #{extinctGrade}, sysdate)
-	</insert>
-	
-    <!-- 동물 정보 수정 -->
-    <update id="updateAnimal" parameterType="Animal">
-        UPDATE ANIMAL
-        SET 
-            ANMAL_CLASS = #{animalClass},
-            ANIMAL_FAMILY = #{animalFamily},
-            ANIMAL_NAME = #{animalName},
-            EXTINCT_GRADE = #{extinctGrade}
-        WHERE ANI_NO = #{aniNO}
-    </update>
-    
-	<!--  동물 삭제 +수정+ ( ) 는 체크박스를 여러개 체크시 함께 삭제를 위한 코드입니다.-->
-	<delete id="deleteAnimal" parameterType="list">
-    DELETE FROM ANIMAL
-    WHERE ANI_NO IN
-    <foreach collection="list" item="aniNO" open="(" separator="," close=")">
-        #{aniNO}
-    </foreach>
-	</delete>
-	
-	<!-- family에 동물보이기
-	<select id="getAllAnimal">
-		SELECT *
-		FROM ANIMAL
-		ORDER BY ANIMAL_CLASS, ANIMAL_NO
-	</select> -->
-	
-	<!-- 마스코트 부분 -->
-	
-	<!-- 마스코트 목록 조회 -->
-	<select id="selectMascotList" resultMap="goodsResultMap">
-    SELECT * FROM GOODS ORDER BY GOODS_NO
-	</select>
-	
-    <!-- 특정 상품 정보 가져오기 -->
-    <select id="selectGoods" parameterType="int" resultMap="goodsResultMap">
-        SELECT * FROM GOODS WHERE GOODS_NO = #{goodsNo}
-    </select>
-
-    <!-- 상품 정보 업데이트 -->
-    <update id="updateGoods" parameterType="Goods">
-        UPDATE GOODS
-        SET GOODS_NAME = #{goodsName},
-            GOODS_PRICE = #{goodsPrice},
-            GOODS_INFO = #{goodsInfo}
-        WHERE GOODS_NO = #{goodsNo}
-    </update>
-
-    <!-- 상품 삭제 -->
-    <delete id="deleteGoods" parameterType="int">
-        DELETE FROM GOODS WHERE GOODS_NO = #{goodsNo}
-    </delete>
-
-    <!-- 새 상품 추가 -->
-    <insert id="insertGoods" parameterType="Goods">
-        INSERT INTO GOODS (GOODS_NO, GOODS_NAME, GOODS_PRICE, GOODS_INFO)
-        VALUES (SEQ_GOODS.NEXTVAL, #{goodsName}, #{goodsPrice}, #{goodsInfo})
-    </insert>
-
-    <!-- Goods 결과 매핑 -->
-    <resultMap id="goodsResultMap" type="Goods">
-        <id property="goodsNo" column="GOODS_NO"/>
-        <result property="goodsName" column="GOODS_NAME"/>
-        <result property="goodsPrice" column="GOODS_PRICE"/>
-        <result property="goodsInfo" column="GOODS_INFO"/>
-    </resultMap>
 	
 </mapper>

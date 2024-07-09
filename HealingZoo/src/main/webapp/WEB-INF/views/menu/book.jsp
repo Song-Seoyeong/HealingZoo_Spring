@@ -10,6 +10,12 @@
 	#searchIcon:hover{cursor: pointer;}
 	#community{font-weight: bold;}
 	#communitySub{visibility: visible;}
+	.title{
+		max-width: 200px; /* 원하는 최대 길이 설정 */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+	}
 </style>
 <title>예약 게시판</title>
 </head>
@@ -47,7 +53,7 @@
 			  	<c:forEach items="${ bookList }" var='b'>
 				  	<tr>
 				      <td scope="row">${ b.boardNo }</td>
-				      <td>${ b.boardTitle }</td>
+				      <td class='title'>${ b.boardTitle }</td>
 				      <td>${ b.boardWriterName }</td>
 				      <td>${ b.boardModifyDate }</td>
 				      <c:if test="${ b.quBoBoardStatus eq 'N' }">

@@ -13,6 +13,12 @@
 #searchIcon:hover {
 	cursor: pointer;
 }
+.title{
+		max-width: 200px; /* 원하는 최대 길이 설정 */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+	}
 </style>
 <title>문의 게시판</title>
 </head>
@@ -50,7 +56,7 @@
 						<c:forEach items="${ questionList }" var='question'>
 							<tr>
 								<td scope="row">${ question.boardNo }</td>
-								<td>${ question.boardTitle }</td>
+								<td class='title'>${ question.boardTitle }</td>
 								<td>${ question.boardWriterName }</td>
 								<td>${ question.boardModifyDate }</td>
 								<c:if test="${ question.quBoBoardStatus == 'N' }">

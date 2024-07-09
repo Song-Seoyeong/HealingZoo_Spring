@@ -56,14 +56,19 @@
 			<div style='margin: 10% 0%'></div>
 			<div class="row g-3 align-items-center">
 			  <div class="col-3"></div>
-			  <div class="col-3 text-center">
-			  	<button id='login' class="btn" style='background: #60A869; color: white;'>로그인</button>
-			  </div>
-			  <div class="col-3 text-center">
-			  	<c:if test="${ !empty id }">
+			  <c:if test="${ !empty id }">
+				  <div class="col-3 text-center">
+				  	<button id='login' class="btn" style='background: #60A869; color: white;'>로그인</button>
+				  </div>
+				  <div class="col-3 text-center">
 			  		<label id='searchPwd'>비밀번호 찾기</label>
-			  	</c:if>
-			  </div>
+			  	  </div>
+			  </c:if>
+			  <c:if test="${ empty id }">
+				  <div class="col-6 text-center">
+				  	<button id='login' class="btn" style='background: #60A869; color: white;'>로그인</button>
+				  </div>
+				</c:if>
 			  <div class="col-3"></div>
 			</div>
 	    </div>
