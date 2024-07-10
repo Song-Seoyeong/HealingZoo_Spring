@@ -109,148 +109,71 @@
         <ul>
             <li><a href="#포유류">포유류</a></li>
             <li><a href="#조류">조류</a></li>
+            <li><a href="#파충류">파충류</a></li>
         </ul>
     </div>
     <br><br>
-    <div class="prolinkbar">
-		<div class="prolink">포유류</div>
-	</div>
-    <div class="animalcontainer">
-	    <div class="animal-card">
-	        <div class="image-container">
-	            <img src="${contextPath}/image2/새끼 호랑이.jpg" alt="호랑이">
-	        </div>
-	        <div class="content">
-	            <h2 class="title">호랑이</h2><br> <!-- 간격 조절은 content title로 -->
-	            <p class="description">분류: 대형 고양이과</p>
-	            <p class="description">서식지: 숲 속</p>
-	            <p class="description">멸종위기급수: 지역절멸(RE)</p>
-	            <p class="description">입소 날짜: 2023/06/01</p>
-	        </div>
-	    </div>
-	    <br>
-	    <div class="animal-card">
-	        <div class="image-container">
-	            <img src="${contextPath}/image2/수달정면.jpg" alt="수달">
-	        </div>
-	        <div class="content">
-	            <h2 class="title">수달</h2>
-	            <p class="description">분류: 족제비과</p>
-	            <p class="description">서식지: 강과 호수</p>
-	            <p class="description">멸종위기급수: 취약(VU)</p>
-	            <p class="description">입소 날짜: 2023/06/01</p>
-	        </div>
-	    </div>
-	    <br>
-	    <div class="animal-card">
-	        <div class="image-container">
-	            <img src="${contextPath}/image2/옆판다.jpg" alt="레서판다">
-	        </div>
-	        <div class="content">
-	            <h2 class="title">레서판다</h2>
-	            <p class="description">분류: 레서판다과</p>
-	            <p class="description">서식지: 숲 속</p>
-	            <p class="description">멸종위기급수: 취약(VU)</p>
-	            <p class="description">입소 날짜: 2023/06/01</p>
-	        </div>
-	    </div>
-	    <br>
-	    <div class="animal-card">
-	        <div class="image-container">
-	            <img src="${contextPath}/image2/더블 담비.jpg" alt="담비">
-	        </div>
-	        <div class="content">
-	            <h2 class="title">담비</h2>
-	            <p class="description">분류: 식육목 족제비과</p>
-	            <p class="description">서식지: 숲 속</p>
-	            <p class="description">멸종위기급수: 취약(VU)</p>
-	            <p class="description">입소 날짜: 2023/06/01</p>
-	        </div>
-	    </div>
-	    <br>
-	    <div class="animal-card">
-	        <div class="image-container">
-	            <img src="${contextPath}/image2/바윗여우.jpg" alt="붉은 여우">
-	        </div>
-	        <div class="content">
-	            <h2 class="title">붉은 여우</h2>
-	            <p class="description">분류: 개과</p>
-	            <p class="description">서식지: 평지</p>
-	            <p class="description">멸종위기급수: 취약(VU)</p>
-	            <p class="description">입소 날짜: 2023/06/01</p>
-	        </div>
-	    </div>
-	    <br>
-	    <div class="animal-card">
-	        <div class="image-container">
-	            <img src="${contextPath}/image2/라쿤.jpg" alt="라쿤">
-	        </div>
-	        <div class="content">
-	            <h2 class="title">라쿤</h2>
-	            <p class="description">분류: 식육목 너구리과</p>
-	            <p class="description">서식지: 숲 속</p>
-	            <p class="description">멸종위기급수: 취약(VU)</p>
-	            <p class="description">입소 날짜: 2023/06/01</p>
-	        </div>
-	    </div>
-	    <br>
-	    <div class="animal-card">
-	        <div class="image-container">
-	            <img src="${contextPath}/image2/나무등반다람쥐.jpg" alt="하늘다람쥐">
-	        </div>
-	        <div class="content">
-	            <h2 class="title">하늘다람쥐</h2>
-	            <p class="description">분류: 설치류</p>
-	            <p class="description">서식지: 숲 속</p>
-	            <p class="description">멸종위기급수: 취약(VU)</p>
-	            <p class="description">입소 날짜: 2023/06/01</p>
-	        </div>
-        </div>
-        <br>
-        <div class="prolinkbar">
-			<div class="prolink">조류</div>
-		</div>
-        <section id="조류">
-            <div class="animal-card">
-                <div class="image-container">
-                    <img src="${contextPath}/image2/수리부엉이.jpg" alt="수리부엉이">
-                </div>
-                <div class="content">
-                    <h2 class="title">수리부엉이</h2>
-                    <p class="description">분류: 올빼미과 맹금류</p>
-                    <p class="description">서식지: 숲 속</p>
-                    <p class="description">멸종위기급수: 취약(VU)</p>
-                    <p class="description">입소 날짜: 2023/06/01</p>
-                </div>
-            </div>
-            <br>
-            <div class="animal-card">
-                <div class="image-container">
-                    <img src="${contextPath}/image2/밑앵무.jpg" alt="푸른목금강앵무">
-                </div>
-                <div class="content">
-                    <h2 class="title">푸른목금강앵무</h2>
-                    <p class="description">분류: 금강앵무속</p>
-                    <p class="description">서식지: 야자나무 둥지</p>
-                    <p class="description">멸종위기급수: 취약(VU)</p>
-                    <p class="description">입소 날짜: 2023/06/01</p>
-                </div>
-            </div>
-            <br>
-            <div class="animal-card">
-                <div class="image-container">
-                    <img src="${contextPath}/image2/둥지딱새.jpg" alt="긴꼬리딱새">
-                </div>
-                <div class="content">
-                    <h2 class="title">긴꼬리딱새</h2>
-                    <p class="description">분류: 긴꼬리딱새속</p>
-                    <p class="description">서식지: 숲 속</p>
-                    <p class="description">멸종위기급수: 취약(VU)</p>
-                    <p class="description">입소 날짜: 2023/06/01</p>
-                </div>
-            </div>
-        </section>
+    
+    <div class="prolinkbar" id="포유류">
+        <div class="prolink">포유류</div>
     </div>
+    <div class="animalcontainer">
+        <c:forEach items="${mammals}" var="animal">
+            <div class="animal-card">
+                <div class="image-container">
+                    <img src="${pageContext.request.contextPath}${animal.imagePath}" alt="${animal.animalName}">
+                </div>
+                <div class="content">
+                    <h2 class="title">${animal.animalName}</h2><br>
+                    <p class="description">분류: ${animal.animalFamily}</p>
+                    <p class="description">멸종위기급수: ${animal.extinctGrade}</p>
+                    <p class="description">입소 날짜: ${animal.enterDate}</p>
+                </div>
+            </div>
+            <br>
+        </c:forEach>
+    </div>
+
+    <div class="prolinkbar" id="조류">
+        <div class="prolink">조류</div>
+    </div>
+    <div class="animalcontainer">
+        <c:forEach items="${birds}" var="animal">
+            <div class="animal-card">
+                <div class="image-container">
+                    <img src="${pageContext.request.contextPath}${animal.imagePath}" alt="${animal.animalName}">
+                </div>
+                <div class="content">
+                    <h2 class="title">${animal.animalName}</h2><br>
+                    <p class="description">분류: ${animal.animalFamily}</p>
+                    <p class="description">멸종위기급수: ${animal.extinctGrade}</p>
+                    <p class="description">입소 날짜: ${animal.enterDate}</p>
+                </div>
+            </div>
+            <br>
+        </c:forEach>
+    </div>
+
+    <div class="prolinkbar" id="파충류">
+        <div class="prolink">파충류</div>
+    </div>
+    <div class="animalcontainer">
+        <c:forEach items="${reptiles}" var="animal">
+            <div class="animal-card">
+                <div class="image-container">
+                    <img src="${pageContext.request.contextPath}${animal.imagePath}" alt="${animal.animalName}">
+                </div>
+                <div class="content">
+                    <h2 class="title">${animal.animalName}</h2><br>
+                    <p class="description">분류: ${animal.animalFamily}</p>
+                    <p class="description">멸종위기급수: ${animal.extinctGrade}</p>
+                    <p class="description">입소 날짜: ${animal.enterDate}</p>
+                </div>
+            </div>
+            <br>
+        </c:forEach>
+    </div>
+    
     <%@ include file='../common/footer.jsp'%>
 </body>
 </html>

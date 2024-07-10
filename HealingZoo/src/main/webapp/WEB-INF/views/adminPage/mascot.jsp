@@ -31,7 +31,7 @@
 		border: none;
 		margin-right: 5px;
 	}
-	#revision_button{
+	#revision_button,#update_button,#mascot_update_button,#goods_info_update_button{
 		background-color: orange;
 		width: 80px;
 		border: none;
@@ -51,37 +51,44 @@
 	<div class="container" style="width: 900px; margin-top: 100px; margin-bottom: 100px;">
 		<!-- 마스코트 이미지 -->
 		<div style='margin-bottom: 70px;'>
-			<h2 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;">마스코트 이미지</h2>
-			<div class='row'>
-				<div class='col-2 text-center'>
-					<p class='inputTitleName'>이미지 : </p>
-				</div>
-				<div class='col-7'>
-					<input class="form-control" width='100px' type="file" id="mascotImg" name='mascotImg' accept='image/*'>
-				</div>
-				<div class='col-3'>
-					<button class="btn btn-primary" type="button" id="revision_button">수정</button>
-					<button class="btn btn-primary" type="button" id="delete_button">삭제</button>
-				</div>
-			</div>
+		    <h2 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;">마스코트 이미지</h2>
+		    <form action="${contextPath}/updateMascotImage.admin" method="post" enctype="multipart/form-data">
+		        <div class='row'>
+		            <div class='col-2 text-center'>
+		                <p class='inputTitleName'>이미지 : </p>
+		            </div>
+		            <div class='col-7'>
+		                <input class="form-control" width='100px' type="file" id="mascotImg" name='mascotImg' accept='image/*'>
+		            </div>
+		            <div class='col-3'>
+		                <button class="btn btn-primary" type="submit" id="mascot_update_button">수정</button>
+		            </div>
+		        </div>
+		    </form>
+		    <c:if test="${not empty mascotImage}">
+		        <img src="${pageContext.request.contextPath}${mascotImage.imgPath}/${mascotImage.imgRename}" alt="마스코트 이미지" style="max-width: 300px; margin-top: 10px;">
+		    </c:if>
 		</div>
 		
-		
 		<!-- 상품 안내 이미지 -->
-		<div  style='margin-bottom: 100px;'>
-			<h2 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;">상품 안내 이미지</h2>
-			<div class='row'>
-				<div class='col-2 text-center'>
-					<p class='inputTitleName'>이미지 : </p>
-				</div>
-				<div class='col-7'>
-					<input class="form-control" width='100px' type="file" id="goodsInfoImg" name='goodsInfoImg' accept='image/*'>
-				</div>
-				<div class='col-3'>
-					<button class="btn btn-primary" type="button" id="revision_button">수정</button>
-					<button class="btn btn-primary" type="button" id="delete_button">삭제</button>
-				</div>
-			</div>
+		<div style='margin-bottom: 100px;'>
+		    <h2 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;">상품 안내 이미지</h2>
+		    <form action="${contextPath}/updateGoodsInfoImage.admin" method="post" enctype="multipart/form-data">
+		        <div class='row'>
+		            <div class='col-2 text-center'>
+		                <p class='inputTitleName'>이미지 : </p>
+		            </div>
+		            <div class='col-7'>
+		                <input class="form-control" width='100px' type="file" id="goodsInfoImg" name='goodsInfoImg' accept='image/*'>
+		            </div>
+		            <div class='col-3'>
+		                <button class="btn btn-primary" type="submit" id="goods_info_update_button">수정</button>
+		            </div>
+		        </div>
+		    </form>
+		    <c:if test="${not empty goodsInfoImage}">
+		        <img src="${pageContext.request.contextPath}${goodsInfoImage.imgPath}/${goodsInfoImage.imgRename}" alt="상품 안내 이미지" style="max-width: 300px; margin-top: 10px;">
+		    </c:if>
 		</div>
 		
 		<!-- 상품 리스트 -->
@@ -121,6 +128,11 @@
 				</div>
 			</form>
 		</div>
+		
+		<!-- 페이지네이션 -->
+		<%@ include file="../common/pagination.jsp" %>
+		<!-- 페이지네이션 -->
+		
 	</div>
 	
 	<!-- 하단 푸터 -->

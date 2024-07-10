@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -103,58 +105,35 @@
             <h2 align="center" class="mascoetTitle">&lt;힐링 동물원 마스코트 라꾸니&gt;</h2>
             <br><br>
             <div class="mascot-image">
-                <img src="${contextPath}/image2/mascot1.png" alt="라꾸니 이미지와 설명">
+                <img src="${pageContext.request.contextPath}${mascotImage.imgPath}/${mascotImage.imgRename}" alt="라꾸니 이미지와 설명">
             </div>
             <br><br><br><br>
             <div class="raccoon-image">
-                <img src="${contextPath}/image2/mascot2.png" alt="작은 라꾸니 이미지와 상품소개">
-            </div>  
+                <img src="${pageContext.request.contextPath}${goodsInfoImage.imgPath}/${goodsInfoImage.imgRename}" alt="작은 라꾸니 이미지와 상품소개">
+            </div>   
         </div>
         <br>
         <div class="prosubtitle">※ 라꾸니 상점의 모든 상품들은 동물보호단체에 기부되며, 현장 구매만 가능합니다.</div>
         <br>
         <div class="product-section">
             <div class="product-list">
-                <div class="product-item">
-                    <img src="${ contextPath }/image2/라쿤.jpg" alt="상품 1">
-                    <p>라꾸니 인형 (3개입)</p>
-                    <p class="product-subtext">라꾸니를 닮은 귀여운 인형입니다.</p>
-                    <p class="proprice">₩3,000</p>
-                </div>
-                <div class="product-item">
-                    <img src="${ contextPath }/image2/라쿤.jpg" alt="상품 2">
-                    <p>라꾸니 부채</p>
-                    <p class="product-subtext">라꾸니가 그려져있는 귀여운 부채입니다.</p>
-                    <p class="proprice">₩1,500</p>
-                </div>
-                <div class="product-item">
-                    <img src="${ contextPath }/image2/라쿤키링.jpg" alt="상품 3">
-                    <p>라꾸니 키링</p>
-                    <p class="product-subtext">라꾸니의 얼굴을 담은 키링입니다.</p>
-                    <p class="proprice">₩1,500</p>
-                </div>
+                <c:forEach items="${goodsList}" var="goods">
+                    <div class="product-item">
+                        <c:choose>
+                            <c:when test="${not empty goods.imagePath}">
+                                <img src="${pageContext.request.contextPath}${goods.imagePath}/${goods.imageRename}" alt="${goods.goodsName}">
+                            </c:when>
+                            <c:otherwise>
+                                <img src="${pageContext.request.contextPath}/resources/images/default_product.jpg" alt="${goods.goodsName}">
+                            </c:otherwise>
+                        </c:choose>
+                        <p>${goods.goodsName}</p>
+                        <p class="product-subtext">${goods.goodsInfo}</p>
+                        <p class="proprice">₩<fmt:formatNumber value="${goods.goodsPrice}" pattern="#,###" /></p>
+                    </div>
+                </c:forEach>
              </div>
              <br>
-             <div class="product-list">
-                <div class="product-item">
-                    <img src="${ contextPath }/image2/크리스마스라쿤.jpg" alt="상품 4">
-                    <p>라꾸니 크리스마스 오너먼트</p>
-                    <p class="product-subtext">썰매를 타고 움직이는 라꾸니 걸이입니다.</p>
-                    <p class="proprice">₩2,500</p>
-                </div>
-                <div class="product-item">
-                    <img src="${ contextPath }/image2/라쿤컵.jpg" alt="상품 5">
-                    <p>라꾸니 머그컵</p>
-                    <p class="product-subtext">라꾸니의 얼굴이 그려져있는 머그컵입니다.</p>
-                    <p class="proprice">₩10,000</p>
-                </div>
-                <div class="product-item">
-                    <img src="${ contextPath }/image2/라쿤냅킨.jpg" alt="상품 6">
-                    <p>라꾸니 냅킨</p>
-                    <p class="product-subtext">라꾸니가 그려져있는 냅킨입니다.</p>
-                    <p class="proprice">₩2,000</p>
-                </div>
-            </div>
         </div>
         <br><br><br>
     </main>

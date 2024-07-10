@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.semiproject.healingzoo.admin.model.dao.AdminDAO;
 import com.semiproject.healingzoo.admin.model.vo.Show;
 import com.semiproject.healingzoo.board.model.vo.Animal;
+import com.semiproject.healingzoo.board.model.vo.Board;
 import com.semiproject.healingzoo.board.model.vo.Goods;
 import com.semiproject.healingzoo.board.model.vo.Image;
 import com.semiproject.healingzoo.board.model.vo.Link;
@@ -27,12 +28,12 @@ public class AdminServiceImpl implements AdminService {
 	
 	
 	@Override
-	public ArrayList<Animal> selectFamilyList(PageInfo pi) { // +수정+
+	public ArrayList<Animal> selectFamilyList(PageInfo pi) {
 		return aDAO.selectFamilyList(sqlSession,pi);
 	}
 
 	
-	@Override public int getAnimalCount() { // +수정+ 
+	@Override public int getAnimalCount() { 
 		return aDAO.getAnimalCount(sqlSession); 
 	}
 
@@ -80,10 +81,81 @@ public class AdminServiceImpl implements AdminService {
 	public void deleteGoods(int goodsNo) {
 		aDAO.deleteGoods(sqlSession,goodsNo);
 	}
+	
+	//0709 +수정+
+	@Override
+	public void insertSingleImage(Image image) {
+		aDAO.insertSingleImage(sqlSession,image);
+	}
 
 	@Override
-	public void insertGoods(Goods goods) {
-		aDAO.insertGoods(sqlSession,goods);
+	public Image selectAnimalImage(int aniNO) {
+		return aDAO.selectAnimalImage(sqlSession,aniNO);
+	}
+
+	@Override
+	public void deactivateOldAnimalImage(int aniNO) {
+		aDAO.deactivateOldAnimalImage(sqlSession,aniNO);
+	}
+
+	@Override
+	public void updateAnimalImage(Image existingImage) {
+		aDAO.updateAnimalImage(sqlSession,existingImage);
+	}
+
+	@Override
+	public Image getMascotImage() {
+		return aDAO.getMascotImage(sqlSession);
+	}
+
+	@Override
+	public Image getGoodsInfoImage() {
+		return aDAO.getGoodsInfoImage(sqlSession);
+	}
+
+	@Override
+	public void updateGoodsInfoImage(Image image) {
+		aDAO.updateGoodsInfoImage(sqlSession,image);
+	}
+
+	@Override
+	public void updateMascotImage(Image image) {
+		aDAO.updateMascotImage(sqlSession,image);
+	}
+
+	@Override
+	public List<Animal> getAnimalsByClass(String string) {
+		return aDAO.getAnimalByClass(sqlSession,string);
+	}
+
+	@Override
+	public List<Goods> getMascotGoods() {
+		return aDAO.getMascotGoods(sqlSession);
+	}
+
+	@Override
+	public int insertGoods(Goods goods) {
+		return aDAO.insertGoods(sqlSession, goods);
+	}
+
+	@Override
+	public void insertGoodsImage(Image image) {
+	    aDAO.insertGoodsImage(sqlSession, image);
+	}
+
+	@Override
+	public void deactivateOldGoodsImage(int goodsNo) {
+		aDAO.deactivateOldGoodsImage(sqlSession,goodsNo);
+	}
+
+	@Override
+	public Image selectGoodsImage(int goodsNo) {
+		return aDAO.selectGoodsImage(sqlSession,goodsNo);
+	}
+
+	@Override
+	public List<Goods> getMascotGoodsWithImages() {
+		return aDAO.getMascotGoodsWithImages(sqlSession);
 	}
 	
 	@Override
@@ -176,8 +248,8 @@ public class AdminServiceImpl implements AdminService {
 
 
 	@Override
-	public void deleteImg(int showNo) {
-		aDAO.deleteImg(sqlSession, showNo);
+	public void deleteShowImg(int showNo) {
+		aDAO.deleteShowImg(sqlSession, showNo);
 	}
 
 
@@ -196,5 +268,226 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public int updateShowImg(HashMap<String, Object> map) {
 		return aDAO.updateShowImg(sqlSession, map);
+	}
+	
+	// 게시글 수 조회 (페이지네이션용)
+	@Override
+	public int getListCount(int i) {
+		return aDAO.getListCount(sqlSession, i);
+	}
+	
+	// 공지사항 게시글 리스트 조회
+	@Override
+	public ArrayList<Board> selectNoBoardList(PageInfo pi, int i) {
+		return aDAO.selectNoBoardList(sqlSession, pi, i);
+	}
+
+	// 문의사항 게시글 리스트 조회
+	@Override
+	public ArrayList<Board> selectQuBoardList(PageInfo pi, int i) {
+		return aDAO.selectQuBoardList(sqlSession, pi, i);
+	}
+
+	// 후기리스트 게시글 리스트 조회
+	@Override
+	public ArrayList<Board> selectReBoardList(PageInfo pi, int i) {
+		return aDAO.selectReBoardList(sqlSession, pi, i);
+	}
+
+	// 예약리스트 게시글 리스트 조회
+	@Override
+	public ArrayList<Board> selectBoBoardList(PageInfo pi, int i) {
+		return aDAO.selectBoBoardList(sqlSession, pi, i);
+	}
+
+	// 공지사항 게시글 상세 조회
+	@Override
+	public Board selectNoBoard(int bId, Integer userNo) {
+		Board b = aDAO.seletNoBoard(sqlSession, bId);
+		
+		if(b != null) {
+			if(userNo != null && userNo != b.getBoardWriterNo()) {
+				int result = aDAO.updateCount(sqlSession, bId);
+				
+				if(result >0) {
+					b.setBoardCount(b.getBoardCount() + 1);
+				}
+			}
+		}
+		return b;
+	}
+
+	// 이미지
+	@Override
+	public ArrayList<Image> selectImg(int bId) {
+		return aDAO.selectImg(sqlSession, bId);
+	}
+	
+	// 후기리스트 게시글 상세 조회
+	@Override
+	public Board selectReBoard(int bId, Integer userNo) {
+		Board b = aDAO.selectReBoard(sqlSession, bId);
+		
+		if(b != null) {
+			if(userNo != null && userNo != b.getBoardWriterNo()) {
+				int result = aDAO.updateCount(sqlSession, bId);
+				
+				if(result >0) {
+					b.setBoardCount(b.getBoardCount() + 1);
+				}
+			}
+		}
+		return b;
+	}
+
+	// 상세 글 보기 + 조회수 증가
+	@Override
+	public Board selectQuBoBoard(int bId, Integer userNo) {
+		Board b = aDAO.selectQuBoBoard(sqlSession, bId);
+		
+		if(b != null) {
+			if(userNo != null && userNo != b.getBoardWriterNo()) {
+				int result = aDAO.updateCount(sqlSession, bId);
+				
+				if(result >0) {
+					b.setBoardCount(b.getBoardCount() + 1);
+				}
+			}
+		}
+		return b;
+	}
+
+	// 말머리 필터 게시글 수 조회
+	@Override
+	public int listSubjectCount(String noSubject) {
+		return aDAO.listSubjectCount(sqlSession, noSubject);
+	}
+
+	// 말머리 필터 게시글 리스트 조회
+	@Override
+	public ArrayList<Board> searchFilter(String noSubject, PageInfo pi) {
+		return aDAO.searchFilter(sqlSession, noSubject, pi);
+	}
+
+	// 검색어 게시글 수 조회
+	@Override
+	public int listSearchCount(HashMap<String, Object> map) {
+		return aDAO.listSearchCount(sqlSession, map);
+	}
+
+	// 공지사항 검색어 리스트 조회
+	@Override
+	public ArrayList<Board> searchNoBoard(HashMap<String, Object> map, PageInfo pi) {
+		return aDAO.searchNoBoard(sqlSession, map, pi);
+	}
+
+	// 후기리스트 검색어 리스트 조회
+	@Override
+	public ArrayList<Board> searchReBoard(HashMap<String, Object> map, PageInfo pi) {
+		return aDAO.searchReBoard(sqlSession, map, pi);
+	}
+
+	// 예약리스트/문의사항 검색어 리스트 조회
+	@Override
+	public ArrayList<Board> searchQuBoBoard(HashMap<String, Object> map, PageInfo pi) {
+		return aDAO.searchQuBoBoard(sqlSession, map, pi);
+	}
+
+	// 상세보기에서 게시글 삭제
+	@Override
+	public int deleteBoard(int boardNo) {
+		return aDAO.deleteBaord(sqlSession, boardNo);
+	}
+
+	// 게시글 삭제와 동시에 이미지도 삭제
+	@Override
+	public int updateImgStatus(int boardNo) {
+		return aDAO.updateImgStatus(sqlSession, boardNo);
+	}
+
+	// 기존 이미지 삭제
+	@Override
+	public int deleteImg(ArrayList<String> deleteImg) {
+		return aDAO.deleteImg(sqlSession, deleteImg);
+	}
+
+	// 게시글 수정 - 문의/예약 글일 경우
+	@Override
+	public int updateQuBo(Board b) {
+		return aDAO.updateQuBo(sqlSession, b);
+	}
+
+	// 게시글 수정 - 공지사항일 경우
+	@Override
+	public int updateNotice(Board b) {
+		return aDAO.updateNotice(sqlSession, b);
+	}
+
+	// 게시글 수정 - 게시글 정보 업데이트
+	@Override
+	public int updateBoard(Board b) {
+		return aDAO.updateBoard(sqlSession, b);
+	}
+
+	// 게시글 수정 - 추가 이미지가 있을 때
+	@Override
+	public int insertImg(ArrayList<Image> list) {
+		return aDAO.insertImg(sqlSession, list);
+	}
+	
+	// 공지사항 게시글 수 조회
+	@Override
+	public int getNoListCount(int i) {
+		return aDAO.getNoListCount(sqlSession, i);
+	}
+
+	// 글쓰기
+	@Override
+	public int insertBoard(Board b) {
+		return aDAO.insertBoard(sqlSession, b);
+	}
+
+	// 글쓰기 - 공지사항
+	@Override
+	public int insertNo(Board b) {
+		return aDAO.insertNo(sqlSession, b);
+	}
+
+	// 글쓰기 - 문의사항/예약
+	@Override
+	public int insertQuBo(Board b) {
+		return aDAO.insertQuBo(sqlSession, b);
+	}
+
+	// 체크 글 삭제 - 글 상태 변경
+	@Override
+	public int checkDelete(int boardNo) {
+        return aDAO.checkDelete(sqlSession, boardNo); 
+    }
+	
+	// 체크 글 삭제 - 카테고리 번호 가져오기
+	@Override
+	public int getCategoryByBoardNo(int boardNoInt) {
+		return aDAO.getCategoryByBoardNo(sqlSession, boardNoInt);
+	}
+	
+	@Override
+	public Image getOperatingImage() {
+	    return aDAO.getOperatingImage(sqlSession);
+	}
+
+	@Override
+	public Image getChargeImage() {
+	    return aDAO.getChargeImage(sqlSession);
+	}
+
+	@Override
+	public void updateOperatingImage(Image image) {
+		aDAO.updateOperatingImage(sqlSession, image);
+	}
+
+	@Override
+	public void updateChargeImage(Image image) {
+		aDAO.updateChargeImage(sqlSession, image);
 	}
 }

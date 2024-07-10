@@ -16,4 +16,6 @@ public class Goods {
 	private String goodsName;
 	private int goodsPrice;
 	private String goodsInfo;
+	private String imagePath; // 이미지를 맞춰주기 위한 추가 0709 갱신
+	private String imageRename;
 }

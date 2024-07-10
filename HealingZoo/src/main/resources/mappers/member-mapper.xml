@@ -24,54 +24,93 @@
 	</select>
 	<!-- id 중복 확인 -->
 	
-	<!-- 비밀번호 수정 -->
+	<!-- 정보업데이트 -->
 	<update id="updatePwd">
 		update member
-		 set mem_pwd = #{memPwd}
-		 where mem_id = #{memId}
+		 set mem_pwd = #{newPwd}, mem_phone = #{memPhone}
+		 where mem_id = #{id}
 	</update>
-	<!-- 비밀번호 수정 -->
-	
-	<resultMap type="Board" id="selBoard">
-		<result column="CREATE_DATE" property="boardCreateDate"/>
-	</resultMap>
-	
+	<!-- 정보업데이트 -->
+		
 	<!-- 내 게시글 수 조회 -->
 	<select id="getListCount" resultType="_int">
 		select count(*)
-		from board
-		where board_active='Y' and board_writer_no = #{memNo}
+		from IN_BO_BOARD_VIEW
+		where board_active='Y' and writer_no = #{memNo}
 	</select>
 	<!-- 내 게시글 수 조회 -->
 	
 	<!-- 내 게시글 리스트 조회 -->	
 	<select id="myBoardList" resultMap="selBoard">
-		select cate_no, board_title, board_writer_name, create_date
-		from board
-		where board_active='Y' and board_writer_no = #{memNo}
+		select *
+		from IN_BO_BOARD_VIEW
+		where board_active='Y' and writer_no = #{memNo}
+		order by board_no desc
 	</select>
+	<resultMap type="Board" id="selBoard">
+		<result column="BOARD_NO" property="boardNo"/>
+		<result column="CATE_NO" property="cateNo"/>
+		<result column="WRITER_NO" property="boardWriterNo"/>
+		<result column="WRITER_NAME" property="boardWriterName"/>
+		<result column="BOARD_TITLE" property="boardTitle"/>
+		<result column="BOARD_CONTENT" property="boardContent"/>
+		<result column="BOARD_ACTIVE" property="boardActive"/>
+		<result column="BOARD_COUNT" property="boardCount"/>
+		<result column="CREATE_DATE" property="boardCreateDate"/>
+		<result column="MODIFY_DATE" property="boardModifyDate"/>
+		<result column="WRITER_PHONE" property="writerPhone"/>
+		<result column="BO_PWD" property="boPwd"/>
+		<result column="IN_BO_STATUS" property="quBoBoardStatus"/>
+	</resultMap>
 	<!-- 내 게시글 리스트 조회 -->	
+	
+	<!-- 검색 자기글 불러오기-->
+	<select id="listSearchCount" resultType="_int">
+		select count(*)
+		from IN_BO_BOARD_VIEW
+		where board_active = 'Y' and writer_no = ${memNo} and (board_title like '%'||  #{value} || '%' or board_content like '%' || #{value} || '%') 
+		order by board_no desc
+	</select>
+	<select id="selectSearchList" resultMap="selBoard">
+		select *
+			from IN_BO_BOARD_VIEW
+			where board_active = 'Y' and writer_no = ${memNo} and (board_title like '%'||  #{value} || '%' or board_content like '%' || #{value} || '%') 
+			order by board_no desc
+	</select>
+	<!-- 검색 자기글 불러오기-->
+	
 	
 	<!-- 내 댓글 수 조회 -->	
 	<select id="getListCommentCount" resultType="_int">
 		select count(*)
 		from reply
-		where mem_no = #{memNo}
+		where RE_WRITER = #{memNo} and re_active='Y'
 	</select>
 	<!-- 내 댓글 수 조회 -->
 	
 	<!-- 내 댓글 리스트 조회 -->
 	<select id="myCommentList" resultMap="selMyComment">
-		select *
+	select re_no, board_no, re_writer, re_content, re_active, board_title
 		from reply
-		where mem_no = #{memNo}
+			join board using(board_no)
+		where RE_WRITER = ${memNo} and re_active='Y'
 	</select>
+	<resultMap type="Reply" id="selMyComment">
+		<result column="RE_NO" property="reNo"/>
+		<result column="BOARD_NO" property="boardNo"/>
+		<result column="RE_WRITER" property="memNo"/>
+		<result column="RE_CONTENT" property="reContent"/>
+		<result column="RE_ACTIVE" property="reActive"/>
+	</resultMap>
 	<!-- 내 댓글 리스트 조회 -->
 	
-	<resultMap type="Reply" id="selMyComment">
-		<result column="RE_CONTENT" property="reContent"/>
-		<result column="MEM_NO" property="memNo"/>
-	</resultMap>
+	<!-- 회원탈퇴 -->
+	<update id="deleteMember">
+		update member
+		set mem_active = 'N'
+		where mem_no = ${memNo}
+	</update>
+	<!-- 회원탈퇴 -->
 	
 	<!-- 아이디 찾기 -->
 	<select id="searchId" resultType='string'>
@@ -88,5 +127,103 @@
 		where mem_id = #{memId} and mem_name = #{memName} and mem_phone = #{memPhone}
 	</select>
 	<!-- 비밀번호 찾기 -->
+	
+	<!-- 마이페이지> 선택된 내 게시글 삭제 -->
+	<select id="selDelBoard" resultType="_int">
+		update board
+		set board_active='N'
+		where board_no = ${boNo}
+	</select>
+	<!-- 마이페이지> 선택된 내 게시글 삭제 -->
+	
+	<!-- 마이리스트 말머리 리스트 조회 -->
+	<select id="listSubjectCount" resultType="_int">
+		select count(*)
+		from in_bo_board_view
+		<if test="noSubject == 1">
+			where board_active='Y' and writer_no = ${memNo}
+		</if>
+		<if test="noSubject != 1">
+			where board_active='Y' and CATE_NO = ${noSubject} and writer_no = ${memNo}
+		</if>
+	</select>
+	<select id="listSubject" resultMap="selBoard">
+		select *
+		from in_bo_board_view
+		where board_active='Y' 
+		<if test="noSubject == 1">
+			and writer_no = ${memNo} 
+		</if>
+		<if test="noSubject != 1">
+			and CATE_NO = ${noSubject} and writer_no = ${memNo}
+		</if>
+		order by board_no desc
+	</select>
+	<!-- 마이리스트 말머리 리스트 조회 -->
+	
+	<!-- 선택한 게시글 상세보기 -->
+	<select id="selectedBoard" resultMap="selBoard">
+		select *
+		from in_bo_board_view
+		where board_no=${bId} 
+	</select>
+	<!-- 선택한 게시글 상세보기 -->
+	
+	<!-- 선택된 댓글 삭제 -->
+	<update id="selDelComment">
+		update reply
+		set re_active = 'N'
+		where re_no = ${boNo}
+	</update>
+	<!-- 선택된 댓글 삭제 -->
+	
+	<!-- 수정 할 게시글 불러오기 -->
+	<select id="getBoard" resultMap="selBoard">
+		select *
+		from IN_BO_BOARD_VIEW
+		where board_no = ${boNo}
+	</select>
+	<!-- 수정 할 게시글 불러오기 -->
+	
+	<!-- 게시글 수정 -->
+	<update id="updateBoard">
+		update board
+			set board_title = #{title}, board_content = #{content}, modify_date = sysdate
+			where board_no = #{boardNo}
+	</update>
+	<!-- 게시글 수정 -->
+	
+	<!-- 게시글(문의/예약) 수정 -->
+	 <update id="updateInBo">
+		update inquiry_book
+			set in_bo_phone = #{writerPhone}, in_bo_pwd = #{boPwd}
+			where board_no = #{boardNo}
+	</update> 
+	<!-- 게시글(문의/예약) 수정 -->
+	
+	<!-- 기존 스태프 사진 불러오기 -->
+	<select id="selectStaff" resultType="Image">
+		select *
+		from image
+		where IMG_REF_NUM = #{memNo}
+	</select>
+	
+	<!-- 관리자 사진 삭제 -->
+	<delete id="deleteStaff">
+		delete from image where IMG_REF_NUM = #{memNo} and IMG_NO = #{ImgNo}
+	</delete>
+	
+	<!-- 관리자 사진 업데이트 -->
+	<insert id="updateStaff">
+		insert into image
+		 values(seq_img.nextval, #{imgPath}, #{imgName},#{imgRename}, #{imgRefNum} , #{imgRefType}, default, 0)
+	</insert>
+	
+	<!-- 관리자 소개글 수정 -->
+	<update id="updateGreetingWrite">
+		update member
+		set MEM_INTRO = #{greetingWrite}
+		where MEM_NO = #{memNo}
+	</update>
 	
 </mapper>

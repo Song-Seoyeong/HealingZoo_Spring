@@ -67,12 +67,16 @@
 					<!-- 카테고리별 제목 입력창 -->
 					
 					<br>
-					<!--  글쓰기 박스인데 일단 제외시킴 이유는 content칸이 없어서
-					<div  class='text-center'>
-				    	<textArea id='inputBoardContent' name='boardContent' cols='80' rows="20" style="resize: none;"  class='inputBoard'></textArea>
-					</div>
-					-->
 					<br>
+					<!-- 파일 선택 칸 추가 0708 -->
+					<div class='row' style='margin:5px;'>
+						<div class='col-8 text-end' id='fileArea'>
+							<div style='margin: 5px;'>
+								<input class="form-control" type="file" name='file' accept='image/*'>
+							</div>
+						</div>
+						<div class='col-1'></div>
+					</div>
 					<div class="text-end">
 				    	<button id='insertBoard' class="btn" style='background: #60A869; color: white;'>완료</button>
 				    	&nbsp;&nbsp;&nbsp;	
@@ -93,8 +97,8 @@
 	<!-- /푸터 -->
 	
 	<script>
-		/* // 파일 추가 로직 추후 사용가능성 있음
-		const fileArea = document.getElementById("fileArea");
+		// 파일 여러 개 추가라 동물 소개에서는 제외(참고용)
+		/* const fileArea = document.getElementById("fileArea");
 		console.log(fileArea)
 		document.getElementById('plusFile').addEventListener('click', ()=>{
 			const newFileArea = document.createElement('div');

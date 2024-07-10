@@ -50,12 +50,19 @@ input {
 	border: none;
 }
 
-#write_button {
+#write_button,#write_button1 {
 	background-color: #65B741;
 	width: 80px;
 	border: none;
 	margin-right: 5px;
 }
+
+#update_button{
+		background-color: orange;
+		width: 80px;
+		border: none;
+		margin-right: 5px;
+	}
 
 .pagination-container {
 	display: flex;
@@ -137,12 +144,17 @@ tr {
 				<button class="btn btn-primary" type="submit" id="delete_button">삭제</button>
 			</div>
 		</form>
+		
+		<!-- 페이지네이션 -->
+		<%@ include file="../common/pagination.jsp" %>
+		<!-- 페이지네이션 -->
+		
 	</div>
 	<br>
 	<br>
 	<br>
 	<br>
-	<br>
+	<br><br><br><br><br><br><br><br><br><br><br><br><br>
 	<%@ include file='../common/footer.jsp'%>
 
 	<script>

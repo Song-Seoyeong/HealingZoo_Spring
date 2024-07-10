@@ -20,4 +20,5 @@ public class Reply {
 	private String createDate;
 	private String modifyDate;
 	private String reActive;
+	private String boardTitle;
 }

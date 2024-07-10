@@ -83,7 +83,7 @@ tr {
 				<tbody class="table-group-divider">
 					<c:forEach items="${ list }" var="n">
 						<tr>
-							<th><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></th>
+							<th><input class="form-check-input" type="checkbox" value="${ n.boardNo }" name="checked" id="flexCheckDefault"></th>
 							<td scope="row">${ n.boardNo }</td>
 							<c:if test="${ n.noSubject == 'NOTICE' }">
 								<td>공지</td>
@@ -105,7 +105,19 @@ tr {
 		</form>
 		<!-- 글 목록 -->
 
-		<!-- form을 만들어서 hidden으로 숨겨놓기  -->
+		<!-- 메시지 표시 -->
+		<c:if test="${not empty message}">
+		    <div class="alert alert-success" role="alert">
+		        ${message}
+		    </div>
+		</c:if>
+		<c:if test="${not empty error}">
+		    <div class="alert alert-danger" role="alert">
+		        ${error}
+		    </div>
+		</c:if>
+		
+	
 
 		<!-- 버튼 -->
 		<div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -114,8 +126,13 @@ tr {
 		</div>
 		<!-- 버튼 -->
 
+		<!-- 선택된 게시물의 상태 업데이트를 위한 숨은 폼 -->
+		<form id="updateForm" action="${contextPath}/checkDelete.admin" method="post" style="display: none;">
+		    <input type="hidden" name="updateBoardNos" id="updateBoardNos"/>
+		</form>
 
 
+		
 		<!-- 페이지네이션 -->
 		<%@ include file="../common/pagination.jsp" %>
 		<!-- 페이지네이션 -->
@@ -164,7 +181,7 @@ tr {
 		
 		// 글쓰기 이동
 		document.getElementById('writeBoard').addEventListener('click', () =>{
-			location.href = '${contextPath}/writeView.bo?category=' + 'notice';
+			location.href = '${contextPath}/writeView.admin?category=' + 'notice';
 														//?category=question
 		})
 		
@@ -193,9 +210,29 @@ tr {
 		
 		
 		
+		// 삭제 버튼 클릭 시 선택된 게시물 상태 업데이트
+		document.getElementById('deleteButton').addEventListener('click', function() {
+		    const checkedBoxes = document.querySelectorAll('input[name="checked"]:checked');
+		    const updateBoardNos = Array.from(checkedBoxes).map(cb => cb.value).join(',');
+			const cateNo = 100;
+		    if (updateBoardNos.length === 0) {
+		        alert('삭제할 게시물을 선택해주세요.');
+		        return;
+		    }
+
+		    if (!confirm('게시글을 삭제 하시겠습니까?')) {
+		        return;
+		    }
+
+		    // 숨은 폼 필드에 선택된 게시물 ID 할당
+		    document.getElementById('updateBoardNos').value = updateBoardNos;
+
+		    // 폼 제출
+		    document.getElementById('updateForm').submit();
+		});
+		
 	             
-	             
+	    // 전체 복붙 하시면 됩니당      
 	</script>
-	<!-- 한 행 모두 클릭 가능하게 -->
 </body>
 </html>

@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.semiproject.healingzoo.board.model.vo.Board;
+import com.semiproject.healingzoo.board.model.vo.Image;
 import com.semiproject.healingzoo.board.model.vo.PageInfo;
 import com.semiproject.healingzoo.board.model.vo.Reply;
 import com.semiproject.healingzoo.member.model.vo.Member;
@@ -26,11 +27,11 @@ public class MemberDAO {
 	public int checkID(SqlSession sqlSession, String id) {
 		return sqlSession.selectOne("memberMapper.checkId", id);
 	}
-	
-	public int updatePassword(SqlSession sqlSession, Member m) {
-		return sqlSession.update("memberMapper.updatePwd", m);
-	}
 
+	public int updatePassword(SqlSession sqlSession, HashMap<String, Object> map) {
+		return sqlSession.update("memberMapper.updatePwd", map);
+	}
+	
 	public ArrayList<Board> selectBoard(SqlSession sqlSession, int i) {
 		return sqlSession.selectOne("memberMapper.selectBoard", i);
 	}
@@ -55,6 +56,22 @@ public class MemberDAO {
 		return (ArrayList)sqlSession.selectList("memberMapper.myCommentList",memNo, rowBounds);
 	}
 
+
+	public int listSearchCount(SqlSession sqlSession, HashMap<String, Object> map) {
+		return sqlSession.selectOne("memberMapper.listSearchCount", map);
+	}
+
+	public ArrayList<Board> listSelectSearchList(SqlSession sqlSession, HashMap<String, Object> map, PageInfo pi) {
+		int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return (ArrayList)sqlSession.selectList("memberMapper.selectSearchList", map, rowBounds);
+	}
+
+	public int delMem(SqlSession sqlSession, int memNo) {
+		return sqlSession.update("memberMapper.deleteMember", memNo);
+	}
+
+	
 	public String searchId(SqlSession sqlSession, Member m) {
 		return sqlSession.selectOne("memberMapper.searchId", m);
 	}
@@ -63,4 +80,63 @@ public class MemberDAO {
 		return sqlSession.selectOne("memberMapper.searchPwd", m);
 	}
 	
+	public int updatePassword(SqlSession sqlSession, Member m) {
+		return sqlSession.update("memberMapper.updatePwd", m);
+	}
+
+	public int selDelBoard(SqlSession sqlSession, String boNo) {
+		return sqlSession.update("memberMapper.selDelBoard", boNo);
+	}
+
+	public int lisSubjectCount(SqlSession sqlSession, HashMap<String, Object> map) {
+		return sqlSession.selectOne("memberMapper.listSubjectCount", map);
+	}
+
+	public ArrayList<Board> listSubject(SqlSession sqlSession, PageInfo pi, HashMap<String, Object> map) {
+		int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return (ArrayList)sqlSession.selectList("memberMapper.listSubject", map, rowBounds);
+	}
+
+	public Board selectedBoard(SqlSession sqlSession, int bId) {
+		return sqlSession.selectOne("memberMapper.selectedBoard",bId);
+	}
+
+	public int selDelComment(SqlSession sqlSession, String boNo) {
+		return sqlSession.update("memberMapper.selDelComment", boNo);
+	}
+
+	public Board getBoard(SqlSession sqlSession, int boNo) {
+		return sqlSession.selectOne("memberMapper.getBoard", boNo);
+	}
+
+	public int updateBoard(SqlSession sqlSession, HashMap<String, Object> map) {
+		return sqlSession.update("memberMapper.updateBoard", map);
+	}
+
+	public int updateInBo(SqlSession sqlSession, HashMap<String, String> map1) {
+		return sqlSession.update("memberMapper.updateInBo", map1);
+	}
+	
+	public Image selectStaff(SqlSession sqlSession, int memNo) {
+		return sqlSession.selectOne("memberMapper.selectStaff", memNo);
+	}
+	
+	public int deleteStaff(SqlSession sqlSession, HashMap<String, Object> mapNo) {
+		return sqlSession.delete("memberMapper.deleteStaff", mapNo);
+	}
+	
+	public int updateStaff(SqlSession sqlSession, Image i) {
+		return sqlSession.update("memberMapper.updateStaff",i);
+	}
+
+	public int updateGreetingWrite(SqlSession sqlSession, HashMap<String, Object> mapI) {
+		return sqlSession.update("memberMapper.updateGreetingWrite", mapI);
+	}
+
+
+
+	
+
+
 }
