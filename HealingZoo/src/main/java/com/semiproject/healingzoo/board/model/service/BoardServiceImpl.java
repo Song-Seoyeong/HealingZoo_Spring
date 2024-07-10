@@ -2,16 +2,13 @@ package com.semiproject.healingzoo.board.model.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.semiproject.healingzoo.board.model.dao.BoardDAO;
-import com.semiproject.healingzoo.board.model.vo.Animal;
 import com.semiproject.healingzoo.board.model.vo.Board;
-import com.semiproject.healingzoo.board.model.vo.Goods;
 import com.semiproject.healingzoo.board.model.vo.Image;
 import com.semiproject.healingzoo.board.model.vo.PageInfo;
 import com.semiproject.healingzoo.board.model.vo.Reply;
@@ -231,5 +228,13 @@ public class BoardServiceImpl implements BoardService{
 		return bDAO.searchReBoard(sqlSession, map, pi);
 	}
 
-	
+	@Override
+	public Image getOperatingImage() {
+		return bDAO.getOperatingImage(sqlSession);
+	}
+
+	@Override
+	public Image getChargeImage() {
+		return bDAO.getChargeImage(sqlSession);
+	}
 }

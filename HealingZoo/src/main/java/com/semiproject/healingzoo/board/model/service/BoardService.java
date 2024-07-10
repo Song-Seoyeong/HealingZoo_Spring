@@ -2,11 +2,8 @@ package com.semiproject.healingzoo.board.model.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-import com.semiproject.healingzoo.board.model.vo.Animal;
 import com.semiproject.healingzoo.board.model.vo.Board;
-import com.semiproject.healingzoo.board.model.vo.Goods;
 import com.semiproject.healingzoo.board.model.vo.Image;
 import com.semiproject.healingzoo.board.model.vo.PageInfo;
 import com.semiproject.healingzoo.board.model.vo.Reply;
@@ -82,5 +79,7 @@ public interface BoardService {
 
 	ArrayList<Board> searchReBoard(HashMap<String, Object> map, PageInfo pi);
 
-	
+	Image getOperatingImage();
+
+	Image getChargeImage();
 }

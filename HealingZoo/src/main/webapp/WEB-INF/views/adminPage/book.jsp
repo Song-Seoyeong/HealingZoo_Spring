@@ -5,6 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<title>예약 리스트(관리자)</title>
 <style>
 @font-face {
     font-family: 'NanumSquareRound';
@@ -17,7 +18,7 @@
 	transform: scale(0.5);
 	accent-color: #65B741;
 }
-#delete_button {
+#deleteButton {
 	background-color: #DD5353;
 	width: 80px;
 	border: none;
@@ -66,7 +67,7 @@ tr {
 			<tbody class="table-group-divider">
 				<c:forEach items="${ list }" var="b">
 					<tr> 
-						<th><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></th>
+						<th><input class="form-check-input" type="checkbox" value="${ b.boardNo }" name="checked" id="flexCheckDefault"></th>
 						<td scope="row">${ b.boardNo  }</td>
 						<td>${ b.boardTitle }</td>
 						<td>${ b.boardWriterName }</td>
@@ -84,9 +85,27 @@ tr {
 		<!-- 글 목록 -->
 
 
+		<!-- 선택된 게시물의 상태 업데이트를 위한 숨은 폼 -->
+		<form id="updateForm" action="${contextPath}/checkDelete.admin" method="post" style="display: none;">
+		    <input type="hidden" name="updateBoardNos" id="updateBoardNos" />
+		</form>
+		
+		<!-- 메시지 표시 -->
+		<c:if test="${not empty message}">
+		    <div class="alert alert-success" role="alert">
+		        ${message}
+		    </div>
+		</c:if>
+		<c:if test="${not empty error}">
+		    <div class="alert alert-danger" role="alert">
+		        ${error}
+		    </div>
+		</c:if>
+		
+		
 		<!-- 버튼 -->
 		<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-			<button class="btn btn-primary" type="button" id="delete_button">삭제</button>
+			<button class="btn btn-primary" type="button" id="deleteButton">삭제</button>
 		</div>
 		<!-- 버튼 -->
 
@@ -154,6 +173,28 @@ tr {
 		      location.href = "${contextPath}/searchBook.admin?condition=" + condition + "&search=" + search + "&page=" + ${pi.currentPage};
 		    }
 		  });
+		
+		
+		// 삭제 버튼 클릭 시 선택된 게시물 상태 업데이트
+			document.getElementById('deleteButton').addEventListener('click', function() {
+			    const checkedBoxes = document.querySelectorAll('input[name="checked"]:checked');
+			    const updateBoardNos = Array.from(checkedBoxes).map(cb => cb.value).join(',');
+
+			    if (updateBoardNos.length === 0) {
+			        alert('삭제할 게시물을 선택해주세요.');
+			        return;
+			    }
+
+			    if (!confirm('게시글을 삭제 하시겠습니까?')) {
+			        return;
+			    }
+
+			    // 숨은 폼 필드에 선택된 게시물 ID 할당
+			    document.getElementById('updateBoardNos').value = updateBoardNos;
+
+			    // 폼 제출
+			    document.getElementById('updateForm').submit();
+			});
 	</script>
 
 	

@@ -2,16 +2,22 @@ package com.semiproject.healingzoo.menu.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.semiproject.healingzoo.admin.model.service.AdminService;
 import com.semiproject.healingzoo.board.model.exception.BoardException;
 import com.semiproject.healingzoo.board.model.service.BoardService;
+import com.semiproject.healingzoo.board.model.vo.Animal;
 import com.semiproject.healingzoo.board.model.vo.Board;
+import com.semiproject.healingzoo.board.model.vo.Goods;
+import com.semiproject.healingzoo.board.model.vo.Image;
 import com.semiproject.healingzoo.board.model.vo.PageInfo;
 import com.semiproject.healingzoo.common.Pagination;
 import com.semiproject.healingzoo.menu.model.service.MenuService;
@@ -21,6 +27,9 @@ public class MenuController {
 
 	@Autowired
 	private MenuService mService;
+	
+	@Autowired
+	private AdminService aService;
 	
 	@Autowired
 	private BoardService bService;
@@ -142,6 +151,10 @@ public class MenuController {
 		
 		// 말머리 필터 게시글 조회
 		ArrayList<Board> noList = bService.searchFilter(noSubject, pi);
+		
+		for(Board b : noList) {
+			b.setBoardWriterName("관리자");
+		}
 		if(noList != null) {
 			model.addAttribute("noList", noList);
 			model.addAttribute("pi", pi);
@@ -297,10 +310,53 @@ public class MenuController {
 		}
 	}
 	
+	// 마스코트 이동
+	@RequestMapping("mascot.menu")
+	public String mascotMove(Model model) {
+	    List<Goods> goodsList = aService.getMascotGoodsWithImages();
+	    model.addAttribute("goodsList", goodsList);
+	    
+	    // 마스코트 이미지와 상품 안내 이미지 가져오기
+	    Image mascotImage = aService.getMascotImage();
+	    Image goodsInfoImage = aService.getGoodsInfoImage();
+	    model.addAttribute("mascotImage", mascotImage);
+	    model.addAttribute("goodsInfoImage", goodsInfoImage);
+	    
+	    return "mascot";
+	}
 	
+	// failmy 내용 띄우기 import시 오류 해결
+	@GetMapping("family.menu")
+	public String familyPage(Model model) {
+	    List<Animal> mammals = aService.getAnimalsByClass("포유류");
+	    List<Animal> birds = aService.getAnimalsByClass("조류");
+	    List<Animal> reptiles = aService.getAnimalsByClass("파충류");
+	    
+	 // 디버깅 출력 -> 잘되는거 확인했음 혹시 안되면 켜볼것.
+//			    for (Animal animal : mammals) {
+//			        System.out.println("Mammal: " + animal.getAnimalName() + 
+//			                           ", Image path: " + animal.getImagePath() + 
+//			                           ", ANI_NO: " + animal.getAniNO());
+//			    }
+	    
+	    model.addAttribute("mammals", mammals);
+	    model.addAttribute("birds", birds);
+	    model.addAttribute("reptiles", reptiles);
+
+	    return "family";
+	}
 	
-	
-	
+	// 운영시간 메뉴 이동
+	@GetMapping("/operating.menu")
+	public String operatingAdmin(Model model) {
+	    Image operatingImage = bService.getOperatingImage();
+	    Image chargeImage = bService.getChargeImage();
+	    
+	    model.addAttribute("operatingImage", operatingImage);
+	    model.addAttribute("chargeImage", chargeImage);
+	    
+	    return "operating";
+	}
 	
 	
 	

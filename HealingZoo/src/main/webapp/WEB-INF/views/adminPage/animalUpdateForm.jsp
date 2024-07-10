@@ -21,7 +21,7 @@
     <!-- /헤더 -->
     
     <!-- 수정 폼 -->
-    <form action='${contextPath}/animalUpdate' method='post'>
+    <form action='${contextPath}/animalUpdate' method='post' enctype="multipart/form-data">
         <div class="container text-center" style='margin-top: 70px;'>
             <div class="row">
                 <div class="col-1"></div>
@@ -65,6 +65,21 @@
                     </div>
                     <!-- 카테고리별 제목 입력창 -->
                     
+                    <!-- 파일 선택 칸 추가 0708 -->
+					<div class='row' style='margin:5px;'>
+					    <div class='col-4'>
+					        <c:if test="${not empty image}">
+					            <img src="${pageContext.request.contextPath}${image.imgPath}/${image.imgRename}" alt="Current Animal Image" class="current-image" style="max-width: 100%; height: auto;">
+					            <p>현재 이미지: ${image.imgName}</p>
+					        </c:if>
+					    </div>
+					    <div class='col-8 text-end' id='fileArea'>
+					        <div style='margin: 5px;'>
+					            <input class="form-control" type="file" name='file' accept='image/*'>
+					        </div>
+					    </div>
+					</div>
+					
                     <br>
                     <div class="text-end">
                         <button type="submit" class="btn" style='background: #60A869; color: white;'>수정 완료</button>

@@ -22,6 +22,6 @@ public class Animal {
 	private Date enterDate;
 	private String extinctGrade;
 	private Date uploadDate;
-	
+	private String imagePath; // 이미지 번호를 이어주기위한 추가코드 0709 갱신
 	
 }

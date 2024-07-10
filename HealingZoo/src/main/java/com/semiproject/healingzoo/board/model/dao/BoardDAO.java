@@ -214,6 +214,13 @@ public class BoardDAO {
 		return (ArrayList)sqlSession.selectList("boardMapper.searchReBoard", map, rowBounds);
 	}
 
-	
+	public Image getOperatingImage(SqlSession sqlSession) {
+		return sqlSession.selectOne("boardMapper.getOperatingImage");
+	}
+
+
+	public Image getChargeImage(SqlSession sqlSession) {
+		return sqlSession.selectOne("boardMapper.getChargeImage");
+	}
 
 }

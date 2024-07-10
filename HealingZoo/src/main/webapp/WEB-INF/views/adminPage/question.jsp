@@ -5,6 +5,7 @@
 <head>
 <%@ taglib prefix='c' uri="http://java.sun.com/jsp/jstl/core"%>
 <meta charset="UTF-8">
+<title>문의사항(관리자)</title>
 <style>
 
 
@@ -55,8 +56,7 @@
 	
 	<!-- 글 목록 -->
 	<div class="container" style="width: 900px; margin-top: 100px;">
-		<h2
-			style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;">문의사항</h2>
+		<h2 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;">문의사항</h2>
 
 		<table class="table text-center">
 			<thead>
@@ -72,7 +72,7 @@
 			<tbody class="table-group-divider">
 				<c:forEach items="${ list }" var="q">
 					<tr>
-						<th><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></th>
+						<th><input class="form-check-input" type="checkbox" value="${ q.boardNo }" name="checked" id="flexCheckDefault"></th>
 						<td scope="row">${ q.boardNo }</td>
 						<td>${ q.boardTitle }</td>
 						<td>${ q.boardWriterName }</td>
@@ -89,8 +89,26 @@
 		</table>
 
 		<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-			<button class="btn btn-primary" type="button" id="delete_button">삭제</button>
+			<button class="btn btn-primary" type="button" id="deleteButton">삭제</button>
 		</div>
+		
+		<!-- 선택된 게시물의 상태 업데이트를 위한 숨은 폼 -->
+		<form id="updateForm" action="${contextPath}/checkDelete.admin" method="post" style="display: none;">
+		    <input type="hidden" name="updateBoardNos" id="updateBoardNos" />
+		</form>
+		
+		
+		<!-- 메시지 표시 -->
+		<c:if test="${not empty message}">
+		    <div class="alert alert-success" role="alert">
+		        ${message}
+		    </div>
+		</c:if>
+		<c:if test="${not empty error}">
+		    <div class="alert alert-danger" role="alert">
+		        ${error}
+		    </div>
+		</c:if>
 		
 		
 		<!-- 페이지네이션 -->
@@ -150,6 +168,28 @@
 		      location.href = "${contextPath}/searchQuestion.admin?condition=" + condition + "&search=" + search + "&page=" + ${pi.currentPage};
 		    }
 		  });
+		
+		
+		// 삭제 버튼 클릭 시 선택된 게시물 상태 업데이트
+			document.getElementById('deleteButton').addEventListener('click', function() {
+			    const checkedBoxes = document.querySelectorAll('input[name="checked"]:checked');
+			    const updateBoardNos = Array.from(checkedBoxes).map(cb => cb.value).join(',');
+
+			    if (updateBoardNos.length === 0) {
+			        alert('삭제할 게시물을 선택해주세요.');
+			        return;
+			    }
+
+			    if (!confirm('게시글을 삭제 하시겠습니까?')) {
+			        return;
+			    }
+
+			    // 숨은 폼 필드에 선택된 게시물 ID 할당
+			    document.getElementById('updateBoardNos').value = updateBoardNos;
+
+			    // 폼 제출
+			    document.getElementById('updateForm').submit();
+			});
 		</script>
 
 

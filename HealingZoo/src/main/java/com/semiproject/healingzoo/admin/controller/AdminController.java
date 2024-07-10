@@ -22,9 +22,9 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.semiproject.healingzoo.admin.model.exception.AdminException;
 import com.semiproject.healingzoo.admin.model.service.AdminService;
 import com.semiproject.healingzoo.admin.model.vo.Show;
-import com.semiproject.healingzoo.board.model.exception.BoardException;
 import com.semiproject.healingzoo.board.model.service.BoardService;
 import com.semiproject.healingzoo.board.model.vo.Animal;
 import com.semiproject.healingzoo.board.model.vo.Board;
@@ -76,7 +76,7 @@ public class AdminController {
 			model.addAttribute("pi", pi);
 			return "show";
 		}else {
-			throw new BoardException("프로그램 리스트를 조회 중 오류가 발생했습니다");
+			throw new AdminException("프로그램 리스트를 조회 중 오류가 발생했습니다");
 		}
 	}
 
@@ -86,79 +86,80 @@ public class AdminController {
 		return "operating";
 	}
 
-	// 공지 게시판 게시글 조회
+	//공지 게시판 게시글 목록 조회
 	@RequestMapping("notice.admin")
-	public String selectNoBoardList(@RequestParam(value = "page", defaultValue = "1") int currentPage, Model model) {
-
-		int listCount = bService.getListCount(100);
-
+	public String selectNoBoardList(@RequestParam(value="page", defaultValue="1") int currentPage, Model model) {
+		
+		int listCount = aService.getListCount(100);
+		
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
-		ArrayList<Board> list = bService.selectNoBoardList(pi, 100);
-
-		if (list != null) {
+		ArrayList<Board> list = aService.selectNoBoardList(pi, 100);
+		
+		if(list != null) {
 			model.addAttribute("list", list);
 			model.addAttribute("pi", pi);
-
+			
 			return "notice";
 		} else {
-			throw new BoardException("게시글 조회를 실패하였습니다.");
+			throw new AdminException("게시글 조회를 실패하였습니다.");
 		}
 	}
-
-	// 공지 게시판 게시글 조회
+	
+	//문의사항 게시판 게시글 목록 조회
 	@RequestMapping("question.admin")
-	public String selectQuBoardList(@RequestParam(value = "page", defaultValue = "1") int currentPage, Model model) {
-
-		int listCount = bService.getListCount(101);
-
+	public String selectQuBoardList(@RequestParam(value="page", defaultValue="1") int currentPage, Model model) {
+		
+		int listCount = aService.getListCount(101);
+		
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
-		ArrayList<Board> list = bService.selectQuBoardList(pi, 101);
-
-		if (list != null) {
+		ArrayList<Board> list = aService.selectQuBoardList(pi, 101);
+		
+		if(list != null) {
 			model.addAttribute("list", list);
 			model.addAttribute("pi", pi);
-
+			
 			return "question";
 		} else {
-			throw new BoardException("게시글 조회를 실패하였습니다.");
+			throw new AdminException("게시글 조회를 실패하였습니다.");
 		}
 	}
 
-	// 후기 게시판 게시글 조회
+
+	//후기 게시판 게시글 목록 조회
 	@RequestMapping("review.admin")
-	public String selectAllQueBookList(@RequestParam(value = "page", defaultValue = "1") int currentPage, Model model) {
-
-		int listCount = bService.getListCount(102);
-
+	public String selectReBoardList(@RequestParam(value="page", defaultValue="1") int currentPage, Model model) {
+		
+		int listCount = aService.getListCount(102);
+		
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
-		ArrayList<Board> list = bService.selectReBoardList(pi, 102);
-
-		if (list != null) {
+		ArrayList<Board> list = aService.selectReBoardList(pi, 102);
+		
+		if(list != null) {
 			model.addAttribute("list", list);
 			model.addAttribute("pi", pi);
-
+			
 			return "review";
 		} else {
-			throw new BoardException("게시글 조회를 실패하였습니다.");
+			throw new AdminException("게시글 조회를 실패하였습니다.");
 		}
 	}
 
-	// 예약 게시판 게시글 조회
+	// 예약리스트 게시글 리스트 조회
 	@RequestMapping("book.admin")
-	public String selectBoBoardList(@RequestParam(value = "page", defaultValue = "1") int currentPage, Model model) {
-
-		int listCount = bService.getListCount(103);
-
+	public String selectBoBoardList(@RequestParam(value="page", defaultValue="1") int currentPage, Model model) {
+		
+		int listCount = aService.getListCount(103);
+		
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
-		ArrayList<Board> list = bService.selectBoardList(pi, 103);
-
-		if (list != null) {
+		ArrayList<Board> list = aService.selectBoBoardList(pi, 103);
+		
+		if(list != null) {
 			model.addAttribute("list", list);
 			model.addAttribute("pi", pi);
-
+			
 			return "book";
 		} else {
-			throw new BoardException("게시글 조회를 실패하였습니다.");
+			throw new AdminException("게시글 조회를 실패하였습니다.");
 		}
 	}
 
@@ -187,7 +188,7 @@ public class AdminController {
 
 			return "../board/boardDetailAdmin";
 		} else {
-			throw new BoardException("게시글을 불러 오는데 실패했습니다.");
+			throw new AdminException("게시글을 불러 오는데 실패했습니다.");
 		}
 	}
 
@@ -216,69 +217,69 @@ public class AdminController {
 
 			return "../board/boardDetailAdmin";
 		} else {
-			throw new BoardException("게시글을 불러 오는데 실패했습니다.");
+			throw new AdminException("게시글을 불러 오는데 실패했습니다.");
 		}
 	}
 
 	// 메인 배너 링크 + 사진 추가/수정
 	@RequestMapping("insertBanner.admin")
-		public String insertBanner(@RequestParam("checkBanner") ArrayList<Integer> checkBanner,
-								   @RequestParam("bannerLink") ArrayList<String> bannerLinks,
-								   @RequestParam("file") ArrayList<MultipartFile> files,
-								   HttpServletRequest request) {
-			
-			ArrayList<Image> list = new ArrayList<Image>();
-			
-			for(MultipartFile img : files) {
-				if(img != null && !img.isEmpty()) {
-					String[] returnArr = saveImg(img, request);
-					
-					Image newImg = new Image();
-					newImg.setImgName(img.getOriginalFilename());
-					newImg.setImgPath(returnArr[0]);
-					newImg.setImgRename(returnArr[1]);
-					newImg.setImgRefType("BANNER");
-					list.add(newImg);
-				}
-			}
-			int result = 0;
-			
-			Link link = new Link();
-			link.setLinkRefType("BANNER");
-			
-			// 이전 배너 이미지 있으면 DB 업데이트+파일 이전 이미지 삭제 / 없으면 DB 추가
-			for(int i = 0; i < checkBanner.size(); i++) {
-				Image checkBannerResult = aService.checkBanner(checkBanner.get(i));
+	public String insertBanner(@RequestParam("checkBanner") ArrayList<Integer> checkBanner,
+							   @RequestParam("bannerLink") ArrayList<String> bannerLinks,
+							   @RequestParam("file") ArrayList<MultipartFile> files,
+							   HttpServletRequest request) {
+		
+		ArrayList<Image> list = new ArrayList<Image>();
+		
+		for(MultipartFile img : files) {
+			if(img != null && !img.isEmpty()) {
+				String[] returnArr = saveImg(img, request);
 				
-				list.get(i).setImgRefNum(checkBanner.get(i));
-				
-				link.setLinkRefNum(checkBanner.get(i));
-				link.setLinkUrl(bannerLinks.get(i) + ".menu");
-				
-				if(checkBannerResult != null) {
-					delete(checkBannerResult.getImgRename(), request);
-					result += aService.updateMainImg(list.get(i));
-					
-				}else {
-					result += aService.insertMainImg(list.get(i));
-				}
-				aService.updateMainLink(link);
-			}
-			
-			if(result == checkBanner.size()) {
-				return "redirect:mainPage.admin";
-			}else {
-				throw new BoardException("배너 이미지 저장에 실패했습니다");
+				Image newImg = new Image();
+				newImg.setImgName(img.getOriginalFilename());
+				newImg.setImgPath(returnArr[0]);
+				newImg.setImgRename(returnArr[1]);
+				newImg.setImgRefType("BANNER");
+				list.add(newImg);
 			}
 		}
+		int result = 0;
+		
+		Link link = new Link();
+		link.setLinkRefType("BANNER");
+		
+		// 이전 배너 이미지 있으면 DB 업데이트+파일 이전 이미지 삭제 / 없으면 DB 추가
+		for(int i = 0; i < checkBanner.size(); i++) {
+			Image checkBannerResult = aService.checkBanner(checkBanner.get(i));
+			
+			list.get(i).setImgRefNum(checkBanner.get(i));
+			
+			link.setLinkRefNum(checkBanner.get(i));
+			link.setLinkUrl(bannerLinks.get(i) + ".menu");
+			
+			if(checkBannerResult != null) {
+				delete(checkBannerResult.getImgRename(), request);
+				result += aService.updateMainImg(list.get(i));
+				
+			}else {
+				result += aService.insertMainImg(list.get(i));
+			}
+			aService.updateMainLink(link);
+		}
+		
+		if(result == checkBanner.size()) {
+			return "redirect:mainPage.admin";
+		}else {
+			throw new AdminException("배너 이미지 저장에 실패했습니다");
+		}
+	}
 
 	//한눈에보기 링크 + 사진 추가/수정
 	@RequestMapping("insertOneEye.admin")
-		public String insertOneEye(@RequestParam("checkOneEye") ArrayList<Integer> checkOneEye,
-								   @RequestParam("oneEyeLink") ArrayList<String> oneEyeLink,
-								   @RequestParam("file2") ArrayList<MultipartFile> files,
-								   HttpServletRequest request) {
-		
+	public String insertOneEye(@RequestParam("checkOneEye") ArrayList<Integer> checkOneEye,
+							   @RequestParam("oneEyeLink") ArrayList<String> oneEyeLink,
+							   @RequestParam("file2") ArrayList<MultipartFile> files,
+							   HttpServletRequest request) {
+	
 		ArrayList<Image> list = new ArrayList<Image>();
 		
 		for(MultipartFile img : files) {
@@ -320,209 +321,220 @@ public class AdminController {
 		if(result == checkOneEye.size()) {
 			return "redirect:mainPage.admin";
 		}else {
-			throw new BoardException("한눈에 보기 이미지 저장에 실패했습니다");
+			throw new AdminException("한눈에 보기 이미지 저장에 실패했습니다");
 		}
 	}
 
 	// 상세 글 보기 + 조회수 증가
 	@RequestMapping("boardView.admin")
-	public String selectBoard(@RequestParam("bId") int bId, @RequestParam("page") int page,
-			@RequestParam("category") int category, HttpSession session, Model model) {
-		Member loginUser = (Member) session.getAttribute("loginUser");
-
+	public String selectBoard(@RequestParam("bId") int bId,
+			@RequestParam("page") int page,
+			@RequestParam("category") int category,
+			HttpSession session,
+			Model model) {
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		
 		Integer userNo = null;
-		if (loginUser != null) {
-			userNo = (Integer) loginUser.getMemNo();
+		if(loginUser != null) {
+			userNo = (Integer)loginUser.getMemNo();
 		}
-
+		
 		// 카테고리별 상세 글 불러오는 메소드 나뉨
 		Board b = null;
-
-		if (category == 100) {
-			b = bService.selectNoBoard(bId, userNo);
-		} else if (category == 101 || category == 103) {
-			b = bService.selectBoard(bId, userNo);
-		} else {
-			b = bService.selectReBoard(bId, userNo);
+		
+		if(category == 100) {	// 공지
+			b = aService.selectNoBoard(bId, userNo);
+		} else if(category == 101 || category == 103){ // 문의/예약
+			b = aService.selectQuBoBoard(bId, userNo);
+		} else {	// 후기
+			b = aService.selectReBoard(bId, userNo);
 		}
-
-		ArrayList<Image> imgList = bService.selectImg(bId);
-
-		if (b.getCateNo() == 100) {
+		
+		ArrayList<Image> imgList = aService.selectImg(bId);
+		
+		if(b.getCateNo() == 100) {
 			b.setBoardWriterName("관리자");
 		}
-
-		if (b != null && imgList != null) {
+		
+		if(b != null && imgList != null) {
 			model.addAttribute("b", b);
 			model.addAttribute("imgList", imgList);
 			model.addAttribute("page", page);
-
-			return "../board/boardDetailAdmin";
-		} else {
-			throw new BoardException("게시글을 불러 오는데 실패했습니다.");
+			
+			return "boardDetailAdmin";
+		}else {
+			throw new AdminException("게시글을 불러 오는데 실패했습니다.");
 		}
 	}
 
 	// 공지사항 말머리 검색 필터
 	@RequestMapping("searchFilter.admin")
 	public String searchFilter(@RequestParam("noSubject") String noSubject,
-			@RequestParam(value = "page", defaultValue = "1") Integer currentPage, Model model) {
-
-		if (noSubject.equals("전체")) {
+							   @RequestParam(value="page", defaultValue="1") Integer currentPage,
+							   Model model) {
+		
+		if(noSubject.equals("전체")) {
 			return "redirect:notice.admin";
 		}
-
+		
 		// 말머리 필터 게시글 수 조회
-		int listSubjectCount = bService.listSubjectCount(noSubject);
-
+		int listSubjectCount = aService.listSubjectCount(noSubject);
+		
 		PageInfo pi = Pagination.getPageInfo(currentPage, listSubjectCount, 10);
-
+		
+		
 		// 말머리 필터 게시글 조회
-		ArrayList<Board> list = bService.searchFilter(noSubject, pi);
-		if (list != null) {
+		ArrayList<Board> list = aService.searchFilter(noSubject, pi);
+		if(list != null) {
 			model.addAttribute("list", list);
 			model.addAttribute("pi", pi);
-
+			
 			return "notice";
 		} else {
-			throw new BoardException("말머리 검색 중 에러가 발생했습니다.");
+			throw new AdminException("말머리 검색 중 에러가 발생했습니다.");
 		}
 	}
 
 	// 공지사항 검색어 리스트 검색
 	@RequestMapping("searchNotice.admin")
-	public String searchNotice(@RequestParam("condition") String condition, @RequestParam("search") String search,
-			@RequestParam(value = "page", defaultValue = "1") Integer currentPage, HttpServletRequest request,
-			Model model) {
-
+	public String searchNotice(@RequestParam("condition") String condition,
+			   					@RequestParam("search") String search,
+							   @RequestParam(value="page", defaultValue="1") Integer currentPage, HttpServletRequest request,
+							   Model model) {
+		
 		HashMap<String, Object> map = new HashMap<String, Object>();
-
+		
 		map.put("condition", condition);
 		map.put("search", search);
 		map.put("cateNo", 100);
-
+		
 		// 검색어 게시글 수 조회
-		int listSearchCount = bService.listSearchCount(map);
-
-		PageInfo pi = Pagination.getPageInfo(currentPage, listSearchCount, 5);
-
-		ArrayList<Board> searchList = bService.searchNoReBoard(map, pi);
-
-		if (searchList != null) {
+		int listSearchCount = aService.listSearchCount(map);
+		
+		PageInfo pi = Pagination.getPageInfo(currentPage, listSearchCount, 10);	
+		
+		ArrayList<Board> searchList = aService.searchNoBoard(map, pi);
+			
+		if(searchList != null) {
 			model.addAttribute("list", searchList);
 			model.addAttribute("pi", pi);
 			model.addAttribute("condition", condition);
 			model.addAttribute("search", search);
-
+			
 			return "notice";
 		} else {
-			throw new BoardException("검색에 실패했습니다.");
+			throw new AdminException("검색에 실패했습니다.");
 		}
 	}
 
 	// 후기 검색어 리스트 조회
 	@RequestMapping("searchReview.admin")
-	public String searchReview(@RequestParam("condition") String condition, @RequestParam("search") String search,
-			@RequestParam(value = "page", defaultValue = "1") Integer currentPage, HttpServletRequest request,
-			Model model) {
-
+	public String searchReview(@RequestParam("condition") String condition,
+			   					@RequestParam("search") String search,
+							   @RequestParam(value="page", defaultValue="1") Integer currentPage, HttpServletRequest request,
+							   Model model) {
+		
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("condition", condition);
 		map.put("search", search);
 		map.put("cateNo", 102);
-
+		
 		// 검색어 게시글 수 조회
-		int listSearchCount = bService.listSearchCount(map);
-
-		PageInfo pi = Pagination.getPageInfo(currentPage, listSearchCount, 10);
-
-		ArrayList<Board> searchList = bService.searchReBoard(map, pi);
-
+		int listSearchCount = aService.listSearchCount(map);
+		
+		PageInfo pi = Pagination.getPageInfo(currentPage, listSearchCount, 10);	
+		
+		ArrayList<Board> searchList = aService.searchReBoard(map, pi);
+		
 		System.out.println(search);
 		System.out.println(condition);
-
-		if (searchList != null) {
+		
+		if(searchList != null) {
 			model.addAttribute("list", searchList);
 			model.addAttribute("pi", pi);
 			model.addAttribute("condition", condition);
 			model.addAttribute("search", search);
-
+			
 			return "review";
 		} else {
-			throw new BoardException("검색에 실패했습니다.");
+			throw new AdminException("검색에 실패했습니다.");
 		}
-	}
+	}	
 
 	// 예약 검색어 리스트 조회
 	@RequestMapping("searchBook.admin")
-	public String searchBoBook(@RequestParam("condition") String condition, @RequestParam("search") String search,
-			@RequestParam(value = "page", defaultValue = "1") Integer currentPage, HttpServletRequest request,
-			Model model) {
-
+	public String searchBoBook(@RequestParam("condition") String condition,
+			   				   @RequestParam("search") String search,
+							   @RequestParam(value="page", defaultValue="1") Integer currentPage, HttpServletRequest request,
+							   Model model) {
+		
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("condition", condition);
 		map.put("search", search);
 		map.put("cateNo", 103);
-
+		
 		// 검색어 게시글 수 조회
-		int listSearchCount = bService.listSearchCount(map);
-
-		PageInfo pi = Pagination.getPageInfo(currentPage, listSearchCount, 5);
-
-		ArrayList<Board> searchList = bService.searchQuBoBoard(map, pi);
-
-		if (searchList != null) {
+		int listSearchCount = aService.listSearchCount(map);
+		
+		PageInfo pi = Pagination.getPageInfo(currentPage, listSearchCount, 10);	
+		
+		ArrayList<Board> searchList = aService.searchQuBoBoard(map, pi);
+		
+		if(searchList != null) {
 			model.addAttribute("list", searchList);
 			model.addAttribute("pi", pi);
 			model.addAttribute("condition", condition);
 			model.addAttribute("search", search);
-
-			return "book" + condition + search;
+			
+			return "book";
 		} else {
-			throw new BoardException("검색에 실패했습니다.");
+			throw new AdminException("검색에 실패했습니다.");
 		}
-	}
+	}	
 
 	// 문의사항 검색어 리스트 조회
 	@RequestMapping("searchQuestion.admin")
-	public String searchQuBook(@RequestParam("condition") String condition, @RequestParam("search") String search,
-			@RequestParam(value = "page", defaultValue = "1") Integer currentPage, Model model) {
-
+	public String searchQuBook(@RequestParam("condition") String condition,
+							   @RequestParam("search") String search,
+							   @RequestParam(value="page", defaultValue="1") Integer currentPage,
+							   Model model) {
+		
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("condition", condition);
 		map.put("search", search);
 		map.put("cateNo", 101);
-
+		
 		// 검색어 게시글 수 조회
-		int listSearchCount = bService.listSearchCount(map);
-
-		PageInfo pi = Pagination.getPageInfo(currentPage, listSearchCount, 10);
-
-		ArrayList<Board> searchList = bService.searchQuBoBoard(map, pi);
-
-		if (searchList != null) {
+		int listSearchCount = aService.listSearchCount(map);
+		
+		PageInfo pi = Pagination.getPageInfo(currentPage, listSearchCount, 10);	
+		
+		ArrayList<Board> searchList = aService.searchQuBoBoard(map, pi);
+		
+		if(searchList != null) {
 			model.addAttribute("list", searchList);
 			model.addAttribute("pi", pi);
 			model.addAttribute("condition", condition);
 			model.addAttribute("search", search);
-
+			
 			return "question";
 		} else {
-			throw new BoardException("검색에 실패했습니다.");
+			throw new AdminException("검색에 실패했습니다.");
 		}
 	}
 
 	// (상세 글 보기에서) 게시글 삭제
-	@RequestMapping("delete.admin")
-	public String deleteBoard(@RequestParam("bId") int boardNo, @RequestParam("list") int listSize,
-			@RequestParam("category") String category) {
-		int deleteBoardResult = bService.deleteBoard(boardNo);
-		int deleteImgResult = bService.updateImgStatus(boardNo);
-
-		if (deleteBoardResult + deleteImgResult == 1 + listSize) {
+		@RequestMapping("delete.admin")
+	public String deleteBoard(@RequestParam("bId") int boardNo,
+							  @RequestParam("list") int listSize,
+							  @RequestParam("category") String category) {
+		int deleteBoardResult = aService.deleteBoard(boardNo);
+		int deleteImgResult = aService.updateImgStatus(boardNo);
+		
+		if(deleteBoardResult + deleteImgResult == 1 + listSize) {
 			return "redirect:" + category + ".admin";
-		} else {
-			throw new BoardException("게시글 삭제 중 에러 발생");
+		}else {
+			throw new AdminException("게시글 삭제 중 에러 발생");
 		}
 	}
 
@@ -567,113 +579,215 @@ public class AdminController {
 
 	// 게시글 수정 페이지 이동
 	@RequestMapping("updateView.admin")
-	public String updateView(@ModelAttribute Board b, @RequestParam("page") int page, Model model) {
+	public String updateView(@ModelAttribute Board b,
+							  @RequestParam("page") int page,
+							  Model model) {
 		Board updateBoard = null;
-
-		if (b.getCateNo() == 100) {
-			updateBoard = bService.selectNoBoard(b.getBoardNo(), null);
-		} else if (b.getCateNo() == 101 || b.getCateNo() == 103) {
-			updateBoard = bService.selectBoard(b.getBoardNo(), null);
-		} else {
-			updateBoard = bService.selectReBoard(b.getBoardNo(), null);
+		
+		if(b.getCateNo() == 100) {
+			updateBoard = aService.selectNoBoard(b.getBoardNo(), null);
+		}else if(b.getCateNo() == 101 || b.getCateNo() == 103){
+			updateBoard = aService.selectQuBoBoard(b.getBoardNo(), null);
+		}else {
+			updateBoard = aService.selectReBoard(b.getBoardNo(), null);
 		}
 
-		ArrayList<Image> imgList = bService.selectImg(b.getBoardNo());
-
+		ArrayList<Image> imgList = aService.selectImg(b.getBoardNo());
+		
 		model.addAttribute("imgList", imgList);
 		model.addAttribute("bId", b.getBoardNo());
 		model.addAttribute("b", updateBoard);
 		model.addAttribute("page", page);
-		return "../board/boardUpdateAdmin";
+		return "boardUpdateAdmin";
 	}
 
 	// 게시글 수정
 	@RequestMapping("updateBoard.admin")
 	public String updateBoard(@ModelAttribute Board b,
-			@RequestParam("checkDelete") ArrayList<String> checkDeletes,
-			@RequestParam("file") ArrayList<MultipartFile> imgs, @RequestParam("page") int page,
-			@RequestParam("category") int category, HttpServletRequest request, Model model) {
+							  @RequestParam("checkDelete") ArrayList<String> checkDeletes,
+							  @RequestParam("file") ArrayList<MultipartFile> imgs,
+							  @RequestParam("page") int page,
+							  @RequestParam("category") int category,
+							  HttpServletRequest request,
+							  Model model) {
 		// 추가 이미지 등록
 		ArrayList<Image> imgList = new ArrayList<Image>();
-
-		for (MultipartFile img : imgs) {
-			if (!img.isEmpty() && img != null) {
+		
+		for(MultipartFile img : imgs) {
+			if(!img.isEmpty() && img != null) {
 				String[] returnArr = saveImg(img, request);
-
+				
 				Image a = new Image();
 				a.setImgName(img.getOriginalFilename());
 				a.setImgRename(returnArr[1]);
 				a.setImgPath(returnArr[1]);
 				a.setImgRefType("BOARD");
 				a.setImgRefNum(b.getBoardNo());
-
+				
 				imgList.add(a);
 			}
 		}
-
+		
+		
 		// 기존 이미지 삭제
 		ArrayList<String> deleteImg = new ArrayList<String>();
-
-		if (checkDeletes != null) {
-			for (String checkDelete : checkDeletes) {
-				if (!checkDelete.equals("none")) {
+	
+		if(checkDeletes != null) {
+			for(String checkDelete : checkDeletes) {
+				if(!checkDelete.equals("none")) {
 					deleteImg.add(checkDelete);
 				}
 			}
 		}
-		System.out.println(deleteImg);
-
+		
 		int deleteImgResult = 0;
-		if (!deleteImg.isEmpty()) {
-			deleteImgResult = bService.deleteImg(deleteImg);
-
-			if (deleteImgResult > 0) {
-				for (String deleteImgRename : deleteImg) {
+		if(!deleteImg.isEmpty()) {
+			deleteImgResult = aService.deleteImg(deleteImg);
+			
+			if(deleteImgResult > 0) {
+				for(String deleteImgRename : deleteImg) {
 					delete(deleteImgRename, request);
 				}
-			} else {
-				throw new BoardException("게시판 수정에 실패했습니다.");
-
+			}else {
+				throw new AdminException("게시판 수정에 실패했습니다.");
+				
 			}
 		}
-
-		// 공지 문의/예약 글일 경우
-		if (b.getCateNo() == 101 || b.getCateNo() == 103) {
-			int quBoBoardResult = bService.updateQuBo(b);
-			if (quBoBoardResult < 0) {
-				throw new BoardException("게시판 수정에 실패했습니다.");
+		
+		// 공지  문의/예약 글일 경우
+		if(b.getCateNo() == 101 || b.getCateNo() == 103) {
+			int quBoBoardResult = aService.updateQuBo(b);
+			if(quBoBoardResult < 0) {
+				throw new AdminException("게시판 수정에 실패했습니다.");
 			}
-		} else if (b.getCateNo() == 100) {
-			int noResult = bService.updateNotice(b);
-			if (noResult < 0) {
-				throw new BoardException("게시판 수정에 실패했습니다.");
+		}else if(b.getCateNo() == 100) {
+			int noResult = aService.updateNotice(b);
+			if(noResult < 0) {
+				throw new AdminException("게시판 수정에 실패했습니다.");
 			}
 		}
-
-		int boardResult = bService.updateBoard(b);
-
+		
+		
+		int boardResult = aService.updateBoard(b);
+		
 		// 추가 이미지가 있을 때만
 		int imgResult = 0;
-		if (!imgList.isEmpty()) {
-			imgResult = bService.insertImg(imgList);
+		if(!imgList.isEmpty()) {
+			imgResult = aService.insertImg(imgList);
 		}
-		if (boardResult + imgResult == 1 + imgList.size()) {
+		if(boardResult + imgResult == 1 + imgList.size()) {
 			model.addAttribute("bId", b.getBoardNo());
 			model.addAttribute("page", page);
 			model.addAttribute("category", category);
-
+			
 			return "redirect:boardView.admin";
-		} else {
-			throw new BoardException("게시판 수정에 실패했습니다.");
+		}else {
+			throw new AdminException("게시판 수정에 실패했습니다.");
+		}
+	}
+	
+	// 게시글 삭제 처리
+	@RequestMapping("/checkDelete.admin") 
+	public String deleteCheckedPosts(@RequestParam("updateBoardNos") String boardNos) {
+	    String[] boardNoArray = boardNos.split(",");
+	    int checkDelete = 0;
+	    int category = 0;
+	    for (String boardNo : boardNoArray) {
+	        int boardNoInt = Integer.parseInt(boardNo);
+	        
+	        // 각 게시글 번호에 해당하는 게시글을 삭제하는 로직
+	        checkDelete = aService.checkDelete(boardNoInt);
+	
+	        // 게시글 번호에 해당하는 카테고리 번호를 가져오는 로직
+	        category = aService.getCategoryByBoardNo(boardNoInt);
+	
+	    }
+	    System.out.println(category);
+	    
+	    if(checkDelete == 1 && category == 100) {
+	    	return "redirect:/notice.admin";
+	    } else if (checkDelete == 1 && category == 101) {
+	    	return "redirect:/question.admin";
+	    } else if (checkDelete == 1 && category == 102) {
+	    	return "redirect:/review.admin";
+	    } else if (checkDelete == 1 && category == 103){
+	    	return "redurect:/book.admin";
+	    } else {
+	    	throw new AdminException("게시글 삭제를 실패했습니다.");
+	    }
+		
+	}
+	
+	
+	// 글쓰기 페이지 이동 (카테고리 모두 동일)
+	@RequestMapping("writeView.admin")
+	public String writeBoardView(@RequestParam("category") String category, Model model) {
+		model.addAttribute("category", category);
+		return "writeBoardAdmin";
+	}
+	
+	// 글쓰기 insert(카테고리 모두 동일)
+	@RequestMapping("write.admin")
+	public String writeBoard(@ModelAttribute Board b,
+							 @RequestParam("file") ArrayList<MultipartFile> imgList,
+							 HttpServletRequest request,
+							 Model model) {
+		ArrayList<Image> list = new ArrayList<Image>();
+		
+		for(MultipartFile img : imgList) {
+			if(!img.isEmpty() && img != null) {
+				String[] returnArr = saveImg(img, request);
+				
+				Image newImg = new Image();
+				newImg.setImgName(img.getOriginalFilename());
+				newImg.setImgPath(returnArr[0]);
+				newImg.setImgRename(returnArr[1]);
+				newImg.setImgRefType("BOARD");
+				
+				list.add(newImg);
+			}
+		}
+		
+		int resultBoard = 0;
+		int resultImg = 0;
+		
+		//공지, 예약/문의 게시글 분리
+		resultBoard = aService.insertBoard(b);
+		if(b.getCateNo() == 100) {
+			aService.insertNo(b);
+		} else if(b.getCateNo() == 101 || b.getCateNo() == 103) {
+			aService.insertQuBo(b);
+		}
+		
+		//이미지가 있다면 DB 넣기
+		if(!list.isEmpty()) {
+			for(Image i : list) {
+				i.setImgRefNum(b.getBoardNo());
+			}
+			resultImg = aService.insertImg(list);
+		}
+		
+		
+			
+		if(resultBoard + resultImg == 1 + list.size()) {
+			
+			model.addAttribute("bId", b.getBoardNo());
+			model.addAttribute("category", b.getCateNo());
+			model.addAttribute("page", 1);
+			return "redirect:boardView.admin";
+		}else {
+			for(Image a : list) {
+				delete(a.getImgRename(), request);
+			}
+			throw new AdminException("게시글 등록에 실패 했습니다.");
 		}
 	}
 
-	// 관리자페이지-> 동물목록 조회
+	// 동물 목록 조회
 	@RequestMapping("animal.admin")
 	public String selectFamilyList(@RequestParam(value = "page", defaultValue = "1") int currentPage, Model model) {
 		int listCount = aService.getAnimalCount();
 
-		// 페이지네이션 안먹혀서 가져갔는데도 안되네 왜 이래 이거
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
 
 		ArrayList<Animal> anilist = aService.selectFamilyList(pi);
@@ -683,18 +797,16 @@ public class AdminController {
 			model.addAttribute("pi", pi);
 			return "animal";
 		} else {
-			throw new BoardException("동물 목록 조회를 실패하였습니다.");
+			throw new AdminException("동물 목록 조회를 실패하였습니다.");
 		}
 	}
 
-	// animal.jsp 추가 클릭시 ->writeAnimal.jsp로 컨트롤러 거치는 코드
+	// 동물 추가 페이지 이동
 	@RequestMapping("writeAni.admin")
 	public String wwMove() {
 		return "writeAnimal";
 	}
 
-	// 관리자페이지에서 동물추가 +수정+ 임포트 DATE redirect 못받아줘서 임포트해줌 없으면 흰바탕에 글씨만 떠요 response와
-	// 충돌이 나네요
 	@PostMapping("/animalInsert")
 	public String insertAnimal(@RequestParam("animalClass") String animalClass,
 			@RequestParam("extinctGrade") String extinctGrade, @ModelAttribute Animal animal,
@@ -762,7 +874,7 @@ public class AdminController {
 		return "redirect:/animal.admin";
 	}
 
-	// 마스코트 이동하면 DB데이터보이게
+	// 마스코트 이동
 	@RequestMapping("mascot.admin")
 	public String selectMascotList(Model model) {
 		ArrayList<Goods> maslist = aService.selectMascotList();
@@ -770,7 +882,7 @@ public class AdminController {
 		return "mascot";
 	}
 
-	// 마스코트 수정 이동 하다가 안되서 그냥 writeMascot 새로만듬
+	// 마스코트 수정 페이지 이동
 	@GetMapping("updateGoods.admin")
 	public String updateGoodsForm(@RequestParam("goodsNo") int goodsNo, Model model) {
 		Goods goods = aService.selectGoods(goodsNo);
@@ -778,7 +890,7 @@ public class AdminController {
 		return "updateGoodsForm";
 	}
 
-	// 마스코트 수정 완료
+	// 마스코트 수정
 	@PostMapping("updateGoods.admin")
 	public String updateGoods(@ModelAttribute Goods goods, RedirectAttributes redirectAttributes) {
 		aService.updateGoods(goods);
@@ -807,7 +919,7 @@ public class AdminController {
 		return "redirect:/mascot.admin";
 	}
 
-	// 마스코트 추가 누르면 이동 수정할때 정보 가져갈수있게 데이터담아감
+	// 마스코트 추가 페이지 이동
 	@RequestMapping("masInsert.admin")
 	public String masMove(@RequestParam(required = false) Integer goodsNo, Model model) {
 		if (goodsNo != null) {
@@ -888,7 +1000,7 @@ public class AdminController {
 			model.addAttribute("page", page);
 			return "redirect:show.admin";
 		}else {
-			throw new BoardException("프로그램 등록에 실패했습니다.");
+			throw new AdminException("프로그램 등록에 실패했습니다.");
 		}
 	}
 	
@@ -924,7 +1036,7 @@ public class AdminController {
 			
 			return "showDetail";
 		}else {
-			throw new BoardException("프로그램 상세 조회에 실패했습니다.");
+			throw new AdminException("프로그램 상세 조회에 실패했습니다.");
 		}
 	}
 	
@@ -936,7 +1048,7 @@ public class AdminController {
 		
 		for(int showNo : showNos) {
 			result += aService.deleteShow(showNo);
-			aService.deleteImg(showNo);
+			aService.deleteShowImg(showNo);
 			
 			// 파일에 저장된 이미지삭제
 			ArrayList<Image> imgList = aService.getImgList(showNo);
@@ -948,7 +1060,7 @@ public class AdminController {
 		if(result == showNos.size()) {
 			return "redirect:show.admin";
 		}else {
-			throw new BoardException("프로그램 삭제에 실패 했습니다.");
+			throw new AdminException("프로그램 삭제에 실패 했습니다.");
 		}
 	}
 	
@@ -1040,7 +1152,7 @@ public class AdminController {
 					delete(deleteImgRename, request);
 				}
 			} else {
-				throw new BoardException("프로그램 수정에 실패했습니다.");
+				throw new AdminException("프로그램 수정에 실패했습니다.");
 
 			}
 		}
@@ -1051,11 +1163,69 @@ public class AdminController {
 			
 			return "redirect:showDetail.admin";
 		}else {
-			throw new BoardException("프로그램 수정에 실패했습니다.");
+			throw new AdminException("프로그램 수정에 실패했습니다.");
 		}
 	}
 	
-	
+	// 운영시간 페이지 이동
+	@GetMapping("/operating.admin")
+	public String operatingAdmin(Model model) {
+	    Image operatingImage = aService.getOperatingImage();
+	    Image chargeImage = aService.getChargeImage();
+	    
+	    model.addAttribute("operatingImage", operatingImage);
+	    model.addAttribute("chargeImage", chargeImage);
+	    
+	    return "operating";
+	}
+
+	// 운영시간 이미지 수정
+	@PostMapping("/updateOperatingImage.admin")
+	public String updateOperatingImage(@RequestParam("operImg") MultipartFile file,
+	                                   HttpServletRequest request,
+	                                   RedirectAttributes redirectAttributes) {
+	    try {
+	        if (!file.isEmpty()) {
+	            String[] imgInfo = saveImg(file, request);
+	            Image image = new Image();
+	            image.setImgPath("/resources/uploadImg");
+	            image.setImgName(file.getOriginalFilename());
+	            image.setImgRename(imgInfo[1]);
+	            image.setImgRefType("OPERATING");
+	            
+	            aService.updateOperatingImage(image);
+	            redirectAttributes.addFlashAttribute("message", "운영시간 이미지가 성공적으로 업데이트되었습니다.");
+	        }
+	    } catch (Exception e) {
+	        redirectAttributes.addFlashAttribute("error", "운영시간 이미지 업데이트 중 오류가 발생했습니다.");
+	        e.printStackTrace();
+	    }
+	    return "redirect:/operating.admin";
+	}
+
+	// 이용요금 이미지 수정
+	@PostMapping("/updateChargeImage.admin")
+	public String updateChargeImage(@RequestParam("charge") MultipartFile file,
+	                                HttpServletRequest request,
+	                                RedirectAttributes redirectAttributes) {
+	    try {
+	        if (!file.isEmpty()) {
+	            String[] imgInfo = saveImg(file, request);
+	            Image image = new Image();
+	            image.setImgPath("/resources/uploadImg");
+	            image.setImgName(file.getOriginalFilename());
+	            image.setImgRename(imgInfo[1]);
+	            image.setImgRefType("CHARGE");
+	            
+	            aService.updateChargeImage(image);
+	            redirectAttributes.addFlashAttribute("message", "이용요금 이미지가 성공적으로 업데이트되었습니다.");
+	        }
+	    } catch (Exception e) {
+	        redirectAttributes.addFlashAttribute("error", "이용요금 이미지 업데이트 중 오류가 발생했습니다.");
+	        e.printStackTrace();
+	    }
+	    return "redirect:/operating.admin";
+	}
 	
 	
 	
