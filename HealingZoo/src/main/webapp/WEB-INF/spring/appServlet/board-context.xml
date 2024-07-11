@@ -23,5 +23,17 @@
 	</bean>
 	
 	<context:component-scan base-package="com.semiproject.healingzoo" />
-
+	
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path='/**'/>
+			<mvc:exclude-mapping path="/write.bo"/>
+			<mvc:exclude-mapping path="/writeView.bo"/>
+			<mvc:exclude-mapping path="/pwdConfirm.bo"/>
+			<mvc:exclude-mapping path="/checkPwd.bo"/>
+			<mvc:exclude-mapping path="/signUp.me"/>
+			<mvc:exclude-mapping path="/boardView.boe"/>
+			<bean id='check' class='com.semiproject.healingzoo.common.CheckLoginInterceptor'/>
+		</mvc:interceptor>
+	</mvc:interceptors>
 </beans>

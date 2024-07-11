@@ -23,6 +23,22 @@
 	
 	<context:component-scan base-package="com.semiproject.healingzoo" />
 	
-	
+	<interceptors>
+		<interceptor>
+			<mapping path='/**'/>
+			<exclude-mapping path="/signUpView.me"/>
+			<exclude-mapping path="/login.me"/>
+			<exclude-mapping path="/loginView.me"/>
+			<exclude-mapping path="/logout.me"/>
+			<exclude-mapping path="/signUp.me"/>
+			<exclude-mapping path="/checkId.me"/>
+			<exclude-mapping path="/searchIdView.me"/>
+			<exclude-mapping path="/searchPwdView.me"/>
+			<exclude-mapping path="/searchId.me"/>
+			<exclude-mapping path="/searchPwd.me"/>
+			<exclude-mapping path="/newPwd.me"/>
+			<beans:bean id='check' class='com.semiproject.healingzoo.common.CheckLoginInterceptor'/>
+		</interceptor>
+	</interceptors>
 	
 </beans:beans>

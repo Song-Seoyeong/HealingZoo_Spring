@@ -100,24 +100,24 @@ tr {
 					<tr>
 						<!-- name id +수정+ -->
 						<th scope="col"><input class="form-check-input"
-							type="checkbox" name="selectAll" id="selectAll"></th>
+						            type="checkbox" name="selectAll" id="selectAll"></th>
 						<th scope="col">번호</th>
 						<th scope="col"><select id="animalClassFilter"
-							style="width: 60px; border: none;">
-								<option value="ALL" selected>전체</option>
-								<option value="포유류">포유류</option>
-								<option value="조류">조류</option>
-								<option value="파충류">파충류</option>
+						            style="width: 60px; border: none;">
+							<option value="ALL" selected>전체</option>
+							<option value="포유류">포유류</option>
+							<option value="조류">조류</option>
+							<option value="파충류">파충류</option>
 						</select></th>
 						<th scope="col">소분류</th>
 						<th scope="col">동물 이름</th>
 						<th scope="col"><select id="extinctGradeFilter"
-							style="width: 60px; border: none;">
-								<option value="ALL" selected>전체</option>
-								<option value="EX">절멸</option>
-								<option value="CR">위급</option>
-								<option value="EN">위기</option>
-								<option value="VU">취약</option>
+						            style="width: 60px; border: none;">
+							<option value="ALL" selected>전체</option>
+							<option value="EX">절멸</option>
+							<option value="CR">위급</option>
+							<option value="EN">위기</option>
+							<option value="VU">취약</option>
 						</select></th>
 						<th scope="col">입소날짜</th>
 					</tr>
@@ -126,7 +126,7 @@ tr {
 					<c:forEach items="${list}" var="f">
 						<tr>
 							<td><input class="form-check-input" type="checkbox"
-								name="aniNOs" value="${f.aniNO}" id="flexCheckDefault"></td>
+							    name="aniNOs" value="${f.aniNO}" id="flexCheckDefault"></td>
 							<td scope="row">${f.aniNO}</td>
 							<td>${f.animalClass}</td>
 							<td>${f.animalFamily}</td>
@@ -135,11 +135,14 @@ tr {
 							<td>${f.enterDate}</td>
 						</tr>
 					</c:forEach>
+				</tbody>
 			</table>
 			<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-				<button class="btn btn-primary" type="button" id="write_button1"style="background-color: green;">추가</button>
+				<button class="btn btn-primary" type="button" id="write_button1"
+				        style="background-color: green;">추가</button>
 				<!-- 수정 버튼 이벤트 리스너 추가 -->
-				<button class="btn btn-primary" type="button" id="update_button" style="background-color: orange;">수정</button>
+				<button class="btn btn-primary" type="button" id="update_button"
+				        style="background-color: orange;">수정</button>
 				<!-- 삭제 버튼 type을 submit으로 변경 +수정+-->
 				<button class="btn btn-primary" type="submit" id="delete_button">삭제</button>
 			</div>
@@ -150,27 +153,23 @@ tr {
 		<!-- 페이지네이션 -->
 		
 	</div>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br><br><br><br><br><br><br><br><br><br><br><br><br>
+	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 	<%@ include file='../common/footer.jsp'%>
 
 	<script>
 	// 수정 처리
-    // 수정 버튼 클릭 시
-    document.getElementById('update_button').addEventListener('click', function() {
-        const checkboxes = document.querySelectorAll('input[name="aniNOs"]:checked');
-        
-        if (checkboxes.length !== 1) {
-            alert('수정할 항목을 하나만 선택해주세요.');
-            return;
-        }
+	// 수정 버튼 클릭 시
+	document.getElementById('update_button').addEventListener('click', function() {
+	    const checkboxes = document.querySelectorAll('input[name="aniNOs"]:checked');
+	    
+	    if (checkboxes.length !== 1) {
+	        alert('수정할 항목을 하나만 선택해주세요.');
+	        return;
+	    }
 
-        const aniNO = checkboxes[0].value;
-        location.href = '${contextPath}/updateAni.admin?aniNO=' + aniNO;
-    });
+	    const aniNO = checkboxes[0].value;
+	    location.href = '${contextPath}/updateAni.admin?aniNO=' + aniNO;
+	});
 	
 	//삭제 처리
 	document.getElementById('delete_button').addEventListener('click', function(e) {
@@ -209,7 +208,7 @@ tr {
 	            const rowClass = row.children[2].textContent.trim();
 	            const rowGrade = row.children[5].textContent.trim();
 	            
-	            const classMatch = selectedClass === 'ALL' || rowClass.indexOf(selectedClass) !== -1;
+	            const classMatch = selectedClass === 'ALL' || rowClass === selectedClass;
 	            const gradeMatch = selectedGrade === 'ALL' || rowGrade === selectedGrade;
 	
 	            if (classMatch && gradeMatch) {
@@ -220,17 +219,17 @@ tr {
 	        });
 	    }
 
-    animalClassFilter.addEventListener('change', filterTable);
-    extinctGradeFilter.addEventListener('change', filterTable);
+	    animalClassFilter.addEventListener('change', filterTable);
+	    extinctGradeFilter.addEventListener('change', filterTable);
 
-    // 초기 필터링 실행
-    filterTable();
+	    // 초기 필터링 실행
+	    filterTable();
 	});
 
 	// 추가 클릭시
 	document.getElementById('write_button1').addEventListener('click', () => {
 	    location.href = '${contextPath}/writeAni.admin?category=' +'animal';
 	});
-</script>
+	</script>
 </body>
 </html>

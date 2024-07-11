@@ -343,6 +343,30 @@
 	</update>
 	<!--  댓글 수정 -->
 	
+	<!-- 운영시간 이미지 -->
+	<select id="getOperatingImage" resultType="Image">
+	    SELECT IMG_PATH, IMG_RENAME
+	    FROM (
+	        SELECT IMG_PATH, IMG_RENAME
+	        FROM IMAGE
+	        WHERE IMG_REF_TYPE = 'OPERATING'
+	        ORDER BY IMG_NO DESC
+	    )
+	    WHERE ROWNUM = 1
+	</select>
+	<!-- 운영시간 이미지 -->
 	
+	<!-- 이용금액 이미지 -->
+	<select id="getChargeImage" resultType="Image">
+	    SELECT IMG_PATH, IMG_RENAME
+	    FROM (
+	        SELECT IMG_PATH, IMG_RENAME
+	        FROM IMAGE
+	        WHERE IMG_REF_TYPE = 'CHARGE'
+	        ORDER BY IMG_NO DESC
+	    )
+	    WHERE ROWNUM = 1
+	</select>
+	<!-- 이용금액 이미지 -->
 	
 </mapper>

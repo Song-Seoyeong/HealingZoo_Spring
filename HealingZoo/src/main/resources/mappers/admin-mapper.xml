@@ -24,15 +24,24 @@
 	<!-- 동물 게시물 수 조회 -->
 
 	<!-- 동물 게시글 목록 조회 -->
-	<select id="selectFamilyList" resultType="Animal">
+	<select id="selectFamilyList" resultMap="AnimalList">
 		SELECT * FROM animal
 		ORDER BY ANI_NO ASC
 	</select>
 	<!-- 동물 게시글 목록 조회 -->
+	
+	<resultMap type="Animal" id="AnimalList">
+        <id column="ANI_NO" property="aniNO"/>
+        <result column="ANMAL_CLASS" property="animalClass"/>
+        <result column="ANIMAL_FAMILY" property="animalFamily"/>
+        <result column="ANIMAL_NAME" property="animalName"/>
+        <result column="ENTER_DATE" property="enterDate"/>
+        <result column="EXTINCT_GRADE" property="extinctGrade"/>
+        <result column="UPLOAD_DATE" property="uploadDate"/>
+	</resultMap>
 
 	<!-- 동물 정보 조회 -->
-	<select id="selectAnimal" resultType="Animal"
-		parameterType="int">
+	<select id="selectAnimal" resultMap="AnimalList" parameterType="int">
 		SELECT * FROM ANIMAL WHERE ANI_NO = #{aniNO}
 	</select>
 	<!-- 동물 정보 조회 -->
@@ -668,8 +677,6 @@
 	        VALUES (SEQ_IMG.NEXTVAL, #{imgPath}, #{imgName}, #{imgRename}, 'CHARGE', 'Y')
 	</update>
 	<!-- 이용시간 이미지 수정 -->
-
-
 
 
 

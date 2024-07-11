@@ -35,7 +35,7 @@ public class BoardController {
 	@Autowired
 	private BoardService bService;
 
-	// 글쓰기 페이지 이동 (카테고리 모두 동일)
+	// 글쓰기 페이지 이동 (문의/예약)
 	@RequestMapping("writeView.bo")
 	public String writeView(@RequestParam("category") String category,
 							Model model) {
@@ -43,8 +43,16 @@ public class BoardController {
 		return "writeBoard";
 	}
 	
+	// 글쓰기 페이지 이동 (공지/후기)
+		@RequestMapping("noRewriteView.bo")
+		public String noRewriteView(@RequestParam("category") String category,
+								Model model) {
+			model.addAttribute("category", category);
+			return "noRewrite";
+		}
 	
-	// 글쓰기 insert(카테고리 모두 동일)
+	
+	// 글쓰기 insert(문의/예약)
 	@RequestMapping("write.bo")
 	public String writeBoard(@ModelAttribute Board b,
 							 @RequestParam("file") ArrayList<MultipartFile> imgList,
@@ -70,12 +78,7 @@ public class BoardController {
 		
 		resultBoard = bService.insertBoard(b);
 		
-		//공지, 예약/문의 게시글 분리
-		if(b.getCateNo() == 100) {
-			bService.insertNotice(b);
-		}else if(b.getCateNo() == 101 || b.getCateNo() == 103) {
-			bService.insertQuBo(b);
-		}
+		bService.insertQuBo(b);
 		
 		//이미지가 있다면 DB 넣기
 		if(!list.isEmpty()) {
@@ -100,6 +103,61 @@ public class BoardController {
 			throw new BoardException("게시글 등록에 실패 했습니다.");
 		}
 	}
+	
+	// 글쓰기 insert(공지/후기)
+		@RequestMapping("noReWrite.bo")
+		public String noReWrite(@ModelAttribute Board b,
+								 @RequestParam("file") ArrayList<MultipartFile> imgList,
+								 HttpServletRequest request,
+								 Model model) {
+			ArrayList<Image> list = new ArrayList<Image>();
+			
+			for(MultipartFile img : imgList) {
+				if(!img.isEmpty() && img != null) {
+					String[] returnArr = saveImg(img, request);
+					
+					Image newImg = new Image();
+					newImg.setImgName(img.getOriginalFilename());
+					newImg.setImgPath(returnArr[0]);
+					newImg.setImgRename(returnArr[1]);
+					newImg.setImgRefType("BOARD");
+					
+					list.add(newImg);
+				}
+			}
+			int resultBoard = 0;
+			int resultImg = 0;
+			
+			resultBoard = bService.insertBoard(b);
+			
+			//공지 게시글 분리
+			if(b.getCateNo() == 100) {
+				bService.insertNotice(b);
+			}
+			
+			//이미지가 있다면 DB 넣기
+			if(!list.isEmpty()) {
+				for(Image i : list) {
+					i.setImgRefNum(b.getBoardNo());
+				}
+				resultImg = bService.insertImg(list);
+			}
+			
+			
+			
+			if(resultBoard + resultImg == 1 + list.size()) {
+				
+				model.addAttribute("bId", b.getBoardNo());
+				model.addAttribute("category", b.getCateNo());
+				model.addAttribute("page", 1);
+				return "redirect:boardView.bo";
+			}else {
+				for(Image a : list) {
+					delete(a.getImgRename(), request);
+				}
+				throw new BoardException("게시글 등록에 실패 했습니다.");
+			}
+		}
 
 	// 이미지 삭제
 	private void delete(String rename, HttpServletRequest request) {
