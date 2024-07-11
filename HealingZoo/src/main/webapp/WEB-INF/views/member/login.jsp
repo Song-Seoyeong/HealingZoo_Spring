@@ -80,7 +80,7 @@
 				  <div class="col-2"></div>
 				</div>
 		    </div>
-		    <div class="col"></div>
+		    <div class="col"><input type='hidden' name='beforeURL'></div>
 		  </div>
 		</div>
 	</form>
@@ -92,6 +92,16 @@
 	<!-- /푸터 -->	
 	
 	<script>
+		
+		// 로그인 인터셉트
+		const msg = '${msg}';
+		const beforeURL = document.referrer;
+		
+		if(msg != ''){
+			alert(msg);
+			document.getElementsByName('beforeURL')[0].value = beforeURL;
+		}
+	
 		// 입력창 비었을 때 알림창
 		const doLogin = ()=>{
 			const id = document.getElementById('id');
@@ -127,5 +137,7 @@
 			location.href = '${contextPath}/searchPwdView.me';
 		})
 	</script>
+	
+	<% session.removeAttribute("msg"); %>
 </body>
 </html>

@@ -56,9 +56,11 @@
                             </select>
                         </div>
                         <div  class='col-6 text-center'>
+                        <p>소분류명</p>
                             <input type='text' name='animalFamily' value='${animal.animalFamily}' placeholder='동물 소분류명을 입력해주세요' id='inputBoardTitle' size='50' class='inputBoard' autofocus>
                         </div>
                         <div class='col-2'>
+                        <p>동물 이름</p>
                             <input  type='text' name='animalName' value='${animal.animalName}' placeholder='동물 이름을 입력해주세요' id='inputBoardWriter' size='20'  class='inputBoard' autofocus>
                         </div>
                         <div class='col-1'></div>

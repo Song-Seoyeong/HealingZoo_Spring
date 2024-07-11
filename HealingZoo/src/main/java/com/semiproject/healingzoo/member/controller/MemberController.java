@@ -52,26 +52,28 @@ public class MemberController {
 	// 로그인 화면 이동
 	@RequestMapping("loginView.me")
 	public String loginView() {
-		System.out.println(bcrypt.encode("1111"));
-		System.out.println(bcrypt.encode("2222"));
-		System.out.println(bcrypt.encode("3333"));
-		System.out.println(bcrypt.encode("4444"));
-		System.out.println(bcrypt.encode("5555"));
 		return "login";
 	}
 
 	// 로그인
 	@RequestMapping("login.me")
-	public ModelAndView login(Member m, ModelAndView mv) {
+	public ModelAndView login(Member m,
+							  @RequestParam("beforeURL") String beforeURL,
+							  ModelAndView mv) {
 		Member loginUser = mService.login(m);
 
 		if (loginUser != null) {
 			if (bcrypt.matches(m.getMemPwd(), loginUser.getMemPwd())) {
 				mv.addObject("loginUser", loginUser);
-				if (loginUser.getMemGrade().equals("CONSUMER")) {
-					mv.setViewName("redirect:/");
-				} else {
-					mv.setViewName("redirect:/notice.admin");
+				
+				if(beforeURL.equals("")) {
+					if (loginUser.getMemGrade().equals("CONSUMER")) {
+						mv.setViewName("redirect:/");
+					} else {
+						mv.setViewName("redirect:/notice.admin");
+					}
+				}else{
+					mv.setViewName("redirect:" + beforeURL);
 				}
 			} else {
 				throw new MemberException("아이디 또는 비밀번호가 존재하지않습니다 :(");
@@ -392,122 +394,122 @@ public class MemberController {
 		}
 	}
 	
-		// 마이페이지> 선택된 내 게시글 삭제
-		@RequestMapping("selDelBoard.me")
-		public String deleteBoard(@RequestParam("boNoList") ArrayList<String> boNoList) {
-			int result = 0;
-			for(int i = 0; i < boNoList.size(); i++ ) {
-				String boNo =boNoList.get(i);
-				result = mService.selDelBoard(boNo);
-				}
-			if(result > 0) {
-				return "redirect:myBoard.me";
-			}else {
-				throw new MemberException("삭제에 실패하였습니다");
+	// 마이페이지> 선택된 내 게시글 삭제
+	@RequestMapping("selDelBoard.me")
+	public String deleteBoard(@RequestParam("boNoList") ArrayList<String> boNoList) {
+		int result = 0;
+		for(int i = 0; i < boNoList.size(); i++ ) {
+			String boNo =boNoList.get(i);
+			result = mService.selDelBoard(boNo);
 			}
-			
-		}
-	
-		// 마이페이지> 말머리 필터 검색
-		@RequestMapping("searchFilter.me")
-		public String searchFilter(@RequestParam("noSubject") String noSubject, @RequestParam(value="page", defaultValue="1") Integer currentPage, HttpServletRequest request, HttpSession session, Model model) {
-			int memNo = ((Member)session.getAttribute("loginUser")).getMemNo();
-			HashMap<String, Object> map = new HashMap<String, Object>();
-			map.put("memNo", memNo);
-			map.put("noSubject", noSubject);
-			int listCount = mService.listSubjectCount(map);
-			
-			PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
-			ArrayList<Board> list = mService.listSubject(pi, map);
-			if (list != null) {
-				model.addAttribute("list", list);
-				model.addAttribute("pi", pi);
-				return "myBoardList";
-			} else {
-				throw new MemberException("게시글조회를 실패하셨습니다");
-			}
-			
-		}
-		//마이페이지 > 선택된 리스트 상세보기 페이지로 이동
-		@RequestMapping("boardView.me")
-		public String pwdConfirmMyBo(HttpSession session, @RequestParam("bId") int bId, @RequestParam("cateNo") int cateNo, @RequestParam("page") int page, Model model) {
-				Member loginUser = (Member)session.getAttribute("loginUser");
-				
-				Integer memNo = (Integer)loginUser.getMemNo();
-				
-				Board b = null;
-				if(cateNo == 101) {
-					b = mService.selectedBoard(bId);
-				}else if(cateNo == 100){
-					b = mService.selectedBoard(bId);
-				}else if(cateNo == 102) {
-					b = mService.selectedBoard(bId);
-				}else {
-					b = mService.selectedBoard(bId);
-				}
-				
-				if(b != null) {
-					model.addAttribute("b", b);
-					model.addAttribute("page", page);
-					model.addAttribute("memNo", memNo);
-					
-				}else {
-					throw new MemberException("불러오는데 실패하였습니다");
-				}
-				
-			return "memBoardDetail";
-		}
-		//마이페이지 > 선택한 댓글 삭제
-		@RequestMapping("selDelComment.me")
-		public String delComment(@RequestParam("boNoList") ArrayList<String> boNoList) {
-			int result = 0;
-			for(int i =0; i < boNoList.size(); i++) {
-				String boNo =boNoList.get(i);
-				result = mService.selDelComment(boNo);
-			}
-			return "redirect:myComment.me";
-		}
-	
-		//마이페이지 > 상세게시글 수정 폼 이동
-		@RequestMapping("updateView.me")
-		public String updateBoard(@ModelAttribute Board b,
-								  @RequestParam("category") int cateNo,	
-								  @RequestParam("boardNo") int boNo, 
-								  Model model) {
-			b = mService.getBoard(boNo);
-			model.addAttribute("b",b);
-			model.addAttribute("cateNo", cateNo);
-			model.addAttribute(boNo);
-			return "memBoardUpdate";
+		if(result > 0) {
+			return "redirect:myBoard.me";
+		}else {
+			throw new MemberException("삭제에 실패하였습니다");
 		}
 		
-		//마이페이지 > 게시글 수정
-		@RequestMapping("updateBoard.me")
-		public String updateBoard(HttpServletRequest request, Model model) {
-			String boardTitle = request.getParameter("boardTitle");
-			String boPwd = request.getParameter("boPwd");
-			String boardContent = request.getParameter("boardContent");
-			String boardNo = request.getParameter("boardNo");
-			String writerPhone = request.getParameter("writerPhone");
-			
-			HashMap<String, Object> map = new HashMap<String, Object>();
-			map.put("title", boardTitle);
-			map.put("content", boardContent);
-			map.put("boardNo", boardNo);
-			
-			HashMap<String, String> map1 = new HashMap<String, String>();
-			map1.put("boPwd", boPwd);
-			map1.put("writerPhone", writerPhone);
-			map1.put("boardNo", boardNo);
-			
-			int result = mService.updateBoard(map);
-			int resultInBo = mService.updateInBo(map1);
-			
-			if( result > 0 && resultInBo > 0) {
-				return null;
-			}
-			throw new MemberException("수정에 실패하셨습니다");
+	}
+
+	// 마이페이지> 말머리 필터 검색
+	@RequestMapping("searchFilter.me")
+	public String searchFilter(@RequestParam("noSubject") String noSubject, @RequestParam(value="page", defaultValue="1") Integer currentPage, HttpServletRequest request, HttpSession session, Model model) {
+		int memNo = ((Member)session.getAttribute("loginUser")).getMemNo();
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("memNo", memNo);
+		map.put("noSubject", noSubject);
+		int listCount = mService.listSubjectCount(map);
+		
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+		ArrayList<Board> list = mService.listSubject(pi, map);
+		if (list != null) {
+			model.addAttribute("list", list);
+			model.addAttribute("pi", pi);
+			return "myBoardList";
+		} else {
+			throw new MemberException("게시글조회를 실패하셨습니다");
 		}
+		
+	}
+	//마이페이지 > 선택된 리스트 상세보기 페이지로 이동
+	@RequestMapping("boardView.me")
+	public String pwdConfirmMyBo(HttpSession session, @RequestParam("bId") int bId, @RequestParam("cateNo") int cateNo, @RequestParam("page") int page, Model model) {
+			Member loginUser = (Member)session.getAttribute("loginUser");
+			
+			Integer memNo = (Integer)loginUser.getMemNo();
+			
+			Board b = null;
+			if(cateNo == 101) {
+				b = mService.selectedBoard(bId);
+			}else if(cateNo == 100){
+				b = mService.selectedBoard(bId);
+			}else if(cateNo == 102) {
+				b = mService.selectedBoard(bId);
+			}else {
+				b = mService.selectedBoard(bId);
+			}
+			
+			if(b != null) {
+				model.addAttribute("b", b);
+				model.addAttribute("page", page);
+				model.addAttribute("memNo", memNo);
+				
+			}else {
+				throw new MemberException("불러오는데 실패하였습니다");
+			}
+			
+		return "memBoardDetail";
+	}
+	//마이페이지 > 선택한 댓글 삭제
+	@RequestMapping("selDelComment.me")
+	public String delComment(@RequestParam("boNoList") ArrayList<String> boNoList) {
+		int result = 0;
+		for(int i =0; i < boNoList.size(); i++) {
+			String boNo =boNoList.get(i);
+			result = mService.selDelComment(boNo);
+		}
+		return "redirect:myComment.me";
+	}
+
+	//마이페이지 > 상세게시글 수정 폼 이동
+	@RequestMapping("updateView.me")
+	public String updateBoard(@ModelAttribute Board b,
+							  @RequestParam("category") int cateNo,	
+							  @RequestParam("boardNo") int boNo, 
+							  Model model) {
+		b = mService.getBoard(boNo);
+		model.addAttribute("b",b);
+		model.addAttribute("cateNo", cateNo);
+		model.addAttribute(boNo);
+		return "memBoardUpdate";
+	}
+	
+	//마이페이지 > 게시글 수정
+	@RequestMapping("updateBoard.me")
+	public String updateBoard(HttpServletRequest request, Model model) {
+		String boardTitle = request.getParameter("boardTitle");
+		String boPwd = request.getParameter("boPwd");
+		String boardContent = request.getParameter("boardContent");
+		String boardNo = request.getParameter("boardNo");
+		String writerPhone = request.getParameter("writerPhone");
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("title", boardTitle);
+		map.put("content", boardContent);
+		map.put("boardNo", boardNo);
+		
+		HashMap<String, String> map1 = new HashMap<String, String>();
+		map1.put("boPwd", boPwd);
+		map1.put("writerPhone", writerPhone);
+		map1.put("boardNo", boardNo);
+		
+		int result = mService.updateBoard(map);
+		int resultInBo = mService.updateInBo(map1);
+		
+		if( result > 0 && resultInBo > 0) {
+			return null;
+		}
+		throw new MemberException("수정에 실패하셨습니다");
+	}
 	
 	
 	

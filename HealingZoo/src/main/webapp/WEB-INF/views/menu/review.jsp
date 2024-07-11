@@ -171,7 +171,7 @@
         // 글쓰기 이동
         if(document.getElementById('writeButton') != null){
 	        document.getElementById('writeButton').addEventListener('click', () =>{
-	        	location.href = '${contextPath}/writeView.bo?category=review';
+	        	location.href = '${contextPath}/noRewriteView.bo?category=review';
 	        });
         }
         

@@ -212,7 +212,7 @@
 		const writeBoard = document.getElementById('writeBoard')
 		if(writeBoard != null){
 			writeBoard.addEventListener('click', () =>{
-				location.href = '${contextPath}/writeView.bo?category=' + 'notice';
+				location.href = '${contextPath}/noRewriteView.bo?category=' + 'notice';
 			})
 		}
 		
