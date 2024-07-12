@@ -15,6 +15,7 @@ import com.semiproject.healingzoo.board.model.vo.Goods;
 import com.semiproject.healingzoo.board.model.vo.Image;
 import com.semiproject.healingzoo.board.model.vo.Link;
 import com.semiproject.healingzoo.board.model.vo.PageInfo;
+import com.semiproject.healingzoo.board.model.vo.Reply;
 
 @Repository("aDAO")
 public class AdminDAO {
@@ -23,7 +24,10 @@ public class AdminDAO {
         RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
         return (ArrayList) sqlSession.selectList("adminMapper.selectFamilyList",rowBounds);
     }
-
+	
+	public void deleteAnimalImage(SqlSession sqlSession, int aniNO) {
+		sqlSession.delete("adminMapper.deleteAnimalImage",aniNO);
+	}
 
 	
 	public int getAnimalCount(SqlSession sqlSession) { //+수정+ return
@@ -453,5 +457,57 @@ public class AdminDAO {
 	public void updateChargeImage(SqlSession sqlSession, Image image) {
 	    sqlSession.update("adminMapper.updateChargeImage", image);
 	}
-		
+	
+	public int insertGreeting(SqlSession sqlSession, Image i) {
+		return sqlSession.insert("adminMapper.insertGreeting", i);
+	}
+
+	public int insertWay(SqlSession sqlSession, Image i) {
+		return sqlSession.insert("adminMapper.insertWay", i);
+	}
+
+	public int insertMapLink(SqlSession sqlSession, Link mapLink) {
+		return sqlSession.insert("adminMapper.insertMapLink", mapLink);
+	}
+
+	public int updateMapLink(SqlSession sqlSession, Link mapLink) {
+		return sqlSession.update("adminMapper.updateMapLink", mapLink);
+	}
+	
+	// 댓글 리스트 조회
+	public ArrayList<Reply> selectReply(SqlSession sqlSession, int bId) {
+		return (ArrayList)sqlSession.selectList("adminMapper.selectReply", bId);
+	}
+
+
+	// 댓글 등록
+	public int insertReply(SqlSession sqlSession, Reply r) {
+		return sqlSession.insert("adminMapper.insertReply", r);
+	}
+
+	// 댓글 삭제
+	public int deleteReply(SqlSession sqlSession, int reId) {
+		return sqlSession.delete("adminMapper.deleteReply", reId);
+	}
+
+	// 댓글 수정
+	public int updateReply(SqlSession sqlSession, Reply r) {
+		return sqlSession.update("adminMapper.updateReply", r);
+	}
+
+	// 게시글 삭제 시 댓글 상태 변경
+	public int updateReplyStatus(SqlSession sqlSession, int boardNo) {
+		return sqlSession.update("adminMapper.updateReplyStatus", boardNo);
+	}
+
+	// 상세 글 보기 - 문의/예약 게시판에서 답글이 있을 시 진행상태를  Y로 변경
+	public void updateQuBoStatusY(SqlSession sqlSession, int bId) {
+		 sqlSession.update("adminMapper.updateQuBoStatusY", bId);
+	}
+
+	// 상세 글 보기 - 문의/예약 게시판에서 답글이 있을 시 진행상태를 N으로 변경
+	public void updateQuBoStatusN(SqlSession sqlSession, int bId) {
+		sqlSession.update("adminMapper.updateQuBoStatusN", bId);
+	}
+	
 }

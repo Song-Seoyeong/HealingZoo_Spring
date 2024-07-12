@@ -11,6 +11,7 @@ import com.semiproject.healingzoo.board.model.vo.Goods;
 import com.semiproject.healingzoo.board.model.vo.Image;
 import com.semiproject.healingzoo.board.model.vo.Link;
 import com.semiproject.healingzoo.board.model.vo.PageInfo;
+import com.semiproject.healingzoo.board.model.vo.Reply;
 
 public interface AdminService {
 
@@ -19,6 +20,8 @@ public interface AdminService {
 	int getAnimalCount();
 
 	ArrayList<Goods> selectMascotList();
+	
+	void deleteAnimalImage(int aniNO);
 
 	int insertAnimal(Animal animal);
 
@@ -195,4 +198,34 @@ public interface AdminService {
 	void updateOperatingImage(Image image);
 	
 	void updateChargeImage(Image image);
+	
+	int insertGreeting(Image i);
+
+	int insertWay(Image i);
+
+	int updateMapLink(Link mapLink);
+
+	int insertMapLink(Link mapLink);
+	
+	ArrayList<Reply> selectReply(int bId);
+
+	// 댓글 등록
+	int insertReply(Reply r);
+
+	// 댓글 삭제
+	int deleteReply(int reId);
+
+	// 댓글 수정
+	int updateReply(Reply r);
+
+	// 게시글 삭제 시 댓글 상태 변경
+	int updateReplyStatus(int boardNo);
+
+	// 상세 글 보기 - 문의/예약 게시판에서 답글이 있을 시 진행상태를  Y로 변경
+	void updateQuBoStatusY(int bId);
+
+	// 상세 글 보기 - 문의/예약 게시판에서 답글이 없을 시 진행상태를  N로 변경
+	void updateQuBoStatusN(int bId);
+
+	
 }

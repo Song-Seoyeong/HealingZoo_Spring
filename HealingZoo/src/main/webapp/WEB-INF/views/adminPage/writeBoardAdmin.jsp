@@ -61,7 +61,7 @@
 			    			<!--  카테고리가 공지사항이라면 말머리 선택창 추가 -->
 			    			<c:if test="${ category == 'notice' }">
 				    			<select aria-label="말머리 선택" id='searchFilter' name='noSubject' style="border-style: none;  text-align: center; background-color: #fff; font-family: 'NanumSquareRound';" >
-				    				<option selected>말머리</option>
+				    				<option selected value="none">말머리</option>
 							        <option value="NEWS">새소식</option>
 							        <option value="NOTICE">공지사항</option>
 							        <option value="EVENT">이벤트</option>
@@ -176,6 +176,9 @@
 			
 			fileArea.append(newFileArea);
 		})
+		
+		
+		
 	</script>
 </body>
 </html>

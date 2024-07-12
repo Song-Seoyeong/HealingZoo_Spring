@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -102,9 +103,8 @@
 	
 	<!-- 인사말 -->
 	<div class="gret-mainimg">
-        <img src="${ contextPath }/image/greetingimg.jpg" alt="큰 사진">
-	</div>
-    
+        <img src="${contextPath }/resources/uploadImg/${image.imgRename}" alt="큰 사진">
+    </div>
 
 	<!-- 인사말 소개 -->
 	<div class="container text-center" style='margin-top: 30px;x'>
@@ -113,38 +113,64 @@
 	    <div class="col-10">
 	    <div class="staffs-header" style='font-size: 35px; margin:3%;'>&lt;힐링동물원 스탭소개&gt;</div>
 		    <div class="staffs-container">
-		        <div class="staff left-image" id="staff1">
-		            <img src="${ contextPath }/image/test2.jpg" alt="스탭 1">
-		            <div class="description">밝고 활기찬 모습으로 항상 동물들을 케어합니다.</div>
-		        </div>
-		        <div class="staff-divider"></div>
+		    	<c:forEach items="${ staff }" var="s" varStatus="vs">
+		    		<c:if test="${ vs.index % 2 == 0 }">
+		    			<div class="staff left-image" id="staff${ vs.count }">
+				            <img src="${contextPath }/resources/uploadImg/${list[vs.index].imgRename}" alt="스탭 ${ vs.count }">
+				            <div class="description">${ s }</div>
+				        </div>
+		    			
+		    		</c:if>
+		    		<c:if test="${ vs.index % 2 != 0 }">
+			    		<div class="staff right-image" id="staff${ vs.count }">
+				            <img src="${contextPath }/resources/uploadImg/${list[vs.index].imgRename}" alt="스탭 ${ vs.count }">
+				            <div class="description right-text-board">
+				                <div>${ s }</div>
+				            </div>
+				        </div>
+		    		</c:if>
+		    		<c:if test="${ !vs.last }">
+		    			<div class="staff-divider"></div>
+		    		</c:if>
+		    	</c:forEach>
+		    	
+		    	
+		    	
+		    	
+		    	
+		    	
+<!-- 		        <div class="staff left-image" id="staff1"> -->
+<%-- 		            <img src="${ contextPath }/image/test2.jpg" alt="스탭 1"> --%>
+<!-- 		            <div class="description">밝고 활기찬 모습으로 항상 동물들을 케어합니다.</div> -->
+<!-- 		        </div> -->
+<!-- 		        <div class="staff-divider"></div> -->
 		        
-		        <div class="staff right-image" id="staff2">
-		            <img src="${ contextPath }/image/test2.jpg" alt="스탭 2">
-		            <div class="description right-text-board">
-		                <div>호기심과 상상력으로 항상 동물들을 케어합니다.</div>
-		            </div>
-		        </div>
-		        <div class="staff-divider"></div>
+<!-- 		        <div class="staff right-image" id="staff2"> -->
+<%-- 		            <img src="${ contextPath }/image/test2.jpg" alt="스탭 2"> --%>
+<!-- 		            <div class="description right-text-board"> -->
+<!-- 		                <div>호기심과 상상력으로 항상 동물들을 케어합니다.</div> -->
+<!-- 		            </div> -->
+<!-- 		        </div> -->
+<!-- 		        <div class="staff-divider"></div> -->
 		        
-		        <div class="staff left-image" id="staff3">
-		            <img src="${ contextPath }/image/test2.jpg" alt="스탭 3">
-		            <div class="description">밝고 정겨운 모습으로 항상 동물들을 케어합니다.</div>
-		        </div>
-		        <div class="staff-divider"></div>
+<!-- 		        <div class="staff left-image" id="staff3"> -->
+<%-- 		            <img src="${ contextPath }/image/test2.jpg" alt="스탭 3"> --%>
+<!-- 		            <div class="description">밝고 정겨운 모습으로 항상 동물들을 케어합니다.</div> -->
+<!-- 		        </div> -->
+<!-- 		        <div class="staff-divider"></div> -->
 		        
-		        <div class="staff right-image" id="staff4">
-		            <img src="${ contextPath }/image/test2.jpg" alt="스탭 4">
-		            <div class="description right-text-board">
-		                <div>멋지고 당당한 모습으로 동물들과 함께합니다.</div>
-		            </div>
-		        </div>
-		        <div class="staff-divider"></div>
+<!-- 		        <div class="staff right-image" id="staff4"> -->
+<%-- 		            <img src="${ contextPath }/image/test2.jpg" alt="스탭 4"> --%>
+<!-- 		            <div class="description right-text-board"> -->
+<!-- 		                <div>멋지고 당당한 모습으로 동물들과 함께합니다.</div> -->
+<!-- 		            </div> -->
+<!-- 		        </div> -->
+<!-- 		        <div class="staff-divider"></div> -->
 		        
-		        <div class="staff left-image" id="staff5">
-		            <img src="${ contextPath }/image/test2.jpg" alt="스탭 5">
-		            <div class="description">밝고 정겨운 모습으로 항상 동물들을 케어합니다.</div>
-		        </div>
+<!-- 		        <div class="staff left-image" id="staff5"> -->
+<%-- 		            <img src="${ contextPath }/image/test2.jpg" alt="스탭 5"> --%>
+<!-- 		            <div class="description">밝고 정겨운 모습으로 항상 동물들을 케어합니다.</div> -->
+<!-- 		        </div> -->
 		    </div>
     	</div>
 	    <div class="col"></div>

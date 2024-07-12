@@ -56,7 +56,7 @@
 	<insert id="insertImg">
 		insert all
 			<foreach collection="list" item="img" separator=" ">
-				into Image values(new_img_id, #{img.imgPath}, #{img.imgName}, #{img.imgRename}, #{img.imgRefNum}, #{img.imgRefType}, default)
+				into Image values(new_img_id, #{img.imgPath}, #{img.imgName}, #{img.imgRename}, #{img.imgRefNum}, #{img.imgRefType}, default, null)
 			</foreach>
 		select * from dual
 	</insert>

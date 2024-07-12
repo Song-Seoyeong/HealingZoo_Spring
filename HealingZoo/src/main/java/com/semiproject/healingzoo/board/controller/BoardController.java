@@ -44,11 +44,11 @@ public class BoardController {
 	}
 	
 	// 글쓰기 페이지 이동 (공지/후기)
-		@RequestMapping("noRewriteView.bo")
+		@RequestMapping("noReWriteView.bo")
 		public String noRewriteView(@RequestParam("category") String category,
 								Model model) {
 			model.addAttribute("category", category);
-			return "noRewrite";
+			return "noReWrite";
 		}
 	
 	
@@ -312,7 +312,7 @@ public class BoardController {
 	// 게시글 수정
 	@RequestMapping("updateBoard.bo")
 	public String updateBoard(@ModelAttribute Board b,
-							  @RequestParam("checkDelete") ArrayList<String> checkDeletes,
+							  @RequestParam(value="checkDelete", required=false) ArrayList<String> checkDeletes,
 							  @RequestParam("file") ArrayList<MultipartFile> imgs, @RequestParam("page") int page,
 							  HttpServletRequest request, Model model) {
 		// 추가 이미지 등록
@@ -371,16 +371,19 @@ public class BoardController {
 		}
 
 		int boardResult = bService.updateBoard(b);
-
+		
 		// 추가 이미지가 있을 때만
 		int imgResult = 0;
 		if (!imgList.isEmpty()) {
 			imgResult = bService.insertImg(imgList);
 		}
+		
+		
 		if (boardResult + imgResult == 1 + imgList.size()) {
 			model.addAttribute("bId", b.getBoardNo());
 			model.addAttribute("page", page);
-
+			model.addAttribute("category", b.getCateNo());
+			
 			return "redirect:boardView.bo";
 		} else {
 			throw new BoardException("게시판 수정에 실패했습니다.");

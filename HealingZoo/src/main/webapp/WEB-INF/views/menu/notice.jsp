@@ -178,7 +178,7 @@
 					  <option value="content">내용</option>
 					</select>
 					&nbsp;&nbsp;
-			    	<input type='text' name='search' size='30' placeholder='제목/핸드폰번호로 검색이 가능합니다'/>
+			    	<input type='text' name='search' size='30' placeholder='제목/내용로 검색이 가능합니다'/>
 			    	&nbsp;&nbsp;
 			    	<img src="resources/image/search.svg" id='searchIcon'>
 			    </div>
@@ -212,7 +212,7 @@
 		const writeBoard = document.getElementById('writeBoard')
 		if(writeBoard != null){
 			writeBoard.addEventListener('click', () =>{
-				location.href = '${contextPath}/noRewriteView.bo?category=' + 'notice';
+				location.href = '${contextPath}/noReWriteView.bo?category=' + 'notice';
 			})
 		}
 		

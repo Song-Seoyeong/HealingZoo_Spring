@@ -46,10 +46,11 @@
 			<div class="row">
 				<div class="col"></div>
 					<div class="col-8 content-center" style='background: white; border-radius: 25px;'>
-						<form action="${ contextPath }/updateView.admin" method='post'>
+						<form action="${ contextPath }/updateView.admin?bId=${b.boardNo}&cateNo=${b.cateNo}" method='post'>
 							<br>
 							<input type='hidden' name='page' value='${ page }'>
 							<input type='hidden' name='boardNo' value='${ b.boardNo }'>
+<%-- 							<input type='hidden' name='boardWriterName' value='${ b.boardWriterName }'> --%>
 							
 							<c:if test="${ b.cateNo == 100 }">
 								<input type='hidden' name='category' value='notice'>
@@ -74,7 +75,7 @@
 							<hr style='border: 2px solid'>
 							<div class='text-end'>
 								<input type='text' name=boardWriterName value='${ b.boardWriterName }' id='inputBoardWriter' size='10' class='inputBoard' readonly>
-								&nbsp;&nbsp; 
+								&nbsp;&nbsp;
 								<input type='text' value='${ b.boardModifyDate }' size='10' class='inputBoard' readonly>
 								&nbsp;&nbsp; 
 								
@@ -113,16 +114,19 @@
 							<div class='text-start'></div>
 							<hr>
 							<div class="text-center">
-								<button type="button" class="btn" style='background: #60A869; color: white;' id='goToBack'>목록</button>
+								<button type="button" class="btn" style='background: #60A869; color: white; margin-right: 2.5%;' id='goToBack'>목록</button>
 								
 								<!-- 로그인유저와 글쓴이가 같을 거나, 예약/문의 게시글을 비번 입력 후 들어왔을 때 -->
-<%-- 								<c:if test="${ (loginUser.memNo == b.boardWriterNo) || b.cateNo == 103 || b.cateNo == 101 || b.cateNo == 100 || b.cateNo == 102 }"> --%>
-								<c:if test="${ (loginUser.memNo == b.boardWriterNo) }">
-									&nbsp;&nbsp;&nbsp;
-									<button class="btn" id='updateBoard' style='background: #EA862A; color: white;'>수정</button>
+								<c:if test="${ b.cateNo == 101 || b.cateNo == 102 || b.cateNo == 103 }">
+									<c:if test="${ (loginUser.memNo == b.boardWriterNo) }">
+										&nbsp;&nbsp;&nbsp;
+										<button class="btn" id='updateBoard' style='background: #EA862A; color: white;'>수정</button>
+									</c:if>
 								</c:if>
 								<c:if test="${ b.cateNo == 100 }">
-									<button class="btn" id='updateBoard' style='background: #EA862A; color: white;'>수정</button>
+									<c:if test="${ loginUser.memGrade == 'MANAGER' }">
+										<button class="btn" id='updateBoard' style='background: #EA862A; color: white;'>수정</button>
+									</c:if>
 								</c:if>
 								<c:if test="${ (loginUser.memNo == b.boardWriterNo) || (loingUser.memGrade == MANAGER) }">
 									&nbsp;&nbsp;&nbsp;
@@ -137,73 +141,113 @@
 				<div class="col"></div>
 			</div>	
 		</div>
-				<!-- 댓글 폼 -->
-		<div class="container text-center">
-			<div class="row">
-				<div class="col"></div>
-				<div class="col-8 content-center" style='background: white; border-radius: 25px;'>
-					<table class="table">
-						<thead>
-							<tr>
-								<th scope="col" width='10%'>작성자</th>
-								<th scope="col" width='65%'>댓글</th>
-								<th scope="col" width='10%'>작성일</th>
-								<th scope="col" width='15%'></th>
-							</tr>
-						</thead>
-						<tbody class='table-group-divider'>
-							<tr>
-								<td scope="row">관리자</td>
-								<td>예약 완료 되었습니다</td>
-								<td>24/06/15</td>
-								<td>
-								<c:if test="${ loginUser.memNo == b.boardWriterNo }">
-									<button type="button" class="btn btn-sm" id='updateReply'
-										style='background: #EA862A; color: white;'>수정</button>&nbsp;
-									<button type="button" class="btn btn-sm" id='deleteReply'
-										style='background: #DD5353; color: white;'>삭제</button>
-								</c:if>
-								</td>
-							</tr>
-						
-							<tr>
-								<td scope="row" colspan='4'>댓글이 없습니다. 댓글을 입력해주세요 :)</td>
-							</tr>
-							
-							<!-- 비회원 댓글 입력창 -->
-							<c:if test="${ empty loginUser }">
-								<tr>
-									<td scope="row">댓글</td>
-									<td colspan='2'><textarea rows="3" cols="60" id='replyContent' style='resize: none;' readonly placeholder='로그인 후 이용해주세요'></textarea></td>
-									<td>
-										<button type="button" class="btn btn-sm" id='insertReply' style='background: #60A869; color: white;'>등록</button>
-										<br>
-									</td>
-								</tr>
+		
+		
+		<!-- 문의 답변 폼 -->
+		<c:if test="${ b.cateNo == 101 || b.cateNo == 103 }">
+			<div class="container" style='margin-bottom: 70px'>
+				<div class="row" height='300px'>
+					<div class="col"></div>
+						<div class="col-8 content-center" style='background: white; border-radius: 25px;'>
+							<h3 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;"> 운영자 답변</h3>
+<%-- 							<c:if test='${ empty quReply }'> --%>
+<!-- 								<div class='text-center'>답변을 작성해주세요.</div> -->
+<%-- 							</c:if> --%>
+							<c:if test='${ !empty quReply }'>
+								<div class='text-center'>${ quReply.replyContent }</div>
 							</c:if>
-							<!-- 비회원 댓글 입력창 -->
-							
-							<!-- 회원 댓글 입력창 -->
-							<c:if test="${ !empty loginUser }">
-								<tr>
-									<td scope="row">댓글</td>
-									<td colspan='2'>
-										<textarea rows="3" cols="60" id='replyContent' style='resize: none;' placeholder='댓글을 작성해주세요'></textarea>
-										</td>
-									<td>
-										<button type="button" class="btn btn-sm" id='insertReply' style='background: #60A869; color: white;'>등록</button>
-										<br>
-									</td>
-								</tr>
-							</c:if>
-							<!-- 비회원 댓글 입력창 -->
-							
-						</tbody>
-					</table>
-				</div>
-				<div class="col"></div>
+						</div>
+					<div class="col"></div>
+				</div>	
 			</div>
-		</div>
+		</c:if>
+		
+		<!-- 댓글 폼 -->
+			<div class="container text-center">
+				<div class="row">
+					<div class="col"></div>
+					<div class="col-8 content-center" style='background: white; border-radius: 25px;'>
+						<table class="table">
+							<thead>
+								<tr>
+									<th scope="col" width='10%'>작성자</th>
+									<th scope="col" width='60%'>
+										<c:if test="${ b.cateNo == 101 || b.cateNo == 103 }">답변</c:if>
+										<c:if test="${ b.cateNo == 100 || b.cateNo == 102 }">댓글</c:if>
+									</th>
+									<th scope="col" width='15%'>작성일</th>
+									<th scope="col" width='15%'></th>
+								</tr>
+							</thead>
+							<tbody class='table-group-divider'>
+								<c:if test="${ !empty replyList }">
+									<c:forEach items="${ replyList }" var='r'>
+										<tr>
+											<td >
+												<c:if test="${ r.memGrade == 'CONSUMER'}">${ r.memName }</c:if>
+												<c:if test="${ r.memGrade == 'MANAGER' }">관리자</c:if>
+											</td>
+											<td>${ r.reContent }</td>
+											<td>${ r.modifyDate }</td>
+											<td>
+												<input type='hidden' value='${ r.reNo }' name='reNo'>
+												<c:if test="${ r.memNo eq loginUser.memNo  || loginUser.memGrade == 'MANAGER'}">
+													<span><button type="button" class="btn btn-sm" id='updateReply' style='background: #EA862A; color: white;'>수정</button></span>
+													 <span><button type="button" class="btn btn-sm" id='deleteReply' style='background: #DD5353; color: white;'>삭제</button></span>
+												</c:if>
+												<input type='hidden' value='${ r.reContent }' name='reContent'>
+											</td>
+										</tr>
+									</c:forEach>
+								</c:if>
+								<c:if test="${ empty replyList }">
+									<tr>
+										<td scope="row" colspan='4'>
+											<c:if test="${ b.cateNo == 100 || b.cateNo == 102 }">댓글이 없습니다. 댓글을 입력해주세요 :)</c:if>
+										</td>
+									</tr>
+								</c:if>
+							</tbody>
+						</table>
+						<div id='paginaion'></div>
+						<!-- 비회원 댓글 입력창 -->
+						<c:if test="${ empty loginUser }">
+							<div class="row">
+								<div class="col-2">
+									<c:if test="${ b.cateNo == 100 || b.cateNo == 102 }">댓글</c:if>
+									<c:if test="${ b.cateNo == 101 || b.cateNo == 103 }">답변</c:if>
+								</div>
+								<div class="col-7 content-center" style='background: white; border-radius: 25px;'>
+									<textarea rows="3" cols="50" style='resize: none;' readonly placeholder='로그인 후 이용해주세요'></textarea>
+								</div>
+								<div class="col-3 content-center">
+									<button type="button" class="btn btn-sm" id='noLoginReply' style='background: #60A869; color: white;'>등록</button>
+								</div>
+							</div>
+						</c:if>
+						<!-- 비회원 댓글 입력창 -->
+						
+						<!-- 회원 댓글 입력창 -->
+						<c:if test="${ !empty loginUser }">
+							<div class="row">
+								<div class="col-2">
+									<c:if test="${ b.cateNo == 100 || b.cateNo == 102 }">댓글</c:if>
+									<c:if test="${ b.cateNo == 101 || b.cateNo == 103 }">답변</c:if>
+								</div>
+								<div class="col-8 content-center" style='background: white; border-radius: 25px;'>
+									<textarea rows="3" cols="50" style='resize: none;' id='replyContent' placeholder='<c:if test="${ b.cateNo == 100 || b.cateNo == 102 }">댓글을 작성해주세요.</c:if><c:if test="${ b.cateNo == 101 || b.cateNo == 103 }">답변을 작성해주세요.</c:if>'></textarea>
+								</div>
+								<div class="col-2 content-center">
+									<button type="button" class="btn btn-sm" id='insertReply' style='background: #60A869; color: white;'>등록</button>
+								</div>
+							</div>
+						</c:if>
+						<!-- 회원 댓글 입력창 -->
+							
+					</div>
+					<div class="col"></div>
+				</div>
+			</div>
 		<!-- 댓글 폼 -->
 		
 		<!-- 삭제 모달 -->
@@ -224,6 +268,25 @@
 			</div>
 		</div>
 		<!-- 삭제 모달 -->
+		
+		<!-- 댓글 로그인 모달 -->
+		<div class="modal fade" tabindex="-1" role="dialog" id="modalChoice2">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content rounded-3 shadow">
+					<div class="modal-body p-4 text-center">
+						<h3 class="mb-0">로그인 후 이용해주세요</h3>
+					</div>
+					<div class="modal-footer flex-nowrap p-0">
+						<button type="button"class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0 border-end" id='loginView'>
+							<strong>로그인</strong>
+						</button>
+						<button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0" data-bs-dismiss="modal">취소</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 댓글 로그인 모달 -->
+		
 
 	<div class='margin'></div>
 	<!-- 푸터 -->
@@ -268,15 +331,179 @@
 		
 		
 		
+		// 미로그인한 상태에서 댓글 등록 버튼 클릭시
+		const noLoginReply = document.getElementById('noLoginReply');
+		
+		if(noLoginReply != null){
+			noLoginReply.addEventListener('click', ()=>{
+				$('#modalChoice2').modal('show');
+			})
+		}
+		
+		// 로그인하기 클릭시
+		document.getElementById('loginView').addEventListener('click', () =>{
+			location.href = '${contextPath}/loginView.me';
+		})
+		
+		const tbody = document.querySelector('tbody');
+		
+		// 댓글 등록
+		if(document.getElementById('insertReply') != null){
+			document.getElementById('insertReply').addEventListener("click", () =>{
+				$.ajax({
+					url:"${contextPath}/insertReply.admin",
+					data:{reContent:document.getElementById('replyContent').value, boardNo:${b.boardNo}, memNo:'${loginUser.memNo}'},
+					dataType: 'json',
+					success: data => {
+						tbody.innerHTML = ""
+						
+						for(const reply of data){
+							const tr = document.createElement("tr");
+							
+							const nameTd = document.createElement('td');
+							nameTd.innerText = reply.memName;
+							
+							const contentTd = document.createElement('td');
+							contentTd.innerHTML = reply.reContent;
+							
+							const dateTd = document.createElement('td');
+							dateTd.innerText = reply.modifyDate.split(" ")[0];
+							
+							const buttonTd = document.createElement('td');
+							if(reply.memNo == '${loginUser.memNo}'){
+								buttonTd.innerHTML = "<input type='hidden' value='" + reply.reNo +"' name='reNo'><span><button type='button' class='btn btn-sm' id='updateReply' style='background: #EA862A; color: white;'>수정</button></span> <span><button type='button' class='btn btn-sm' id='deleteReply' style='background: #DD5353; color: white;'>삭제</button><span>" 
+							}
+							
+							tr.append(nameTd);
+							tr.append(contentTd);
+							tr.append(dateTd);
+							tr.append(buttonTd);
+							
+							tbody.append(tr);
+							
+							document.getElementById('replyContent').value = "";
+						}
+					},
+					error: data => console.log(data)
+				})
+			})
+		}
+		
+		// 댓글 수정 + 삭제
+		tbody.addEventListener('click', e => {
+			const eventTarget = e.target;
+			const targetTagName = eventTarget.tagName.toLowerCase();
+			
+			
+			let targetButton = null;
+			if(targetTagName == 'button'){
+				targetButton = eventTarget.parentElement;
+			}else if(targetTagName == 'span'){
+				targetButton = eventTarget;
+			}
+			
+			// 댓글 수정
+			if(targetButton != null){
+				// 클릭한 버튼 td
+				const clickTd = targetButton.parentElement;
+				
+				// reId
+				const reId = clickTd.children[0].value;
+				
+				// content가 담긴 Td
+				const contentTd = clickTd.parentElement.children[1];
+				
+				if(targetButton.children[0].id == 'updateReply'){
+					
+					// 다른 댓글 수정 버튼 클릭시
+					if(document.getElementById('updateReplySubmit') != null){
+						buttonChange();
+					}
+					
+					
+					contentTd.innerHTML = '<textarea rows="3" cols="50" style="resize: none;">' + contentTd.innerText +'</textarea>'
+					
+					// 수정 버튼 > 완료 버튼
+					clickTd.children[1].innerHTML = '<button type="button" class="btn btn-sm" id="updateReplySubmit" style="background: #60A869	; color: white;">완료</button>&nbsp;'
+					
+					// 삭제 버튼 > 취소 버튼
+					clickTd.children[2].innerHTML = '<button type="button" class="btn btn-sm" id="cancelUpdateReply" style="background: #DD5353; color: white;">취소</button>'
+					
+				// 댓글 삭제	
+				}else if(targetButton.children[0].id == 'deleteReply'){
+					if(confirm("정말 삭제하시겠습니까?")){
+						$.ajax({
+							url:'${contextPath}/deleteReply.admin',
+							data:{reId:reId},
+							success: data => {
+								if(data == 'success'){
+									clickTd.parentElement.remove();
+								}else{
+									alert("댓글 삭제에 실패했습니다.");
+								}
+							},
+							error: data => console.log(data)
+						})
+					}
+				}else if(targetButton.children[0].id = 'updateReplySubmit'){
+				
+					$.ajax({
+						url:"${contextPath}/updateReply.admin",
+						data:{reNo:reId, reContent:contentTd.children[0].value},
+						success: data => {
+							if(data == 'success'){
+								buttonChange(contentTd.children[0].value);
+							}else{
+								alert("댓글 수정에 실패했습니다.");
+							}
+						},
+						error: data => console.log(data)
+					})
+					
+				}else if(targetButton.children[0].id = 'cancelUpdateReply'){
+					buttonChange();
+				}
+				
+			}
+		})
 		
 		
-		
-		
-		
-		
-		
-		
-		
+		// 댓글 수정 삭제 버튼 변경 함수
+		const buttonChange = (type) => {
+			
+			// 이전 완료 버튼
+			const submitButton = document.getElementById('updateReplySubmit');
+			
+			// 이전 완료 버튼의 span
+			const submitSpan = submitButton.parentElement;
+			
+			// 이전 취소 버튼의 span
+			const cancelSpan = submitSpan.nextElementSibling;
+			
+			// 이전 완료/취소 버튼의 TD
+			const beforeTd = submitSpan.parentElement;
+			
+			// reNo
+			const reNoInput = beforeTd.children[0].value;
+			
+			
+			// 수정 전 댓글 내용
+			const beforeContentInput = beforeTd.children[1].value;
+			
+			// 내용 Td
+			const contentTd = beforeTd.parentElement.children[1];
+			
+			//버튼 변경
+			submitSpan.innerHTML = "<button type='button' class='btn btn-sm' id='updateReply' style='background: #EA862A; color: white;'>수정</button>&nbsp;";
+			cancelSpan.innerHTML = "<button type='button' class='btn btn-sm' id='deleteReply' style='background: #DD5353; color: white;'>삭제</button>";
+			
+			if(type == undefined){
+				contentTd.innerHTML = beforeContentInput
+			}else{
+				contentTd.innerHTML = type
+				beforeTd.children[3].value = type
+			}
+		}
 	</script>
 </body>
 </html>

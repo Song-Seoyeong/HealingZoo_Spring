@@ -15,7 +15,7 @@
 }
 
 .form-check-input {
-	transform: scale(0.5);
+	transform: scale(1);
 	accent-color: #65B741;
 }
 #deleteButton {
@@ -56,7 +56,7 @@ tr {
 		<table class="table">
 			<thead>
 				<tr>
-					<th scope="col" style="width: 3%"></th>
+					<th scope="col" style="width: 3%"><input class="form-check-input" type="checkbox" id="checkAll"></th>
 					<th scope="col" style="width: 8%;">글 번호</th>
 					<th scope="col" style="width: 50%;">글 제목</th>
 					<th scope="col" style="width: 10%">작성자</th>
@@ -195,7 +195,13 @@ tr {
 		    document.getElementById('updateForm').submit();
 		});
 		
-		
+	    // 체크박스 전체 선택
+		document.querySelector('input[id="checkAll"]').addEventListener('change', function() {
+			const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+				checkboxes.forEach(checkbox => {
+				checkbox.checked = this.checked;
+			});	
+		});   
 		
 		
 	</script>

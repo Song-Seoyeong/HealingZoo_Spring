@@ -53,11 +53,11 @@
 		<div class="row" id='mainCategoryBar'>
 		    <div class="col">
 		    	<br><br>
-		    	<a href='${ contextPath }/views/zooInfo/greeting.jsp' class='mainCateName' id='zooInfo'>동물원 소개</a>
+		    	<a href='${ contextPath }/greeting.menu' class='mainCateName' id='zooInfo'>동물원 소개</a>
 		    	<div class="subCategory" id='zooInfoSub'>
 			    	<ul>
-					  <li><a href='${ contextPath }/views/zooInfo/greeting.jsp'>인사말</a></li>
-					  <li><a href='${ contextPath }/views/zooInfo/way.jsp'>오시는 길</a></li>
+					  <li><a href='${ contextPath }/greeting.menu'>인사말</a></li>
+					  <li><a href='${ contextPath }/way.menu'>오시는 길</a></li>
 					  <li><a href='${ contextPath }/views/zooInfo/programInfo.jsp'>프로그램 안내</a></li>
 					  <li><a href='${ contextPath }/operating.menu'>운영시간 및 입장금액 안내</a></li>
 					  <li style='width: 80px;'><a href='${ contextPath }/notice.menu'>공지사항</a></li>

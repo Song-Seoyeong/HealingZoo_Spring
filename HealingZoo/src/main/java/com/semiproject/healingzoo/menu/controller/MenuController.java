@@ -18,6 +18,7 @@ import com.semiproject.healingzoo.board.model.vo.Animal;
 import com.semiproject.healingzoo.board.model.vo.Board;
 import com.semiproject.healingzoo.board.model.vo.Goods;
 import com.semiproject.healingzoo.board.model.vo.Image;
+import com.semiproject.healingzoo.board.model.vo.Link;
 import com.semiproject.healingzoo.board.model.vo.PageInfo;
 import com.semiproject.healingzoo.common.Pagination;
 import com.semiproject.healingzoo.menu.model.service.MenuService;
@@ -358,7 +359,39 @@ public class MenuController {
 	    return "operating";
 	}
 	
-	
+	//인사말페이지 이동
+		@RequestMapping("greeting.menu")
+		public String moveToGreeting(Model model) {
+			// service -> dao -> DB
+			// 인삿말 *select* result set -> view
+			//	greeting사진, 각 멤버에 대한 프로필 사진, 문구 가지고와
+			Image result = mService.greeting();
+			ArrayList<Image> list = mService.greetingStaff();
+			ArrayList<String> staff = mService.greetingStaffWrite();
+			//		Model, ModelAndView
+			// 글 상세보기, 내 정보 보기
+	        model.addAttribute("image", result);
+	        model.addAttribute("list", list);
+			model.addAttribute("staff", staff);
+			
+			
+			
+			return "greeting";
+		}
+		
+		
+		//오시는길 이동
+		@RequestMapping("way.menu")
+		public String moveToWay(Model model) {
+			Image result = mService.way();
+			Link mapInfo = mService.getMapInfo();
+			
+			model.addAttribute("image", result);
+			model.addAttribute("mapInfo", mapInfo);
+			
+			return "way";
+		}
+
 	
 	
 	
