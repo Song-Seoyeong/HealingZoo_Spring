@@ -1,6 +1,7 @@
 package com.semiproject.healingzoo.admin.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +20,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonIOException;
 import com.semiproject.healingzoo.admin.model.exception.AdminException;
 import com.semiproject.healingzoo.admin.model.service.AdminService;
 import com.semiproject.healingzoo.admin.model.vo.Show;
@@ -32,6 +38,7 @@ import com.semiproject.healingzoo.board.model.vo.Goods;
 import com.semiproject.healingzoo.board.model.vo.Image;
 import com.semiproject.healingzoo.board.model.vo.Link;
 import com.semiproject.healingzoo.board.model.vo.PageInfo;
+import com.semiproject.healingzoo.board.model.vo.Reply;
 import com.semiproject.healingzoo.common.Pagination;
 import com.semiproject.healingzoo.member.model.vo.Member;
 
@@ -350,16 +357,36 @@ public class AdminController {
 			b = aService.selectReBoard(bId, userNo);
 		}
 		
+		// 이미지 리스트 조회
 		ArrayList<Image> imgList = aService.selectImg(bId);
 		
-		if(b.getCateNo() == 100) {
-			b.setBoardWriterName("관리자");
+		
+		// 댓글 리스트 조회
+		ArrayList<Reply> replyList = aService.selectReply(bId);
+		if (category == 101 || category == 103) {
+			if( replyList != null && !replyList.isEmpty()) {
+				// 문의/예약 게시판에서 답글이 있을 시 진행상태를  Y로 변경
+				aService.updateQuBoStatusY(bId);
+			} else {
+				// 답글이 없을 시 N으로 변경
+				aService.updateQuBoStatusN(bId);
+			}
+		}
+		
+		
+		System.out.println(replyList);
+		for(Reply r : replyList) {
+			r.setModifyDate(r.getModifyDate().split(" ")[0]);
+//				if (loginUser != null && "MANAGER".equals(loginUser.getMemGrade())) {
+//		            r.setReWriter("관리자");
+//		        }
 		}
 		
 		if(b != null && imgList != null) {
 			model.addAttribute("b", b);
 			model.addAttribute("imgList", imgList);
 			model.addAttribute("page", page);
+			model.addAttribute("replyList", replyList);
 			
 			return "boardDetailAdmin";
 		}else {
@@ -579,7 +606,7 @@ public class AdminController {
 
 	// 게시글 수정 페이지 이동
 	@RequestMapping("updateView.admin")
-	public String updateView(@ModelAttribute Board b,
+	public String updateView(@ModelAttribute Board b, 
 							  @RequestParam("page") int page,
 							  Model model) {
 		Board updateBoard = null;
@@ -588,7 +615,7 @@ public class AdminController {
 			updateBoard = aService.selectNoBoard(b.getBoardNo(), null);
 		}else if(b.getCateNo() == 101 || b.getCateNo() == 103){
 			updateBoard = aService.selectQuBoBoard(b.getBoardNo(), null);
-		}else {
+		}else if(b.getCateNo() == 102 ){
 			updateBoard = aService.selectReBoard(b.getBoardNo(), null);
 		}
 
@@ -604,7 +631,7 @@ public class AdminController {
 	// 게시글 수정
 	@RequestMapping("updateBoard.admin")
 	public String updateBoard(@ModelAttribute Board b,
-							  @RequestParam("checkDelete") ArrayList<String> checkDeletes,
+							  @RequestParam(value="checkDelete", defaultValue="none") ArrayList<String> checkDeletes,
 							  @RequestParam("file") ArrayList<MultipartFile> imgs,
 							  @RequestParam("page") int page,
 							  @RequestParam("category") int category,
@@ -639,6 +666,7 @@ public class AdminController {
 				}
 			}
 		}
+		System.out.println(deleteImg);
 		
 		int deleteImgResult = 0;
 		if(!deleteImg.isEmpty()) {
@@ -783,7 +811,7 @@ public class AdminController {
 		}
 	}
 
-	// 동물 목록 조회
+	// 동물 목록 조회 0711 +수정+
 	@RequestMapping("animal.admin")
 	public String selectFamilyList(@RequestParam(value = "page", defaultValue = "1") int currentPage, Model model) {
 		int listCount = aService.getAnimalCount();
@@ -792,13 +820,9 @@ public class AdminController {
 
 		ArrayList<Animal> anilist = aService.selectFamilyList(pi);
 
-		if (anilist != null && !anilist.isEmpty()) {
-			model.addAttribute("list", anilist);
-			model.addAttribute("pi", pi);
-			return "animal";
-		} else {
-			throw new AdminException("동물 목록 조회를 실패하였습니다.");
-		}
+		model.addAttribute("list", anilist);
+		model.addAttribute("pi", pi);
+		return "animal";
 	}
 
 	// 동물 추가 페이지 이동
@@ -855,38 +879,44 @@ public class AdminController {
 	    }
 	}
 
-	// 동물 수정 처리
-	@PostMapping("animalUpdate")
-	public String animalUpdate(@ModelAttribute Animal animal,
-	                           @RequestParam(value = "file", required = false) MultipartFile file,
-	                           HttpServletRequest request,
-	                           RedirectAttributes redirectAttributes) {
-	    try {
-	        int result = aService.updateAnimal(animal);
-	        
-	        	aService.deactivateOldAnimalImage(animal.getAniNO());
-	            
-	            String[] imgInfo = saveImg(file, request);
-	            Image image = new Image();
-	            image.setImgPath("/resources/uploadImg");
-	            image.setImgName(file.getOriginalFilename());
-	            image.setImgRename(imgInfo[1]);
-	            image.setImgRefNum(animal.getAniNO());
-	            image.setImgRefType("ANIMAL");
-	            
-	            aService.insertSingleImage(image);
-	        
-	        if(result > 0) {
-	            redirectAttributes.addFlashAttribute("message", "동물 정보가 성공적으로 수정되었습니다.");
-	        } else {
-	            redirectAttributes.addFlashAttribute("error", "동물 정보 수정에 실패했습니다.");
-	        }
-	    } catch(Exception e) {
-	        redirectAttributes.addFlashAttribute("error", "동물 정보 수정 중 오류가 발생했습니다: " + e.getMessage());
-	        e.printStackTrace();
-	    }
-	    return "redirect:/animal.admin";
-	}
+	// 동물 수정 처리 0711 +수정+
+		@PostMapping("animalUpdate")
+		public String animalUpdate(@ModelAttribute Animal animal,
+		                           @RequestParam(value = "file", required = false) MultipartFile file,
+		                           HttpServletRequest request,
+		                           RedirectAttributes redirectAttributes) {
+		    try {
+		        int result = aService.updateAnimal(animal);
+		        	
+		        	// 기존 이미지 삭제합니다
+		        	aService.deleteAnimalImage(animal.getAniNO());
+		        
+		        	// 바꾼이미지를 화면에 띄어줍니다.
+		        	aService.deactivateOldAnimalImage(animal.getAniNO());
+		            
+		        	//새로운 이미지를 저장해요
+		            String[] imgInfo = saveImg(file, request);
+		            Image image = new Image();
+		            image.setImgPath("/resources/uploadImg");
+		            image.setImgName(file.getOriginalFilename());
+		            image.setImgRename(imgInfo[1]);
+		            image.setImgRefNum(animal.getAniNO());
+		            image.setImgRefType("ANIMAL");
+		            
+		            aService.insertSingleImage(image);
+		            
+		            //System.out.println("Image Info: " + image); 디버깅용
+		        if(result > 0) {
+		            redirectAttributes.addFlashAttribute("message", "동물 정보가 성공적으로 수정되었습니다.");
+		        } else {
+		            redirectAttributes.addFlashAttribute("error", "동물 정보 수정에 실패했습니다.");
+		        }
+		    } catch(Exception e) {
+		        redirectAttributes.addFlashAttribute("error", "동물 정보 수정 중 오류가 발생했습니다: " + e.getMessage());
+		        e.printStackTrace();
+		    }
+		    return "redirect:/animal.admin";
+		}
 
 	// 동물 삭제
 	@RequestMapping("animalDelete")
@@ -968,7 +998,7 @@ public class AdminController {
 		return "writeMascot";
 	}
 
-	//마스코트 상품 추가
+	//마스코트 상품 추가 0711 +수정+
 	@PostMapping("/insertGoods.admin")
 	public String insertOrUpdateGoods(@ModelAttribute Goods goods, 
 	                                  @RequestParam(value = "file", required = false) MultipartFile file,
@@ -983,9 +1013,10 @@ public class AdminController {
 	            // 기존 상품 수정
 	            goodsNo = goods.getGoodsNo();
 	            aService.updateGoods(goods);
-
-	            // 기존 이미지를 비활성화
+	            
+	         // 기존 이미지를 비활성화 -> 삭제 변경 0711 
 	            aService.deactivateOldGoodsImage(goodsNo);
+	            
 	        }
 
 	        // 이미지 처리
@@ -998,11 +1029,11 @@ public class AdminController {
 	            image.setImgRefNum(goodsNo);
 	            image.setImgRefType("GOODS");
 
-	            System.out.println("Image Info: " + image);  // 디버깅 출력
-
 	            aService.insertGoodsImage(image);
+	            
+	            //System.out.println("Image Info: " + image);  // 디버깅 출력
 	        }
-
+	        
 	        redirectAttributes.addFlashAttribute("message", goods.getGoodsNo() == 0 ? "새 상품이 성공적으로 추가되었습니다." : "상품이 성공적으로 수정되었습니다.");
 	    } catch (Exception e) {
 	        redirectAttributes.addFlashAttribute("error", "상품 처리 중 오류가 발생했습니다.");
@@ -1337,11 +1368,139 @@ public class AdminController {
 	    return "redirect:/mascot.admin";
 	}
 
+	// 인사말 이미지 변경
+	@RequestMapping("updateGreetingImg.admin")
+	public String updateGreetingImg(@RequestParam("operImg") MultipartFile upload, HttpServletRequest request) {
+		Image i = new Image();
+		String[] returnArr = saveImg(upload, request);
+
+		i.setImgRename(returnArr[1]);
+		i.setImgName(upload.getOriginalFilename());
+		i.setImgPath(returnArr[0]);
+		i.setImgRefType("GREETING");
+		
+		// DB에 저장하는 부분 작성 : spring-jdbc(+mybatis)
+		// service -> dao -> db(mapper)
+		int result = aService.insertGreeting(i);
+		if(result>0) {
+			return "redirect:greeting.admin";
+		} else {
+			throw new AdminException("인삿말 사진 등록에 실패했습니다.");
+		}
+		
+	}
+
 	
+	// 오시는길 이미지 변경
+		@RequestMapping("updateWayImg.admin")
+		public String updateWayImg(@RequestParam("mapImg") MultipartFile upload, HttpServletRequest request) {
+			Image i = new Image();
+			String[] returnArr = saveImg(upload, request);
+
+			i.setImgRename(returnArr[1]);
+			i.setImgName(upload.getOriginalFilename());
+			i.setImgPath(returnArr[0]);
+			i.setImgRefType("WAY");
+			
+			// DB에 저장하는 부분 작성 : spring-jdbc(+mybatis)
+			// service -> dao -> db(mapper)
+			int result = aService.insertWay(i);
+			if(result>0) {
+				return "redirect:way.admin";
+			} else {
+				throw new AdminException("인삿말 사진 등록에 실패했습니다.");
+			}
+			
+		}
+		
+	//오시는길 주소변경
+	// Controller
+	@PostMapping("updateWayInfo.admin")
+	public String updateWayInfo(@RequestParam("timestamp") String timestamp,
+	                            @RequestParam("address") String address,
+	                            @RequestParam("mapImg") MultipartFile mapImg,
+	                            HttpServletRequest request,
+	                            RedirectAttributes redirectAttributes) {
+	    // 1. Link 정보 업데이트 (지도와 주소)
+	    Link mapLink = new Link();
+	    mapLink.setLinkRefType("MAP");
+	    mapLink.setLinkUrl(timestamp);
+	    mapLink.setLinkInfo(address);
+
+	    int linkResult = aService.updateMapLink(mapLink);
+
+	    if (linkResult == 0) {
+	        linkResult = aService.insertMapLink(mapLink);
+	    }
+
+	    // 2. 이미지 업로드 및 저장 (기존 코드 유지)
+	    int imageResult = 1; // 이미지 업로드가 없는 경우에도 성공으로 간주
+	    if (!mapImg.isEmpty()) {
+	        Image i = new Image();
+	        String[] returnArr = saveImg(mapImg, request);
+
+	        i.setImgRename(returnArr[1]);
+	        i.setImgName(mapImg.getOriginalFilename());
+	        i.setImgPath(returnArr[0]);
+	        i.setImgRefType("WAY");
+
+	        imageResult = aService.insertWay(i);
+	    }
+
+	    if (linkResult > 0 && imageResult > 0) {
+	        redirectAttributes.addFlashAttribute("message", "오시는 길 정보가 성공적으로 업데이트되었습니다.");
+	    } else {
+	        redirectAttributes.addFlashAttribute("error", "오시는 길 정보 업데이트에 실패했습니다.");
+	    }
+
+	    return "redirect:way.admin";
+	}
+
+	// 댓글 작성
+	@RequestMapping("insertReply.admin")
+	@ResponseBody
+	public void insertReply(@ModelAttribute Reply r,
+							HttpServletResponse response) {
+		
+		int result = aService.insertReply(r);
+		
+		if(result > 0) {
+			// 댓글 리스트 조회
+			ArrayList<Reply> replyList = aService.selectReply(r.getBoardNo());
+			
+			GsonBuilder gb = new GsonBuilder().setDateFormat("yyyy-MM-dd");
+			Gson gson = gb.create();
+			response.setContentType("application/json; charset=UTF-8");
+			
+			try {
+				gson.toJson(replyList, response.getWriter());
+			} catch (JsonIOException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}else {
+			throw new AdminException("댓글 작성에 실패했습니다.");
+		}
+	}
 	
+	// 댓글 완전 삭제
+	@RequestMapping("deleteReply.admin")
+	@ResponseBody
+	public String deleteReply(@RequestParam("reId") int reId) {
+		int result = aService.deleteReply(reId);
+		
+		return result == 1 ? "success" : "fail";
+	}
 	
-	
-	
+	// 댓글 수정
+	@RequestMapping("updateReply.admin")
+	@ResponseBody
+	public String updateReply(@ModelAttribute Reply r) {
+		int result = aService.updateReply(r);
+		return result == 1 ? "success":"fail";
+	}
 	
 	
 	

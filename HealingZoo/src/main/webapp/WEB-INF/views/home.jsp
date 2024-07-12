@@ -12,6 +12,9 @@
 		height: 330px;
 		opacity:50%;
 	}
+	.oneeye:hover{
+		transform: translateY(-20px);
+	}
 </style>
 </head>
 <body>
@@ -64,7 +67,7 @@
 		</div>
 	</div>
   
-	<div style='margin: 3%'></div>
+	<div style='margin: 5%'></div>
 	
 	<!-- 한눈에 보기 영역 -->
 	<div class="row text-center">
@@ -72,14 +75,14 @@
 	    <div class="col-4">
 	    	<div style='height: 330px; width: 550px;'>
 	    		<a href="${ contextPath }/${oneeyeLinkList[0].linkUrl}">
-					<img src="${ contextPath }/resources/uploadImg/${oneeyeList[0].imgRename}" class="d-block w-100" alt='${ oneeyeList[0].imgName }'>
+					<img src="${ contextPath }/resources/uploadImg/${oneeyeList[0].imgRename}" class="d-block w-100 oneeye" alt='${ oneeyeList[0].imgName }'>
 			 	</a>
 			</div>
 	    </div>
 	    <div class="col-4">
 	    	<div style='height: 330px; width: 550px;'>
 	    		<a href="${ contextPath }/${oneeyeLinkList[1].linkUrl}">
-					<img src="${ contextPath }/resources/uploadImg/${oneeyeList[1].imgRename}" class="d-block w-100" alt='${ oneeyeList[1].imgName }'>
+					<img src="${ contextPath }/resources/uploadImg/${oneeyeList[1].imgRename}" class="d-block w-100 oneeye " alt='${ oneeyeList[1].imgName }'>
 			 	</a>
 			</div>
 	    </div>

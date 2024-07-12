@@ -36,18 +36,6 @@
 				    		&nbsp;&nbsp;&nbsp;&nbsp;<h3 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;"> 공지사항 남기기</h3>
 				    	</div>
 			    	</c:if>
-			    	<c:if test="${ category == 'book' }">
-				    	<div class='text-start'>
-				    		<input type='hidden' value='103' name='cateNo'/>
-				    		&nbsp;&nbsp;&nbsp;&nbsp;<h3 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;"> 예약글 남기기</h3>
-				    	</div>
-			    	</c:if>
-			    	<c:if test="${ category == 'question' }">
-				    	<div class='text-start'>
-				    		<input type='hidden' value='101' name='cateNo'/>
-				    		&nbsp;&nbsp;&nbsp;&nbsp;<h3 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;"> 문의사항 남기기</h3>
-				    	</div>
-			    	</c:if>
 			    	<c:if test="${ category == 'review' }">
 				    	<div class='text-start'>
 				    		<input type='hidden' value='102' name='cateNo'/>
@@ -71,7 +59,7 @@
 						    	<input type='text' name='boardTitle' placeholder='제목을 입력해주세요' id='inputBoardTitle'size='50' class='inputBoard' autofocus>
 						    </div>
 						    <div class='col-2'>
-						    	<input  type='text' name='boardWriterName' placeholder='이름을 입력해주세요' id='inputBoardWriter' size='20'  class='inputBoard' value='${ !empty loginUser ? loginUser.memName : "" }'>
+						    	<input  type='hidden' name='boardWriterName' id='inputBoardWriter' size='20'  class='inputBoard' value='${ !empty loginUser ? loginUser.memName : "" }'>
 							</div>
 							<div class='col-1'></div>
 						</div>

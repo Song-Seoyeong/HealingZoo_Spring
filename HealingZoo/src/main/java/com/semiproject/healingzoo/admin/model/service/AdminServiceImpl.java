@@ -16,6 +16,7 @@ import com.semiproject.healingzoo.board.model.vo.Goods;
 import com.semiproject.healingzoo.board.model.vo.Image;
 import com.semiproject.healingzoo.board.model.vo.Link;
 import com.semiproject.healingzoo.board.model.vo.PageInfo;
+import com.semiproject.healingzoo.board.model.vo.Reply;
 
 @Service("aService")
 public class AdminServiceImpl implements AdminService {
@@ -26,6 +27,10 @@ public class AdminServiceImpl implements AdminService {
 	@Autowired
 	private AdminDAO aDAO;
 	
+	@Override
+	public void deleteAnimalImage(int aniNO) {
+		aDAO.deleteAnimalImage(sqlSession,aniNO);
+	}
 	
 	@Override
 	public ArrayList<Animal> selectFamilyList(PageInfo pi) {
@@ -490,4 +495,69 @@ public class AdminServiceImpl implements AdminService {
 	public void updateChargeImage(Image image) {
 		aDAO.updateChargeImage(sqlSession, image);
 	}
+	
+	@Override
+	public int insertGreeting(Image i) {
+		return aDAO.insertGreeting(sqlSession,i);
+	}
+
+	@Override
+	public int insertWay(Image i) {
+		return aDAO.insertWay(sqlSession, i);
+	}
+
+	@Override
+	public int updateMapLink(Link mapLink) {
+		return aDAO.updateMapLink(sqlSession, mapLink);
+	}
+
+	@Override
+	public int insertMapLink(Link mapLink) {
+		return aDAO.insertMapLink(sqlSession, mapLink);
+	}
+	
+	// 댓글 리스트 조회
+	@Override
+	public ArrayList<Reply> selectReply(int bId) {
+		return aDAO.selectReply(sqlSession, bId);
+	}
+
+	// 댓글 등록
+	@Override
+	public int insertReply(Reply r) {
+		return aDAO.insertReply(sqlSession, r);
+	}
+
+	// 댓글 삭제
+	@Override
+	public int deleteReply(int reId) {
+		return aDAO.deleteReply(sqlSession, reId);
+	}
+
+
+	// 댓글 수정
+	@Override
+	public int updateReply(Reply r) {
+		return aDAO.updateReply(sqlSession, r);
+	}
+	
+	// 게시글 삭제 시 댓글 상태 변경
+	@Override
+	public int updateReplyStatus(int boardNo) {
+		return aDAO.updateReplyStatus(sqlSession, boardNo);
+	}
+
+	// 상세 글 보기 - 문의/예약 게시판에서 답글이 있을 시 진행상태를  Y로 변경
+	@Override
+	public void updateQuBoStatusY(int bId) {
+		aDAO.updateQuBoStatusY(sqlSession, bId);
+	}
+
+	// 상세 글 보기 - 문의/예약 게시판에서 답글이 있을 시 진행상태를 N으로 변경
+	@Override
+	public void updateQuBoStatusN(int bId) {
+		aDAO.updateQuBoStatusN(sqlSession, bId);
+	}
+	
+	
 }

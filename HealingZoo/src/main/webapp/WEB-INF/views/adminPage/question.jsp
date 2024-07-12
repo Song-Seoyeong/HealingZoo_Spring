@@ -10,21 +10,14 @@
 
 
 .form-check-input {
-	transform: scale(0.5);
+	transform: scale(1);
 	accent-color: #65B741;
 }
 
-#delete_button {
+#deleteButton {
 	background-color: #DD5353;
 	width: 80px;
 	border: none;
-}
-
-#write_button {
-	background-color: #65B741;
-	width: 80px;
-	border: none;
-	margin-right: 5px;
 }
 
 .pagination-container {
@@ -61,12 +54,12 @@
 		<table class="table text-center">
 			<thead>
 				<tr>
-					<th scope="col" style="width: 3%;"></th>
-					<th scope="col">글 번호</th>
-					<th scope="col">글 제목</th>
-					<th scope="col">작성자</th>
-					<th scope="col">작성일</th>
-					<th scope="col">진행상태</th>
+					<th scope="col" style="width: 3%;"><input class="form-check-input" type="checkbox" id="checkAll"></th>
+					<th scope="col" style="width: 8%;">글 번호</th>
+					<th scope="col" style="width: 50%;">글 제목</th>
+					<th scope="col" style="width: 10%;">작성자</th>
+					<th scope="col" style="width: 13%;">작성일</th>
+					<th scope="col" style="width: 10%;">진행상태</th>
 				</tr>
 			</thead>
 			<tbody class="table-group-divider">
@@ -171,25 +164,33 @@
 		
 		
 		// 삭제 버튼 클릭 시 선택된 게시물 상태 업데이트
-			document.getElementById('deleteButton').addEventListener('click', function() {
-			    const checkedBoxes = document.querySelectorAll('input[name="checked"]:checked');
-			    const updateBoardNos = Array.from(checkedBoxes).map(cb => cb.value).join(',');
+		document.getElementById('deleteButton').addEventListener('click', function() {	
+		    const checkedBoxes = document.querySelectorAll('input[name="checked"]:checked');
+		    const updateBoardNos = Array.from(checkedBoxes).map(cb => cb.value).join(',');
 
-			    if (updateBoardNos.length === 0) {
-			        alert('삭제할 게시물을 선택해주세요.');
-			        return;
-			    }
+		    if (updateBoardNos.length === 0) {
+		        alert('삭제할 게시물을 선택해주세요.');
+		        return;
+		    }
 
-			    if (!confirm('게시글을 삭제 하시겠습니까?')) {
-			        return;
-			    }
+		    if (!confirm('게시글을 삭제 하시겠습니까?')) {
+		        return;
+		    }
 
-			    // 숨은 폼 필드에 선택된 게시물 ID 할당
-			    document.getElementById('updateBoardNos').value = updateBoardNos;
+		    // 숨은 폼 필드에 선택된 게시물 ID 할당
+		    document.getElementById('updateBoardNos').value = updateBoardNos;
 
-			    // 폼 제출
-			    document.getElementById('updateForm').submit();
-			});
+		    // 폼 제출
+		    document.getElementById('updateForm').submit();
+		});
+		
+	    // 체크박스 전체 선택
+		document.querySelector('input[id="checkAll"]').addEventListener('change', function() {
+			const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+				checkboxes.forEach(checkbox => {
+				checkbox.checked = this.checked;
+			});	
+		});   
 		</script>
 
 

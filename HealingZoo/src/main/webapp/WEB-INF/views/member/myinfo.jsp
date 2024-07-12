@@ -88,14 +88,13 @@
 				<hr>
 				<label>휴대폰 번호</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="phoneNo" name="phoneNo" placeholder="(-제외)" style="width:500px" value="${ loginUser.memPhone }">
 				<hr>
-				<div id='staffDiv'>
+				<c:if test="${ loginUser.memGrade == 'MANAGER' || loginUser.memGrade == 'WORKER' }">
 					<label>프로필</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<input class='form-control' type="file" name="greetingStaff" style="width:500px; display:inline-block;" accept='image/*'>
+					<input class='form-control' type="file" name="greetingStaff" style="width:500px; display:inline-block; " accept='image/*'>
 					<hr>
 					<label>소개글</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<textarea class='form-control'  name="greetingWrite"style="width:500px; height: 100px; display:inline-block; resize:none;">${ loginUser.memIntro}</textarea>
-				</div>
-					<hr>
+				</c:if>
 				<div style="text-align:center;">
 					<button class="btn btn-primary" id="revision_button">수정</button>
 					

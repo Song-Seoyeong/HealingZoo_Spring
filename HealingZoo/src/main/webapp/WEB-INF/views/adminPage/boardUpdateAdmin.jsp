@@ -73,12 +73,11 @@
 			    	<div class='row'>
 			    		<div class='col-1' style="margin-right: 5%;">
 			    			<c:if test="${ b.cateNo == 100 }">
-				    			<select aria-label="말머리 선택" id='searchFilter' name='noSubject' style="border-style: none;  text-align: center; background-color: #fff; font-family: 'NanumSquareRound';" >
-				    				<option selected>말머리</option>
-							        <option value="NEWS">새소식</option>
-							        <option value="NOTICE">공지사항</option>
-							        <option value="EVENT">이벤트</option>
-							     </select>
+		    					<select name='noSubject'>
+				    				<option value='NEWS' ${ b.cateNo} ${ b.noSubject == 'NEWS' ? "selected" :""}>새소식</option>
+				    				<option value='EVENT' ${ b.noSubject == 'EVENT' ? "selected" :""}>이벤트</option>
+				    				<option value='NOTICE' ${ b.noSubject == 'NOTICE' ? "selected" :""}>공지</option>
+				    			</select>
 						    </c:if>
 			    		</div>
 				    	<div  class='col-7 text-center'>

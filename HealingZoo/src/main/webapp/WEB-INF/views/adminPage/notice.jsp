@@ -17,7 +17,7 @@
 }
 
 .form-check-input {
-	transform: scale(0.5);
+	transform: scale(1);
 	accent-color: #65B741;
 }
 
@@ -63,7 +63,7 @@ tr {
 			<table class="table">
 				<thead>
 					<tr>
-						<th scope="col" style="width: 3%"></th>
+						<th scope="col" style="width: 3%"><input class="form-check-input" type="checkbox" id="checkAll"></th>
 						<th scope="col" style="width: 10%;">글 번호</th>
 						<th scope="col" style="width: 130px;">
 							<select aria-label="말머리 선택" id='searchFilter' name='noSubject' style="border-style: none;  text-align: center; background-color: #fff; font-family: 'NanumSquareRound';">
@@ -231,8 +231,14 @@ tr {
 		    document.getElementById('updateForm').submit();
 		});
 		
-	             
-	    // 전체 복붙 하시면 됩니당      
+		
+	    // 체크박스 전체 선택
+		document.querySelector('input[id="checkAll"]').addEventListener('change', function() {
+			const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+				checkboxes.forEach(checkbox => {
+				checkbox.checked = this.checked;
+			});	
+		});
 	</script>
 </body>
 </html>

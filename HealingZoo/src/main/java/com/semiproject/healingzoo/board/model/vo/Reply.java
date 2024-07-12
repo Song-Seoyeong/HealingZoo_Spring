@@ -20,5 +20,6 @@ public class Reply {
 	private String createDate;
 	private String modifyDate;
 	private String reActive;
-	private String boardTitle;
+	private String boardTitle; // 추가
+	private String memGrade; // 추가
 }

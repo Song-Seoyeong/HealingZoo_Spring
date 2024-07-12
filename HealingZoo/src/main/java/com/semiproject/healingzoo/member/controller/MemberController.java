@@ -149,8 +149,8 @@ public class MemberController {
 	// 마이페이지>내정보수정
 	@RequestMapping("updateMember.me")
 	public String updateMember(@RequestParam("newPwd") String newPwd, @RequestParam("phoneNo") String phoneNo ,Model model, SessionStatus status,
-			                   @RequestParam("greetingStaff") MultipartFile upload,HttpServletRequest request,
-			                   @RequestParam(value="greetingWrite", defaultValue="") String greetingWrite) {
+			                   @RequestParam(value="greetingStaff", required=false ) MultipartFile upload,HttpServletRequest request,
+			                   @RequestParam(value="greetingWrite", required=false) String greetingWrite) {
 		Member m = (Member)model.getAttribute("loginUser");
 		int memNo = m.getMemNo();
 		
@@ -163,8 +163,9 @@ public class MemberController {
 		
 		//관리자 로그인 시 프로필 수정
 		int resultU = 0;
-		Image i = new Image();
+		
 		if(upload != null && !upload.isEmpty()) {
+			Image i = new Image();
 			String[] returnArr = saveFile(upload, request);
 			i.setImgRename(returnArr[1]);
 			i.setImgName(upload.getOriginalFilename());
