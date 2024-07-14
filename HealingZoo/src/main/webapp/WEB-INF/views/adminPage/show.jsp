@@ -188,13 +188,6 @@ tr {
 		    }
 		});
 	
-		// 체크박스 모두 선택
-		document.getElementById('selectAll').addEventListener('change', function() {
-		    const checkboxes = document.querySelectorAll('input[name="aniNOs"]');
-		    checkboxes.forEach(checkbox => {
-		        checkbox.checked = this.checked;
-		    });
-		});
 	
 	
 		// 추가 클릭시
@@ -204,11 +197,11 @@ tr {
 		
 		// 전체 선택
 		document.getElementById('selectAll').addEventListener('change', function() {
-	    const checkboxes = document.querySelectorAll('input[name="showNo"]');
-	    checkboxes.forEach(checkbox => {
-	        checkbox.checked = this.checked;
-	    });
-	});
+		    const checkboxes = document.querySelectorAll('input[name="showNo"]');
+		    checkboxes.forEach(checkbox => {
+		        checkbox.checked = this.checked;
+		    });
+		});
 	</script>
 </body>
 </html>

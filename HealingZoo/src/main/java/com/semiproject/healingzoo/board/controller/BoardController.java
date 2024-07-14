@@ -249,7 +249,13 @@ public class BoardController {
 		ArrayList<Image> imgList = bService.selectImg(bId);
 
 		// 댓글 리스트 조회
-		ArrayList<Reply> replyList = bService.selectReply(bId);
+		ArrayList<Reply> replyList =  new ArrayList<Reply>();
+		
+		if(category == 100 || category == 102 || category == 103) {
+			replyList = bService.selectReply(bId);
+		}else if(category == 101){
+			replyList = bService.selectQuReply(bId);
+		}
 
 		if (b != null && imgList != null && replyList != null) {
 
@@ -436,5 +442,8 @@ public class BoardController {
 		int result = bService.updateReply(r);
 		return result == 1 ? "success" : "fail";
 	}
+	
+	
+	
 
 }

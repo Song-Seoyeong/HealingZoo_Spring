@@ -3,12 +3,17 @@ package com.semiproject.healingzoo.board.model.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.semiproject.healingzoo.admin.model.vo.Show;
 import com.semiproject.healingzoo.board.model.vo.Board;
 import com.semiproject.healingzoo.board.model.vo.Image;
 import com.semiproject.healingzoo.board.model.vo.PageInfo;
 import com.semiproject.healingzoo.board.model.vo.Reply;
 
 public interface BoardService {
+	
+	ArrayList<Show> getAllShows();
+
+	Image getShowImage(int showNo, int i);
 
 	int getListCount(int i);
 
@@ -82,4 +87,8 @@ public interface BoardService {
 	Image getOperatingImage();
 
 	Image getChargeImage();
+
+	ArrayList<Reply> selectQuReply(int bId);
+	
+	Image getShowImageByRefType(String linkRefType);
 }

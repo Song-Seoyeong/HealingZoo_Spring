@@ -509,5 +509,62 @@ public class AdminDAO {
 	public void updateQuBoStatusN(SqlSession sqlSession, int bId) {
 		sqlSession.update("adminMapper.updateQuBoStatusN", bId);
 	}
+
+	public ArrayList<Board> FAQView(SqlSession sqlSession, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+        RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return (ArrayList)sqlSession.selectList("adminMapper.FAQView", rowBounds);
+	}
+
+	public int getFAQListCount(SqlSession sqlSession) {
+		return sqlSession.selectOne("adminMapper.getFAQListCount");
+	}
+
+	public int deleteFAQ(SqlSession sqlSession, int faqNo) {
+		return sqlSession.delete("adminMapper.deleteFAQ", faqNo);
+	}
+
+	public Board getFAQ(SqlSession sqlSession, int faqNo) {
+		return sqlSession.selectOne("adminMapper.getFAQ", faqNo);
+	}
+
+	public int insertFAQ(SqlSession sqlSession, Board b) {
+		return sqlSession.insert("adminMapper.insertFAQ", b);
+	}
+
+	public int updateFAQ(SqlSession sqlSession, Board b) {
+		return sqlSession.update("adminMapper.updateFAQ", b);
+	}
 	
+	public Link getShowLink(SqlSession sqlSession) {
+		return sqlSession.selectOne("adminMapper.getShowLink");
+	}
+
+	public void deleteExistingShowImage(SqlSession sqlSession) {
+		sqlSession.delete("adminMapper.deleteExistingShowImage");
+	}
+	
+	public Image getGoodsImage(SqlSession sqlSession,int goodsNo) {
+		return sqlSession.selectOne("adminMapper.getGoodsImage", goodsNo);
+	}
+
+	public void deleteGoodsImage(SqlSession sqlSession,int goodsNo) {
+        sqlSession.delete("adminMapper.deleteGoodsImage", goodsNo);
+    }
+	
+	public int insertProtitleImg(SqlSession sqlSession, Image i) {
+		return sqlSession.insert("adminMapper.insertProtitleImg", i);
+	}
+
+
+
+	public int updateShowLink(SqlSession sqlSession, Link showLink) {
+		return sqlSession.update("adminMapper.updateShowLink", showLink);
+	}
+
+
+
+	public int insertShowLink(SqlSession sqlSession, Link showLink) {
+		return sqlSession.insert("adminMapper.insertShowLink", showLink);
+	}
 }

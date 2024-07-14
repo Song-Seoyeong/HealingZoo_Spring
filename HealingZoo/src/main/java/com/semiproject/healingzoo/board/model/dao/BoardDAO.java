@@ -2,15 +2,14 @@ package com.semiproject.healingzoo.board.model.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
-import com.semiproject.healingzoo.board.model.vo.Animal;
+import com.semiproject.healingzoo.admin.model.vo.Show;
 import com.semiproject.healingzoo.board.model.vo.Board;
-import com.semiproject.healingzoo.board.model.vo.Goods;
 import com.semiproject.healingzoo.board.model.vo.Image;
 import com.semiproject.healingzoo.board.model.vo.PageInfo;
 import com.semiproject.healingzoo.board.model.vo.Reply;
@@ -221,6 +220,27 @@ public class BoardDAO {
 
 	public Image getChargeImage(SqlSession sqlSession) {
 		return sqlSession.selectOne("boardMapper.getChargeImage");
+	}
+
+
+	public ArrayList<Reply> selectQuReply(SqlSession sqlSession, int bId) {
+		return (ArrayList)sqlSession.selectList("boardMapper.selectQuReply", bId);
+	}
+	
+	public Image getShowImageByRefType(SqlSession sqlSession, String linkRefType) {
+		return sqlSession.selectOne("boardMapper.getShowImageByRefType",linkRefType);
+	}
+	
+	public ArrayList<Show> getAllShows(SqlSession sqlSession) {
+		return (ArrayList)sqlSession.selectList("boardMapper.getAllShows");
+	}
+
+
+	public Image getShowImage(SqlSession sqlSession, int showNo, int imgRefHover) {
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("showNo", showNo);
+	    params.put("imgRefHover", imgRefHover);
+	    return sqlSession.selectOne("boardMapper.getShowImage", params);
 	}
 
 }

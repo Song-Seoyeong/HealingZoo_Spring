@@ -41,18 +41,13 @@
       border: none;
    }
 
-   #write_button {
+   #insert_button {
       background-color: #65B741;
       width: 80px;
       border: none;
       margin-right: 5px;
    }
-   #revision_button{
-      background-color: orange;
-      width: 80px;
-      border: none;
-      margin-right: 5px;
-   }
+  
    
    .pagination-container {
      display: flex;
@@ -63,10 +58,21 @@
       padding: 10px;
    }
    tr{text-align:center;}
-   
+   .content{
+		max-width: 200px; /* 원하는 최대 길이 설정 */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+	}
+	 .title{
+		max-width: 100px; /* 원하는 최대 길이 설정 */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+	}
    
 </style>
-<title>Insert title here</title>
+<title>자주 묻는 Q&A 관리</title>
 </head>
 <body>
 	<%@ include file='../common/logoBar.jsp' %>
@@ -77,119 +83,71 @@
    <div class='margin' style="margin-top:100px"></div>
    <div class="container" style="width: 900px; margin-top: 100px;">
 		<h2 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 30px;">자주 묻는 Q&A</h2>
-		 <form>
-	         <div class="row">
-		         <div class="col-1"></div>
-		         <div class="col-9">
-	                  <div class='row' style="margin-bottom: 30px;">
-	                       <div class='col-3 text-center' >
-	                           <h4 class='inputTitleName'>FAQ1 | 제목</h4>
-	                        </div>
-	                        <div class='col-7'>
-	                           <input class="form-control" type="text" id="FAQTitle1" name='FAQTitle1' placeholder="제목을 입력하세요">
-	                        </div>
-	                        <div class='col-2'></div>
-	                     </div>
-	                  <div class='row' style="margin-bottom: 30px;">
-	                     <div class='col-3 text-center' >
-	                        <h4 class='inputTitleName'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;내용</h4>
-	                     </div>
-	                     <div class='col-9'>
-	                        <textarea class='form-control'name="FAQContent1" id='FAQContent1' placeholder="내용을 입력하세요" style="height:100px; resize: none;"></textarea>
-	                     </div>
-					  </div>
-					  <div class='row' style="margin-bottom: 30px;">
-	                       <div class='col-3 text-center' >
-	                           <h4 class='inputTitleName'>FAQ2 | 제목</h4>
-	                        </div>
-	                        <div class='col-7'>
-	                           <input class="form-control" type="text" id="FAQTitle2" name='FAQTitle2' placeholder="제목을 입력하세요">
-	                        </div>
-	                        <div class='col-2'></div>
-	                     </div>
-	                  <div class='row' style="margin-bottom: 30px;">
-	                     <div class='col-3 text-center' >
-	                        <h4 class='inputTitleName'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;내용</h4>
-	                     </div>
-	                     <div class='col-9'>
-	                        <textarea class='form-control'name="FAQContent2" id='FAQContent2' placeholder="내용을 입력하세요" style="height: 100px; resize: none;"></textarea>
-	                     </div>
-					  </div>
-					  <div class='row' style="margin-bottom: 30px;">
-	                       <div class='col-3 text-center' >
-	                           <h4 class='inputTitleName'>FAQ3 | 제목</h4>
-	                        </div>
-	                        <div class='col-7'>
-	                           <input class="form-control" type="text" id="FAQTitle3" name='FAQTitle3' placeholder="제목을 입력하세요">
-	                        </div>
-	                        <div class='col-2'></div>
-	                     </div>
-	                  <div class='row' style="margin-bottom: 30px;">
-	                     <div class='col-3 text-center' >
-	                        <h4 class='inputTitleName'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;내용</h4>
-	                     </div>
-	                     <div class='col-9'>
-	                        <textarea class='form-control'name="FAQContent3" id='FAQContent3' placeholder="내용을 입력하세요" style="height:100px; resize: none;"></textarea>
-	                     </div>
-					  </div>
-					  <div class='row' style="margin-bottom: 30px;">
-	                       <div class='col-3 text-center' >
-	                           <h4 class='inputTitleName'>FAQ4 | 제목</h4>
-	                        </div>
-	                        <div class='col-7'>
-	                           <input class="form-control" type="text" id="FAQTitle4" name='FAQTitle4' placeholder="제목을 입력하세요">
-	                        </div>
-	                        <div class='col-2'></div>
-	                     </div>
-	                  <div class='row' style="margin-bottom: 30px;">
-	                     <div class='col-3 text-center' >
-	                        <h4 class='inputTitleName'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;내용</h4>
-	                     </div>
-	                     <div class='col-9'>
-	                        <textarea class='form-control'name="FAQContent4" id='FAQContent4' placeholder="내용을 입력하세요" style="height:100px; resize: none;"></textarea>
-	                     </div>
-					  </div>
-					  <div class='row' style="margin-bottom: 30px;">
-	                       <div class='col-3 text-center' >
-	                           <h4 class='inputTitleName'>FAQ5 | 제목</h4>
-	                        </div>
-	                        <div class='col-7'>
-	                           <input class="form-control" type="text" id="FAQTitle5" name="FAQTitle5" placeholder="제목을 입력하세요">
-	                        </div>
-	                        <div class='col-2'></div>
-	                     </div>
-	                  <div class='row' style="margin-bottom: 30px;">
-	                     <div class='col-3 text-center' >
-	                        <h4 class='inputTitleName'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;내용</h4>
-	                     </div>
-	                     <div class='col-9'>
-	                        <textarea class='form-control'name="FAQContent5" id='FAQContent5' placeholder="내용을 입력하세요" style="height:100px; resize: none;"></textarea>
-	                     </div>
-					  </div>
-					  <div class='row' style="margin-bottom: 30px;">
-	                       <div class='col-3 text-center' >
-	                           <h4 class='inputTitleName'>FAQ6 | 제목</h4>
-	                        </div>
-	                        <div class='col-7'>
-	                           <input class="form-control" type="text" id="FAQTitle6" name='"FAQTitle6"' placeholder="제목을 입력하세요">
-	                        </div>
-	                        <div class='col-2'></div>
-	                     </div>
-	                  <div class='row' style="margin-bottom: 30px;">
-	                     <div class='col-3 text-center' >
-	                        <h4 class='inputTitleName'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;내용</h4>
-	                     </div>
-	                     <div class='col-9'>
-	                        <textarea class='form-control'name="FAQContent6" id='FAQContent6' placeholder="내용을 입력하세요" style="height:100px; resize: none;"></textarea>
-	                     </div>
-					  </div>
-					   <div class='d-grid gap-2 d-md-flex justify-content-md-end'>
-	                  <button class="btn btn-primary"  id="revision_button" >수정</button>
-	                  <button class="btn btn-primary"  id="delete_button">삭제</button>
-	               </div> 
-	             </div>
-	         </div>
-	    </form>
+		 <form action="${contextPath}/deleteFAQ.admin" id="deleteForm">
+			<table class="table table-hover">
+			  <thead>
+			    <tr>
+			      <th scope="col" width='8%'><input class="form-check-input" type="checkbox" id="selectAll"></th>
+			      <th scope="col" width='8%'>번호</th>
+			      <th scope="col" width='25%'>질문</th>
+			      <th scope="col" width='44%'>답변</th>
+			      <th scope="col" width='15%'>작성 일자</th>
+			    </tr>
+			  </thead>
+			  <tbody class='table-group-divider'>
+			  	<c:forEach items="${ FAQList }" var='FAQ'>
+				  	<tr>
+				  	  <th><input class="form-check-input" type="checkbox" value="${ FAQ.boardNo }" id="flexCheckDefault" name='FAQNo' ></th>
+				      <td>${ FAQ.boardNo }</td>
+				      <td class='title'>${ FAQ.boardTitle }</td>
+				      <td class='content'>${ FAQ.boardContent }</td>
+				      <td>${ FAQ.boardModifyDate }</td>
+				    </tr>
+			    </c:forEach>
+			  </tbody>
+			</table>
+			<div class="container text-center">
+			  <div class="row">
+			    <div class="col-3"></div>
+			    <div class="col-6">
+					<nav aria-label="Standard pagination">
+						<ul class="pagination justify-content-center">
+							<li class="page-item">
+								<c:url var='goBack' value="${ loc }">
+									<c:param name='page' value="${ pi.currentPage -1 }" />
+								</c:url>
+								<a class="page-link" href="${ goBack }" aria-label="Previous">
+									<span aria-hidden="true" style='color: black;'>&laquo;</span>
+								</a>
+							</li>
+							
+							<c:forEach begin="${ pi.startPage }" end="${ pi.endPage }" var="p">
+								<c:url var='goNum' value='${ loc }'>
+									<c:param name="page" value="${ p }" />
+								</c:url>
+								<li class="page-item">
+									<a class="page-link" href="${ goNum }" style='color: black;'>${ p }</a>
+								</li>
+							</c:forEach>
+							<li class="page-item">
+								<c:url var='goNext' value='${ loc }'>
+									<c:param name="page" value="${ pi.currentPage +1 }" />
+								</c:url>
+								<a class="page-link" href="${ goNext }" aria-label="Next">
+									<span aria-hidden="true" style='color: black;'>&raquo;</span>
+								</a>
+							</li>
+						</ul>
+					</nav>
+				</div>
+			    <div class="col-3 text-end">
+			    	<button class="btn btn-primary" type="button" id="insert_button">추가</button> &nbsp;&nbsp;
+					<!-- 삭제 버튼 type을 submit으로 변경 -->
+					<button class="btn btn-primary" id="delete_button">삭제</button>
+			    </div>
+			  </div>
+			</div>
+		</form>
 	</div>  
 	                 
 	              
@@ -203,5 +161,51 @@
    <!-- 푸터 -->
    <%@ include file='../common/footer.jsp' %>
    <!-- /푸터 -->
+   
+   
+   <script>
+		 //상세 게시글 보기
+		const tds = document.querySelectorAll('td');
+		for(const td of tds){
+			const parent = td.parentElement;
+			
+			td.addEventListener('click', ()=>{
+				const FAQNo = parent.children[1].innerText;
+				location.href = '${contextPath}/FAQDetail.admin?FAQNo=' + FAQNo + "&page=" + ${pi.currentPage};
+			})
+		}
+	
+		//삭제 처리
+		document.getElementById('delete_button').addEventListener('click', function(e) {
+		    e.preventDefault(); // 기본 이벤트 방지
+		
+		    const checkboxes = document.querySelectorAll('input[name="boardNo"]:checked');
+		    
+		    if (checkboxes.length === 0) {
+		        alert('삭제할 항목을 선택해주세요.');
+		        return;
+		    }
+		
+		    if (confirm('선택한 ' + checkboxes.length + '개의 항목을 삭제하시겠습니까?')) {
+		        document.getElementById('deleteForm').submit(); // 폼 제출
+		    }
+		});
+	
+	
+		// 추가 클릭시
+		document.getElementById('insert_button').addEventListener('click', () => {
+		    location.href = '${contextPath}/insertFAQView.admin?page=' + ${pi.currentPage};
+		});
+		
+		// 전체 선택
+		document.getElementById('selectAll').addEventListener('change', function() {
+		    const checkboxes = document.querySelectorAll('input[name="boardNo"]');
+		    checkboxes.forEach(checkbox => {
+		        checkbox.checked = this.checked;
+		    });
+		});
+   
+   
+   </script>
 </body>
 </html>

@@ -140,11 +140,11 @@
 					<div class="col"></div>
 						<div class="col-8 content-center" style='background: white; border-radius: 25px;'>
 							<h3 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;"> 운영자 답변</h3>
-							<c:if test='${ empty quReply }'>
+							<c:if test='${ empty replyList }'>
 								<div class='text-center'>아직 운영자가 답변을 남기지않았습니다. 조금만 기다려주세요.</div>
 							</c:if>
-							<c:if test='${ !empty quReply }'>
-								<div class='text-center'>${ quReply.replyContent }</div>
+							<c:if test='${ !empty replyList }'>
+								<div class='text-start'>${ replyList[0].reContent }</div>
 							</c:if>
 						</div>
 					<div class="col"></div>

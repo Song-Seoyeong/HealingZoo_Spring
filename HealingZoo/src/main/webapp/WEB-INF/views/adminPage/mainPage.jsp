@@ -31,7 +31,7 @@
 }
 	#sideButton{color: #65B741; font-weight: bold;}
 </style>
-<title>Insert title here</title>
+<title>메인 페이지</title>
 </head>
 <body>
 	<%@ include file='../common/logoBar.jsp' %>

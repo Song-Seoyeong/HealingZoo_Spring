@@ -178,7 +178,7 @@
 					  <option value="content">내용</option>
 					</select>
 					&nbsp;&nbsp;
-			    	<input type='text' name='search' size='30' placeholder='제목/내용로 검색이 가능합니다'/>
+			    	<input type='text' name='search' id='search' size='30' placeholder='제목/내용로 검색이 가능합니다'/>
 			    	&nbsp;&nbsp;
 			    	<img src="resources/image/search.svg" id='searchIcon'>
 			    </div>
@@ -227,6 +227,16 @@
 			const search = this.parentElement.children[1].value;
 			
 			location.href = "${contextPath}/searchNotice.menu?condition=" + condition + "&search=" + search + "&page=" + ${pi.currentPage};
+		})
+		
+		// 키보드 엔터
+		document.getElementById('search').addEventListener('keyup', function(e){
+			if(e.key == 'Enter'){
+				const condition = this.parentElement.children[0].value;
+				const search = this.parentElement.children[1].value;
+				
+				location.href = "${contextPath}/searchNotice.menu?condition=" + condition + "&search=" + search + "&page=" + ${pi.currentPage};
+			}
 		})
 		
 	</script>

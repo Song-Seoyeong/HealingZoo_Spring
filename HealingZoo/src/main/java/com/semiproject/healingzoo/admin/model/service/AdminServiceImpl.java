@@ -28,6 +28,16 @@ public class AdminServiceImpl implements AdminService {
 	private AdminDAO aDAO;
 	
 	@Override
+	public Image getGoodsImage(int goodsNo) {
+		return aDAO.getGoodsImage(sqlSession,goodsNo);
+	}
+
+	@Override
+	public void deleteGoodsImage(int goodsNo) {
+		aDAO.deleteGoodsImage(sqlSession,goodsNo);
+	}
+	
+	@Override
 	public void deleteAnimalImage(int aniNO) {
 		aDAO.deleteAnimalImage(sqlSession,aniNO);
 	}
@@ -558,6 +568,60 @@ public class AdminServiceImpl implements AdminService {
 	public void updateQuBoStatusN(int bId) {
 		aDAO.updateQuBoStatusN(sqlSession, bId);
 	}
+
+	@Override
+	public ArrayList<Board> FAQView(PageInfo pi) {
+		return aDAO.FAQView(sqlSession, pi);
+	}
+
+	@Override
+	public int getFAQListCount() {
+		return aDAO.getFAQListCount(sqlSession);
+	}
+
+	@Override
+	public int deleteFAQ(int FAQNo) {
+		return aDAO.deleteFAQ(sqlSession, FAQNo);
+	}
+
+	@Override
+	public Board getFAQ(int faqNo) {
+		return aDAO.getFAQ(sqlSession, faqNo);
+	}
+
+	@Override
+	public int insertFAQ(Board b) {
+		return aDAO.insertFAQ(sqlSession, b);
+	}
+
+	@Override
+	public int updateFAQ(Board b) {
+		return aDAO.updateFAQ(sqlSession, b);
+	}
 	
+	@Override
+	public Link getShowLink() {
+		return aDAO.getShowLink(sqlSession);
+	}
+
+
+	@Override
+	public void deleteExistingShowImage() {
+		aDAO.deleteExistingShowImage(sqlSession);
+	}
 	
+	@Override
+	public int insertProtitleImg(Image i) {
+		return aDAO.insertProtitleImg(sqlSession, i);
+	}
+
+	@Override
+	public int updateShowLink(Link showLink) {
+		return aDAO.updateShowLink(sqlSession, showLink);
+	}
+
+	@Override
+	public int insertShowLink(Link showLink) {
+		return aDAO.insertShowLink(sqlSession, showLink);
+	}
 }
