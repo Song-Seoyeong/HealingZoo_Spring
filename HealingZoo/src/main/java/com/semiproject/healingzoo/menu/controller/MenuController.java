@@ -3,6 +3,7 @@ package com.semiproject.healingzoo.menu.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.semiproject.healingzoo.admin.model.service.AdminService;
+import com.semiproject.healingzoo.admin.model.vo.Show;
 import com.semiproject.healingzoo.board.model.exception.BoardException;
 import com.semiproject.healingzoo.board.model.service.BoardService;
 import com.semiproject.healingzoo.board.model.vo.Animal;
@@ -360,39 +362,69 @@ public class MenuController {
 	}
 	
 	//인사말페이지 이동
-		@RequestMapping("greeting.menu")
-		public String moveToGreeting(Model model) {
-			// service -> dao -> DB
-			// 인삿말 *select* result set -> view
-			//	greeting사진, 각 멤버에 대한 프로필 사진, 문구 가지고와
-			Image result = mService.greeting();
-			ArrayList<Image> list = mService.greetingStaff();
-			ArrayList<String> staff = mService.greetingStaffWrite();
-			//		Model, ModelAndView
-			// 글 상세보기, 내 정보 보기
-	        model.addAttribute("image", result);
-	        model.addAttribute("list", list);
-			model.addAttribute("staff", staff);
-			
-			
-			
-			return "greeting";
-		}
+	@RequestMapping("greeting.menu")
+	public String moveToGreeting(Model model) {
+		// service -> dao -> DB
+		// 인삿말 *select* result set -> view
+		//	greeting사진, 각 멤버에 대한 프로필 사진, 문구 가지고와
+		Image result = mService.greeting();
+		ArrayList<Image> list = mService.greetingStaff();
+		ArrayList<String> staff = mService.greetingStaffWrite();
+		//		Model, ModelAndView
+		// 글 상세보기, 내 정보 보기
+        model.addAttribute("image", result);
+        model.addAttribute("list", list);
+		model.addAttribute("staff", staff);
 		
 		
-		//오시는길 이동
-		@RequestMapping("way.menu")
-		public String moveToWay(Model model) {
-			Image result = mService.way();
-			Link mapInfo = mService.getMapInfo();
-			
-			model.addAttribute("image", result);
-			model.addAttribute("mapInfo", mapInfo);
-			
-			return "way";
-		}
-
+		
+		return "greeting";
+	}
 	
+	
+	//오시는길 이동
+	@RequestMapping("way.menu")
+	public String moveToWay(Model model) {
+		Image result = mService.way();
+		Link mapInfo = mService.getMapInfo();
+		
+		model.addAttribute("image", result);
+		model.addAttribute("mapInfo", mapInfo);
+		
+		return "way";
+	}
+
+	// 프로그램 목록 이동 menuController 0713
+	@RequestMapping("programInfo.menu")
+	public String showProgramInfo(Model model) {
+		Link showLink = aService.getShowLink();
+	    model.addAttribute("showLink", showLink);
+	    
+	    // 이미지 정보 가져오기
+	    Image showImage = bService.getShowImageByRefType(showLink.getLinkRefType());
+	    if (showImage != null) {
+	        model.addAttribute("showImage", showImage);
+	    }
+	    
+	    // 값 들어오는지 확인용 디버깅이라해야하나
+	    //System.out.println("Controller - showLink: " + showLink);
+	    //System.out.println("Controller - showImage: " + showImage);
+
+	    // 프로그램 리스트 가져오기
+	    ArrayList<Show> showList = bService.getAllShows();
+	    
+	    // 이미지 정보 가져오기
+	    Map<Integer, Map<String, Image>> showImages = new HashMap<>();
+	    for (Show show : showList) {
+	        Map<String, Image> images = new HashMap<>();
+	        images.put("mainImage", bService.getShowImage(show.getShowNo(), 1));
+	        images.put("hoverImage", bService.getShowImage(show.getShowNo(), 2));
+	        showImages.put(show.getShowNo(), images);
+	    }
+	    model.addAttribute("showList", showList);
+	    model.addAttribute("showImages", showImages);
+	    return "programInfo";
+	}
 	
 	
 	

@@ -32,7 +32,7 @@
 	
 </style>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>프로그램 안내 관리</title>
 </head>
 <body>
 	<%@ include file='../common/logoBar.jsp' %>

@@ -879,44 +879,52 @@ public class AdminController {
 	    }
 	}
 
-	// 동물 수정 처리 0711 +수정+
-		@PostMapping("animalUpdate")
-		public String animalUpdate(@ModelAttribute Animal animal,
-		                           @RequestParam(value = "file", required = false) MultipartFile file,
-		                           HttpServletRequest request,
-		                           RedirectAttributes redirectAttributes) {
-		    try {
-		        int result = aService.updateAnimal(animal);
-		        	
-		        	// 기존 이미지 삭제합니다
-		        	aService.deleteAnimalImage(animal.getAniNO());
-		        
-		        	// 바꾼이미지를 화면에 띄어줍니다.
-		        	aService.deactivateOldAnimalImage(animal.getAniNO());
-		            
-		        	//새로운 이미지를 저장해요
-		            String[] imgInfo = saveImg(file, request);
-		            Image image = new Image();
-		            image.setImgPath("/resources/uploadImg");
-		            image.setImgName(file.getOriginalFilename());
-		            image.setImgRename(imgInfo[1]);
-		            image.setImgRefNum(animal.getAniNO());
-		            image.setImgRefType("ANIMAL");
-		            
-		            aService.insertSingleImage(image);
-		            
-		            //System.out.println("Image Info: " + image); 디버깅용
-		        if(result > 0) {
-		            redirectAttributes.addFlashAttribute("message", "동물 정보가 성공적으로 수정되었습니다.");
-		        } else {
-		            redirectAttributes.addFlashAttribute("error", "동물 정보 수정에 실패했습니다.");
-		        }
-		    } catch(Exception e) {
-		        redirectAttributes.addFlashAttribute("error", "동물 정보 수정 중 오류가 발생했습니다: " + e.getMessage());
-		        e.printStackTrace();
-		    }
-		    return "redirect:/animal.admin";
-		}
+	// 동물 수정 처리 0712 
+	@PostMapping("animalUpdate")
+	public String animalUpdate(@ModelAttribute Animal animal,
+	                           @RequestParam(value = "file", required = false) MultipartFile file,
+	                           HttpServletRequest request,
+	                           RedirectAttributes redirectAttributes) {
+	    try {
+	        // 기존 이미지 정보 가져오기
+	        Image oldImage = aService.selectAnimalImage(animal.getAniNO());
+	        
+	        // 기존 이미지 파일 삭제
+	        if (oldImage != null) {
+	            String uploadPath = request.getSession().getServletContext().getRealPath("/resources/uploadImg");
+	            File oldFile = new File(uploadPath + "/" + oldImage.getImgRename());
+	            if (oldFile.exists()) {
+	                oldFile.delete();
+	            }
+	        }
+	        
+	        // 동물 정보 업데이트
+	        int result = aService.updateAnimal(animal);
+	        
+	        // 새 이미지 처리
+	        if (file != null && !file.isEmpty()) {
+	            String[] imgInfo = saveImg(file, request);
+	            Image newImage = new Image();
+	            newImage.setImgPath("/resources/uploadImg");
+	            newImage.setImgName(file.getOriginalFilename());
+	            newImage.setImgRename(imgInfo[1]);
+	            newImage.setImgRefNum(animal.getAniNO());
+	            newImage.setImgRefType("ANIMAL");
+	            
+	            aService.updateAnimalImage(newImage);
+	        }
+	        
+	        if(result > 0) {
+	            redirectAttributes.addFlashAttribute("message", "동물 정보가 성공적으로 수정되었습니다.");
+	        } else {
+	            redirectAttributes.addFlashAttribute("error", "동물 정보 수정에 실패했습니다.");
+	        }
+	    } catch(Exception e) {
+	        redirectAttributes.addFlashAttribute("error", "동물 정보 수정 중 오류가 발생했습니다: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+	    return "redirect:/animal.admin";
+	}
 
 	// 동물 삭제
 	@RequestMapping("animalDelete")
@@ -951,7 +959,7 @@ public class AdminController {
 	}
 
 
-	// 마스코트 수정 페이지 이동
+	// 상품 수정 페이지 이동
 	@GetMapping("updateGoods.admin")
 	public String updateGoodsForm(@RequestParam("goodsNo") int goodsNo, Model model) {
 		Goods goods = aService.selectGoods(goodsNo);
@@ -959,15 +967,16 @@ public class AdminController {
 		return "updateGoodsForm";
 	}
 
-	// 마스코트 수정
+	// 상품 수정
 	@PostMapping("updateGoods.admin")
 	public String updateGoods(@ModelAttribute Goods goods, RedirectAttributes redirectAttributes) {
 		aService.updateGoods(goods);
+		
 		redirectAttributes.addFlashAttribute("message", "상품이 성공적으로 업데이트되었습니다.");
 		return "redirect:/mascot.admin";
 	}
 
-	// 마스코트 삭제
+	// 상품 삭제
 	@PostMapping("/deleteGoods.admin")
 	public String deleteGoods(@RequestParam(value = "goodsNo", required = false) List<Integer> goodsNos,
 			RedirectAttributes redirectAttributes) {
@@ -998,49 +1007,51 @@ public class AdminController {
 		return "writeMascot";
 	}
 
-	//마스코트 상품 추가 0711 +수정+
-	@PostMapping("/insertGoods.admin")
-	public String insertOrUpdateGoods(@ModelAttribute Goods goods, 
-	                                  @RequestParam(value = "file", required = false) MultipartFile file,
-	                                  HttpServletRequest request,
-	                                  RedirectAttributes redirectAttributes) {
-	    try {
-	        int goodsNo;
-	        if (goods.getGoodsNo() == 0) {
-	            // 새 상품 추가
-	            goodsNo = aService.insertGoods(goods);
-	        } else {
-	            // 기존 상품 수정
-	            goodsNo = goods.getGoodsNo();
-	            aService.updateGoods(goods);
-	            
-	         // 기존 이미지를 비활성화 -> 삭제 변경 0711 
-	            aService.deactivateOldGoodsImage(goodsNo);
-	            
-	        }
-
-	        // 이미지 처리
-	        if (file != null && !file.isEmpty()) {
-	            String[] imgInfo = saveImg(file, request);
-	            Image image = new Image();
-	            image.setImgPath("/resources/uploadImg");
-	            image.setImgName(file.getOriginalFilename());
-	            image.setImgRename(imgInfo[1]);
-	            image.setImgRefNum(goodsNo);
-	            image.setImgRefType("GOODS");
-
-	            aService.insertGoodsImage(image);
-	            
-	            //System.out.println("Image Info: " + image);  // 디버깅 출력
-	        }
-	        
-	        redirectAttributes.addFlashAttribute("message", goods.getGoodsNo() == 0 ? "새 상품이 성공적으로 추가되었습니다." : "상품이 성공적으로 수정되었습니다.");
-	    } catch (Exception e) {
-	        redirectAttributes.addFlashAttribute("error", "상품 처리 중 오류가 발생했습니다.");
-	        e.printStackTrace();
-	    }
-	    return "redirect:/mascot.admin";
-	}
+	//마스코트 상품 추가 0712 이미지파일 내 이미지 삭제
+    @PostMapping("/insertGoods.admin")
+    public String insertOrUpdateGoods(@ModelAttribute Goods goods, 
+                                      @RequestParam(value = "file", required = false) MultipartFile file,
+                                      HttpServletRequest request,
+                                      RedirectAttributes redirectAttributes) {
+        try {
+            int goodsNo;
+            if (goods.getGoodsNo() == 0) {
+                goodsNo = aService.insertGoods(goods);
+            } else {
+                goodsNo = goods.getGoodsNo();
+                aService.updateGoods(goods);
+                
+                // 기존 이미지 삭제
+                Image oldImage = aService.getGoodsImage(goodsNo);
+                if (oldImage != null) {
+                    String uploadPath = request.getSession().getServletContext().getRealPath("/resources/uploadImg");
+                    File oldFile = new File(uploadPath + "/" + oldImage.getImgRename());
+                    if (oldFile.exists()) {
+                        oldFile.delete();
+                    }
+                    aService.deleteGoodsImage(goodsNo);
+                }
+            }
+            
+            // 새 이미지 처리
+            if (file != null && !file.isEmpty()) {
+                String[] imgInfo = saveImg(file, request);
+                Image image = new Image();
+                image.setImgPath("/resources/uploadImg");
+                image.setImgName(file.getOriginalFilename());
+                image.setImgRename(imgInfo[1]);
+                image.setImgRefNum(goodsNo);
+                image.setImgRefType("GOODS");
+                aService.insertGoodsImage(image);
+            }
+            
+            redirectAttributes.addFlashAttribute("message", goods.getGoodsNo() == 0 ? "새 상품이 성공적으로 추가되었습니다." : "상품이 성공적으로 수정되었습니다.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "상품 처리 중 오류가 발생했습니다.");
+            e.printStackTrace();
+        }
+        return "redirect:/mascot.admin";
+    }
 	
 	// 프로그램 추가 페이지 이동
 	@RequestMapping("insertShowView.admin")
@@ -1272,13 +1283,26 @@ public class AdminController {
 	    return "operating";
 	}
 
-	// 운영시간 이미지 수정
+	// 운영시간 이미지 수정 0712
 	@PostMapping("/updateOperatingImage.admin")
 	public String updateOperatingImage(@RequestParam("operImg") MultipartFile file,
 	                                   HttpServletRequest request,
 	                                   RedirectAttributes redirectAttributes) {
 	    try {
 	        if (!file.isEmpty()) {
+	            // 기존 이미지 가져오기
+	            Image oldImage = aService.getOperatingImage();
+	            
+	            // 기존 이미지 파일 삭제
+	            if (oldImage != null) {
+	                String uploadPath = request.getSession().getServletContext().getRealPath("/resources/uploadImg");
+	                File oldFile = new File(uploadPath + "/" + oldImage.getImgRename());
+	                if (oldFile.exists()) {
+	                    oldFile.delete();
+	                }
+	            }
+	            
+	            // 새 이미지 저장
 	            String[] imgInfo = saveImg(file, request);
 	            Image image = new Image();
 	            image.setImgPath("/resources/uploadImg");
@@ -1296,13 +1320,26 @@ public class AdminController {
 	    return "redirect:/operating.admin";
 	}
 
-	// 이용요금 이미지 수정
+	// 이용요금 이미지 수정 0712
 	@PostMapping("/updateChargeImage.admin")
 	public String updateChargeImage(@RequestParam("charge") MultipartFile file,
 	                                HttpServletRequest request,
 	                                RedirectAttributes redirectAttributes) {
 	    try {
 	        if (!file.isEmpty()) {
+	            // 기존 이미지 가져오기
+	            Image oldImage = aService.getChargeImage();
+	            
+	            // 기존 이미지 파일 삭제
+	            if (oldImage != null) {
+	                String uploadPath = request.getSession().getServletContext().getRealPath("/resources/uploadImg");
+	                File oldFile = new File(uploadPath + "/" + oldImage.getImgRename());
+	                if (oldFile.exists()) {
+	                    oldFile.delete();
+	                }
+	            }
+	            
+	            // 새 이미지 저장
 	            String[] imgInfo = saveImg(file, request);
 	            Image image = new Image();
 	            image.setImgPath("/resources/uploadImg");
@@ -1320,16 +1357,29 @@ public class AdminController {
 	    return "redirect:/operating.admin";
 	}
 	
-	// 마스코트 이미지 상세
+	// 마스코트 이미지 상세 0712
 	@PostMapping("/updateMascotImage.admin")
 	public String updateMascotImage(@RequestParam("mascotImg") MultipartFile file,
 	                                HttpServletRequest request,
 	                                RedirectAttributes redirectAttributes) {
 	    try {
 	        if (!file.isEmpty()) {
+	            // 기존 이미지 가져오기
+	            Image oldImage = aService.getMascotImage();
+	            
+	            // 기존 이미지 파일 삭제
+	            if (oldImage != null) {
+	                String uploadPath = request.getSession().getServletContext().getRealPath("/resources/uploadImg");
+	                File oldFile = new File(uploadPath + "/" + oldImage.getImgRename());
+	                if (oldFile.exists()) {
+	                    oldFile.delete();
+	                }
+	            }
+	            
+	            // 새 이미지 저장
 	            String[] imgInfo = saveImg(file, request);
 	            Image image = new Image();
-	            image.setImgPath("/resources/uploadImg"); // 여기가 이미지 경로예요.
+	            image.setImgPath("/resources/uploadImg");
 	            image.setImgName(file.getOriginalFilename());
 	            image.setImgRename(imgInfo[1]);
 	            image.setImgRefType("MASCOT");
@@ -1393,7 +1443,7 @@ public class AdminController {
 	
 	// 오시는길 이미지 변경
 		@RequestMapping("updateWayImg.admin")
-		public String updateWayImg(@RequestParam("mapImg") MultipartFile upload, HttpServletRequest request) {
+	public String updateWayImg(@RequestParam("mapImg") MultipartFile upload, HttpServletRequest request) {
 			Image i = new Image();
 			String[] returnArr = saveImg(upload, request);
 
@@ -1502,6 +1552,153 @@ public class AdminController {
 		return result == 1 ? "success":"fail";
 	}
 	
+	// FAQ 이동
+	@RequestMapping("FAQ.admin")
+	public String FAQView(@RequestParam(value="page", defaultValue="1") int currentPage,Model model) {
+		int listCount = aService.getFAQListCount();
+		
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10); 
+		
+		ArrayList<Board> faqList = aService.FAQView(pi);
+		
+		if(faqList != null) {
+			model.addAttribute("FAQList", faqList);
+			model.addAttribute("pi", pi);
+			return "FAQ";
+		}else {
+			throw new AdminException("글 목록을 불러오는데 실패했습니다.");	
+		}
+	}
+	
+	// FAQ 삭제
+	@RequestMapping("deleteFAQ.admin")
+	public String deleteFAQ(@RequestParam("FAQNo") ArrayList<Integer> FAQNos) {
+		int result = 0;
+		for(int FAQNo : FAQNos) {
+			result = aService.deleteFAQ(FAQNo);
+		}
+		
+		if(result == FAQNos.size()) {
+			
+			return "redirect:FAQ.admin";
+		}else {
+			throw new AdminException("FAQ 삭제에 실패했습니다.");
+		}
+	}
+	
+	
+	// FAQ 추가 페이지 이동
+	@RequestMapping("insertFAQView.admin")
+	public String insertFAQView(@RequestParam("page") int page, Model model){
+		model.addAttribute("page", page);
+		return "FAQInsert";
+	}
+	
+	// FAQ 추가
+	@RequestMapping("insertFAQ.admin")
+	public String insertFAQ(Board b, @RequestParam("page") int page, Model model) {
+		int result = aService.insertFAQ(b);
+		
+		if(result > 0) {
+			model.addAttribute("page", page);
+			model.addAttribute("FAQNo", b.getBoardNo());
+			return "redirect:FAQDetail.admin";
+		}else {
+			throw new AdminException("Q&A 추가에 실패했습니다.");
+		}
+		
+	}
+	
+	// FAQ 상세 페이지 이동
+	@RequestMapping("FAQDetail.admin")
+	public String FAQDetail(@RequestParam("FAQNo") int faqNo,
+							@RequestParam("page") int page,
+							Model model) {
+		
+		Board FAQ = aService.getFAQ(faqNo);
+		
+		if(FAQ != null) {
+			model.addAttribute("faq", FAQ);
+			model.addAttribute("page", page);
+			return "FAQDetail";
+		}else {
+			throw new AdminException("상세 글 조회에 실패했습니다.");
+		}
+	}
+	
+	// FAQ 수정 페이지 이동
+	@RequestMapping("updateFAQView.admin")
+	public String updateFAQView(@RequestParam("FAQNo") int faqNo,
+								@RequestParam("page") int page,
+								Model model){
+		
+		Board FAQ = aService.getFAQ(faqNo);
+		
+		model.addAttribute("faq", FAQ);
+		model.addAttribute("page", page);
+		return "FAQUpdate";
+	}
+	
+	// FAQ 수정
+	@RequestMapping("updateFAQ/admin")
+	public String updateFAQ(Board b,
+							@RequestParam("page") int page,
+							Model model) {
+		
+		int result = aService.updateFAQ(b);
+		
+		if(result > 0) {
+			model.addAttribute("b", b);
+			model.addAttribute("page", page);
+			
+			
+			return "redirect:FAQDetail.admin";
+		}else {
+			throw new AdminException("Q&A 수정에 실패했습니다.");
+		}
+	}
+	
+	
+	// 프로그램안내 메인이미지,문구 삽입 0713
+	@RequestMapping("insertProtitleImg.admin")
+	public String insertProtitleImg(@RequestParam("showImg") MultipartFile upload, 
+	                                @RequestParam("write") String write,
+	                                @RequestParam("swrite") String swrite,
+	                                RedirectAttributes redirectAttributes, 
+	                                HttpServletRequest request) {
+	    // 기존 이미지 삭제
+	    aService.deleteExistingShowImage();
+
+	    Image i = new Image();
+	    String[] returnArr = saveImg(upload, request);
+	    i.setImgRename(returnArr[1]);
+	    i.setImgName(upload.getOriginalFilename());
+	    i.setImgPath(returnArr[0]);
+	    i.setImgRefType("SHOW");
+	    
+	    int result = aService.insertProtitleImg(i);
+	    
+	    // 기존 Link 객체를 가져옵니다
+	    Link existingLink = aService.getShowLink();
+	    
+	    Link showLink = new Link();
+	    showLink.setLinkRefType("SHOW");
+	    showLink.setLinkUrl(write);
+	    showLink.setLinkInfo(swrite);
+	    
+	    int linkResult = aService.updateShowLink(showLink);
+	    if (linkResult == 0) {
+	        linkResult = aService.insertShowLink(showLink);
+	    }
+	    
+	    if (linkResult > 0 && result > 0) {
+	        redirectAttributes.addFlashAttribute("message", "프로그램 안내 정보가 성공적으로 업데이트되었습니다.");
+	    } else {
+	        redirectAttributes.addFlashAttribute("error", "프로그램 안내 정보 업데이트에 실패했습니다.");
+	    }
+	    return "redirect:show.admin";
+	}
+
 	
 	
 }

@@ -764,6 +764,103 @@
 			set IN_BO_STATUS = 'N'
 			where board_no = #{bId}
 	</update>
+	
+	<!-- FAQ 목록 수 조회 -->
+	<select id="getFAQListCount" resultType="_int">
+		select count(*)
+			from FAQ
+	</select>
+	<!-- FAQ 목록 수 조회 -->
+	
+	<!-- FAQ 목록 조회 -->
+	<select id="FAQView" resultMap="FAQBoard">
+		select *
+			from FAQ
+			order by faq_no desc
+	</select>
+	<!-- FAQ 목록 조회 -->
+	
+	<resultMap id="FAQBoard" type='Board'>
+		<id column="FAQ_NO" property="boardNo"/>
+		<result column="FAQ_TITLE" property="boardTitle"/>
+		<result column="FAQ_REPLY" property="boardContent"/>
+		<result column="UPDATE_DATE" property="boardModifyDate"/>
+	</resultMap>
+	
+	<!-- FAQ 삭제 -->
+	<delete id="deleteFAQ">
+		delete from FAQ
+			where FAQ_no = #{faqNo} 
+	</delete>
+	<!-- FAQ 삭제 -->
+	
+	<!-- FAQ 상세 글 조회 -->
+	<select id="getFAQ" resultMap="FAQBoard">
+		select *
+			from FAQ
+			where FAQ_NO = #{faqNo}
+	</select>
+	
+	<!-- FAQ 추가 -->
+	<insert id="insertFAQ">
+		<selectKey order="BEFORE" resultType="_int" keyProperty="boardNo">
+			select seq_faq.nextval from dual
+		</selectKey>
+		insert into faq
+			values(#{boardNo}, #{boardTitle}, #{boardContent}, sysdate)
+	</insert>
+	
+	<!-- FAQ 수정 -->
+	<update id="updateFAQ">
+		update faq
+			set faq_title = #{boardTitle}, faq_content = #{boardContent}, update_date = sysdate
+			where faq_no = #{boardNo}
+	</update>
+
+	<!-- 프로그램 안내 메인문구 0713 밑으로 쭉  -->
+	<insert id="insertShowLink">
+	    INSERT INTO LINK
+	    VALUES (SEQ_LINK.NEXTVAL, #{linkUrl}, #{linkInfo}, #{linkRefType} ,#{linkRefNum})
+	</insert>
+	<!--  링크에 정보 넣기 -->
+	<update id="updateShowLink">
+	     UPDATE LINK
+	        SET LINK_URL = COALESCE(#{linkUrl}, LINK_URL), 
+	            LINK_INFO = #{linkInfo}
+	        WHERE LINK_REF_TYPE = 'SHOW'
+	 </update>
+	<!-- 프로그램 안내 메인문구 -->
+	
+	<!-- Link에 정보 가져오기 -->
+	<select id="getShowLink" resultType="Link">
+	    SELECT * FROM LINK
+	    WHERE LINK_REF_TYPE = 'SHOW'
+	</select>
+	
+	<!-- 기존 사진 삭제  -->
+	<delete id="deleteExistingShowImage">
+	    DELETE FROM IMAGE
+	    WHERE IMG_REF_TYPE = 'SHOW' AND IMG_REF_NUM IS NULL
+	</delete>
+	
+	<!-- 상품 이미지 조회 -->
+	<select id="getGoodsImage" parameterType="int" resultType="Image">
+        SELECT * FROM IMAGE 
+        WHERE IMG_REF_NUM = #{goodsNo} AND IMG_REF_TYPE = 'GOODS'
+    </select>
+    
+    <!--상품 이미지 삭제 -->
+    <delete id="deleteGoodsImage" parameterType="int">
+        DELETE FROM IMAGE 
+        WHERE IMG_REF_NUM = #{goodsNo} AND IMG_REF_TYPE = 'GOODS'
+    </delete>
+    
+    <!-- 프로그램 안내 메인이미지 -->
+	<insert id="insertProtitleImg">
+	   insert into image
+	   values (seq_img.nextval, #{imgPath}, #{imgName},#{imgRename}, null , #{imgRefType}, default, 0)
+	</insert>
+	<!-- 프로그램 안내 메인이미지 -->
 
 
 </mapper>

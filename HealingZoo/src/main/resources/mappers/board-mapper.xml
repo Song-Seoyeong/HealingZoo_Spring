@@ -369,4 +369,41 @@
 	</select>
 	<!-- 이용금액 이미지 -->
 	
+	<!-- 문의글 답변 조회 -->
+	<select id="selectQuReply" resultMap='qeReply'>
+		select *
+			from qu_reply
+			where board_no = #{bId}
+	</select>
+	
+	<resultMap type="Reply" id="qeReply">
+		<id column="REPLY_NO" property="reNo"/>
+		<result column="BOARD_NO" property="boardNo"/>
+		<result column='REPLY_CONTENT' property='reContent'/>
+	</resultMap>
+	
+	<!-- 0713 프로그램에 이미지를 링크번호에 맞춰서 전달 -->
+	<select id="getShowImageByRefType" resultType="Image">
+	    SELECT * FROM IMAGE 
+	    WHERE IMG_REF_TYPE = #{refType} 
+	    AND IMG_ACTIVE = 'Y'
+	    ORDER BY IMG_NO DESC
+	    FETCH FIRST 1 ROW ONLY
+	</select>
+	
+	<!-- 프로그램 추가  -->
+	<select id="getAllShows" resultType="Show">
+	    SELECT * FROM show ORDER BY show_no
+	</select>
+	<!-- 프로그램 추가  -->
+	
+	<!-- 프로그램 이미지 -->
+	<select id="getShowImage" resultType="Image">
+	    SELECT * FROM image 
+	    WHERE img_ref_num = #{showNo} 
+	    AND img_ref_type = 'SHOW' 
+	    AND img_ref_hover = #{imgRefHover}
+	    AND img_active = 'Y'
+	</select>
+	
 </mapper>

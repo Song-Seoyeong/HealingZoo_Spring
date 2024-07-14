@@ -14,6 +14,19 @@ import com.semiproject.healingzoo.board.model.vo.PageInfo;
 import com.semiproject.healingzoo.board.model.vo.Reply;
 
 public interface AdminService {
+	
+	//프로그램 메인 이미지
+	int insertProtitleImg(Image i);
+	
+	//프로그램 메인 문구
+	int updateShowLink(Link showLink);
+	
+	//프로그램 메인 문구
+	int insertShowLink(Link showLink);
+	
+	Image getGoodsImage(int goodsNo);
+
+	void deleteGoodsImage(int goodsNo);
 
 	ArrayList<Animal> selectFamilyList(PageInfo pi);
 
@@ -227,5 +240,20 @@ public interface AdminService {
 	// 상세 글 보기 - 문의/예약 게시판에서 답글이 없을 시 진행상태를  N로 변경
 	void updateQuBoStatusN(int bId);
 
+	ArrayList<Board> FAQView(PageInfo pi);
+
+	int getFAQListCount();
+
+	int deleteFAQ(int FAQNo);
+
+	Board getFAQ(int faqNo);
+
+	int insertFAQ(Board b);
+
+	int updateFAQ(Board b);
+	
+	Link getShowLink();
+
+	void deleteExistingShowImage();
 	
 }

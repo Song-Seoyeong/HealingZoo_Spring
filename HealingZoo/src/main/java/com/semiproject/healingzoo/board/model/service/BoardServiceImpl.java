@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.semiproject.healingzoo.admin.model.vo.Show;
 import com.semiproject.healingzoo.board.model.dao.BoardDAO;
 import com.semiproject.healingzoo.board.model.vo.Board;
 import com.semiproject.healingzoo.board.model.vo.Image;
@@ -236,5 +237,25 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public Image getChargeImage() {
 		return bDAO.getChargeImage(sqlSession);
+	}
+
+	@Override
+	public ArrayList<Reply> selectQuReply(int bId) {
+		return bDAO.selectQuReply(sqlSession, bId);
+	}
+	
+	@Override
+	public Image getShowImageByRefType(String linkRefType) {
+		return bDAO.getShowImageByRefType(sqlSession,linkRefType);
+	}
+	
+	@Override
+	public ArrayList<Show> getAllShows() {
+		return bDAO.getAllShows(sqlSession);
+	}
+
+	@Override
+	public Image getShowImage(int showNo, int i) {
+		return bDAO.getShowImage(sqlSession,showNo,i);
 	}
 }

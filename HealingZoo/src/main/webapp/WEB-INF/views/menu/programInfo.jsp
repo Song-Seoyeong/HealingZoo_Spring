@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<% pageContext.setAttribute("newLineChar", "\n"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -142,73 +145,47 @@
             .procard .text {
                 padding: 10px;
             }
+            .op_text {
+			    white-space: pre-wrap;
+			    word-wrap: break-word;
+			}
         }
     </style>
 </head>
 <body>
     <%@ include file='../common/logoBar.jsp' %>
     <%@ include file='../common/mainCategoryBar.jsp' %>
+
         <div class="protitle">
-            <div class="prointro">
-                <h2 class="op_title1">멸종위기종을 구해ZOO!!!</h2>
-                <p class="op_text">
-                    멸종위기종에 대해 자세히 알고 싶다면?<br>
-                    다양한 멸종위기종에 대해 배우고 직접 체험할 수 있는<br>
-                    특별한 시간을 가져보세요!<br>
-                    다양한 동물들과 함께 특별한 시간을 만들어 드립니다!
-                </p>
-            </div>
+		    <div class="prointro" style="background-image: url('${contextPath}/resources/uploadImg/${showImage.imgRename}');">
+			    <h2 class="op_title1">${showLink.linkUrl}</h2>
+			    <p class="op_text">${fn:replace(showLink.linkInfo, newLineChar, '<br>')}</p>
+			</div>
+		</div>
             <br><br>
             <div class="proboard">
-                <div class="procard">
-                    <div class="image-container">
-                        <img src="${contextPath}/image/test2.jpg" alt="라쿤 먹이주기 체험" class="original">
-                        <img src="${contextPath}/image/test3.jpg" alt="라쿤 먹이주기 체험 - Hover" class="hover">
-                    </div>
-                    <div class="text">
-                        <p class="prosubtitle">-라쿤 먹이주기 체험-<br></p>
-                        <p class="prosubcontent">순수하고 귀여운 라쿤! 아이들과 주말 호기심을 키워봐요!!<br>
-                        이곳에서는 라쿤의 많은 모습을 감상하실 수 있습니다!!</p>
-                    </div>
-                </div>
-                <br><br>
-                <div class="procard right-image">
-                    <div class="text">
-                        <p class="prosubtitle">-힐링동물원 드로잉카페-<br></p>
-                        <p class="prosubcontent">힐링동물원의 멸종위기종을 드로잉 카페에서 그려보세요! 그린 그림들은 손쉽게 가져갈 수 있어요<br>
-                        멋진 그림들을 그려 주변사람들에게 자랑해봐요!!</p>
-                    </div>
-                    <div class="image-container">
-                        <img src="${contextPath}/image/test2.jpg" alt="힐링동물원 드로잉카페" class="original">
-                        <img src="${contextPath}/image/test3.jpg" alt="힐링동물원 드로잉카페 - Hover" class="hover">
-                    </div>
-                </div>
-                <br><br>
-                <div class="procard">
-                    <div class="image-container">
-                        <img src="${contextPath}/image/test2.jpg" alt="수달 생태 체험" class="original">
-                        <img src="${contextPath}/image/test3.jpg" alt="수달 생태 체험 - Hover" class="hover">
-                    </div>
-                    <div class="text">
-                        <p class="prosubtitle">-수달 생태 체험-<br></p>
-                        <p class="prosubcontent">바다에 사는 수달을 조심스럽게 살펴보고 먹이를 주며 알아봐요!!<br>
-                        수달이 소라를 까는 장면이 궁금하지 않으세요??</p>
-                    </div>
-                </div>
-                <br><br>
-                <div class="procard right-image">
-                    <div class="text">
-                        <p class="prosubtitle">-래서 판다 설명회-<br></p>
-                        <p class="prosubcontent">평소에 래서 판다에 대해 뭔가 궁금하셨나요? 여기서 설명해드릴게요!!<br>
-                        귀엽고 동글동글한것만이 아니랍니다...? 여기서 알아보시겠어요?</p>
-                    </div>
-                    <div class="image-container">
-                        <img src="${contextPath}/image/test2.jpg" alt="래서 판다 설명회" class="original">
-                        <img src="${contextPath}/image/test3.jpg" alt="래서 판다 설명회 - Hover" class="hover">
-                    </div>
-                </div>
-                <br><br>
-            </div>
+			    <c:forEach items="${showList}" var="show" varStatus="status">
+			        <div class="procard ${status.index % 2 == 1 ? 'right-image' : ''}">
+			            <c:if test="${status.index % 2 == 0}">
+			                <div class="image-container">
+			                    <img src="${contextPath}/resources/uploadImg/${showImages[show.showNo]['mainImage'].imgRename}" alt="프로그램 사진" class="original">
+			                    <img src="${contextPath}/resources/uploadImg/${showImages[show.showNo]['hoverImage'].imgRename}" alt="프로그램 사진 - Hover" class="hover">
+			                </div>
+			            </c:if>
+			            <div class="text">
+			                <p class="prosubtitle">${show.showName}<br></p>
+			                <p class="prosubcontent">${show.showContent}</p>
+			            </div>
+			            <c:if test="${status.index % 2 == 1}">
+			                <div class="image-container">
+			                    <img src="${contextPath}/resources/uploadImg/${showImages[show.showNo]['mainImage'].imgRename}" alt="프로그램 사진" class="original">
+			                    <img src="${contextPath}/resources/uploadImg/${showImages[show.showNo]['hoverImage'].imgRename}" alt="프로그램 사진 - Hover" class="hover">
+			                </div>
+			            </c:if>
+			        </div>
+			        <br><br>
+			    </c:forEach>
+			</div>
         </div>
 
     <%@ include file='../common/footer.jsp' %>
