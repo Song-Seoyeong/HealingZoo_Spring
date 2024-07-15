@@ -308,7 +308,7 @@
 	<!-- 공지사항 수정 -->
 	<update id="updateNotice">
 		update notice
-			set no_sebject = #{noSubject}
+			set no_subject = #{noSubject}
 		where board_no = #{boardNo}
 	</update>
 	<!-- 공지사항 수정 -->
@@ -403,6 +403,14 @@
 	    WHERE img_ref_num = #{showNo} 
 	    AND img_ref_type = 'SHOW' 
 	    AND img_ref_hover = #{imgRefHover}
+	    AND img_active = 'Y'
+	</select>
+	
+	<!-- 프로그램 이미지 2 0715-->
+	<select id="getShowImage2" resultType="Image">
+	    SELECT * FROM image 
+	    WHERE img_ref_type = 'SHOW' 
+	    AND img_ref_hover = 0
 	    AND img_active = 'Y'
 	</select>
 	

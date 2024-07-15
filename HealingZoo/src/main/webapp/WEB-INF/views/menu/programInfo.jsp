@@ -156,9 +156,9 @@
     <%@ include file='../common/mainCategoryBar.jsp' %>
 
         <div class="protitle">
-		    <div class="prointro" style="background-image: url('${contextPath}/resources/uploadImg/${showImage.imgRename}');">
-			    <h2 class="op_title1">${showLink.linkUrl}</h2>
-			    <p class="op_text">${fn:replace(showLink.linkInfo, newLineChar, '<br>')}</p>
+		    <div class="prointro" style="background-image: url('${contextPath}/resources/uploadImg/${proMainImg.imgRename}');">
+				<h2 class="op_title1">${showLink.linkUrl}</h2>
+				<p class="op_text">${fn:replace(showLink.linkInfo, newLineChar, '<br>')}</p>
 			</div>
 		</div>
             <br><br>

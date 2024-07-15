@@ -22,7 +22,7 @@ public class MenuDAO {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
         RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
         return (ArrayList)sqlSession.selectList("boardMapper.selectReviewList", null, rowBounds);
-	}
+	}//?
 	
 	public Image greeting(SqlSession sqlSession) {
 		return sqlSession.selectOne("menuMapper.greeting");

@@ -48,14 +48,15 @@
 			    	<!-- 카테고리별 제목 입력창 -->
 			    	<c:if test="${ category == 'notice'}">
 				    	<div class='row'>
-				    		<div class='col-3'>
+				    		<div class='col-1'></div>
+				    		<div class='col-2 text-center'>
 				    			<select name='noSubject'>
 				    				<option value='NEWS' selected>새소식</option>
 				    				<option value='EVENT'>이벤트</option>
 				    				<option value='NOTICE'>공지</option>
 				    			</select>
 				    		</div>
-					    	<div  class='col-6 text-center'>
+					    	<div  class='col-5 text-center'>
 						    	<input type='text' name='boardTitle' placeholder='제목을 입력해주세요' id='inputBoardTitle'size='50' class='inputBoard' autofocus>
 						    </div>
 						    <div class='col-2'>

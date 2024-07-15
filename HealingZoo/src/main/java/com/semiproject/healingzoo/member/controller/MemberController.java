@@ -286,29 +286,29 @@ public class MemberController {
 	}
 	
 	// 마이페이지> 내 게시글> 검색
-			@RequestMapping("search.me")
-			public String searchMyList(@RequestParam(value="page", defaultValue="1")Integer currentPage, 
-					                   HttpServletRequest request, HttpSession session, Model model) {
-				String value = request.getParameter("value");
-				int memNo = ((Member)session.getAttribute("loginUser")).getMemNo();
-				HashMap<String, Object> map = new HashMap<String, Object>();
-				map.put("value", value);
-				map.put("memNo", memNo);
-				
-				int listSearchCount = mService.getListSerachCount(map);
-				PageInfo pi = Pagination.getPageInfo(currentPage, listSearchCount, 10);
-				
-				ArrayList<Board> list = mService.selectSearchList(map, pi);
-				if(list != null) {
-					model.addAttribute("value", value);
-					model.addAttribute("list", list);
-					model.addAttribute("pi", pi);
-					return "myBoardList";
-				}else {
-					throw new MemberException("게시글 불러오기에 실패하였습니다");
-				}
-				
-			}
+	@RequestMapping("search.me")
+	public String searchMyList(@RequestParam(value="page", defaultValue="1")Integer currentPage, 
+			                   HttpServletRequest request, HttpSession session, Model model) {
+		String value = request.getParameter("value");
+		int memNo = ((Member)session.getAttribute("loginUser")).getMemNo();
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("value", value);
+		map.put("memNo", memNo);
+		
+		int listSearchCount = mService.getListSerachCount(map);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listSearchCount, 10);
+		
+		ArrayList<Board> list = mService.selectSearchList(map, pi);
+		if(list != null) {
+			model.addAttribute("value", value);
+			model.addAttribute("list", list);
+			model.addAttribute("pi", pi);
+			return "myBoardList";
+		}else {
+			throw new MemberException("게시글 불러오기에 실패하였습니다");
+		}
+		
+	}
 
 	// 마이페이지> 내 답글 이동
 	@RequestMapping("myComment.me")
@@ -526,9 +526,6 @@ public class MemberController {
 		String bId = request.getParameter("boardNo");
 		ArrayList<Image> imgList = mService.selectOriginImg(bId);
 		
-		System.out.println(b);
-		System.out.println(boNo);
-		System.out.println(bId);
 		model.addAttribute("b",b);
 		model.addAttribute("cateNo", cateNo);
 		model.addAttribute("boNo", boNo);

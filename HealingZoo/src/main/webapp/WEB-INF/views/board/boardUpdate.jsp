@@ -77,7 +77,7 @@
 				    			</select>
 				    		</div>
 					    	<div  class='col-6 text-center'>
-						    	<input type='text' name='boardTitle' placeholder='제목을 입력해주세요' id='inputBoardTitle'size='50' class='inputBoard' autofocus value='${ b.boardTitle }'>
+						    	<input type='text' name='boardTitle' placeholder='제목을 입력해주세요' id='inputBoardTitle'size='30' class='inputBoard' autofocus value='${ b.boardTitle }'>
 						    </div>
 						    <div class='col-2'>
 						    	<input  type='text' name='boardWriterName' placeholder='이름을 입력해주세요' id='inputBoardWriter' size='20'  class='inputBoard' value='${ b.boardWriterName }'>

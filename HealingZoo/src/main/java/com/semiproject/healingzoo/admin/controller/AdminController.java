@@ -193,7 +193,7 @@ public class AdminController {
 			model.addAttribute("imgList", imgList);
 			model.addAttribute("page", page);
 
-			return "../board/boardDetailAdmin";
+			return "boardDetailAdmin";
 		} else {
 			throw new AdminException("게시글을 불러 오는데 실패했습니다.");
 		}
@@ -222,7 +222,7 @@ public class AdminController {
 			model.addAttribute("imgList", imgList);
 			model.addAttribute("page", page);
 
-			return "../board/boardDetailAdmin";
+			return "boardDetailAdmin";
 		} else {
 			throw new AdminException("게시글을 불러 오는데 실패했습니다.");
 		}
@@ -374,7 +374,6 @@ public class AdminController {
 		}
 		
 		
-		System.out.println(replyList);
 		for(Reply r : replyList) {
 			r.setModifyDate(r.getModifyDate().split(" ")[0]);
 //				if (loginUser != null && "MANAGER".equals(loginUser.getMemGrade())) {
@@ -846,7 +845,6 @@ public class AdminController {
 	    	aService.insertAnimal(animal);
 	        int aniNO = animal.getAniNO(); // 여기서 생성된 aniNO를 가져옵니다.
 	        
-	        System.out.println("Generated aniNO: " + aniNO);
 
 	            String[] imgInfo = saveImg(file, request);
 	            Image image = new Image();
@@ -1204,7 +1202,7 @@ public class AdminController {
 	@RequestMapping("updateShow.admin")
 	public String updateShow(@ModelAttribute Show show,
 							 @RequestParam("checkDelete") ArrayList<String> checkDeletes,
-							 @RequestParam(value="file", defaultValue="") ArrayList<MultipartFile> files,
+							 @RequestParam(value="file", required = false) ArrayList<MultipartFile> files,
 							 @RequestParam("page") int page,
 							 HttpServletRequest request,
 							 Model model){
@@ -1213,22 +1211,22 @@ public class AdminController {
 		
 		// 추가 이미지 등록
 		ArrayList<Image> imgList = new ArrayList<Image>();
-
-		for (MultipartFile img : files) {
-			if (!img.isEmpty() && img != null) {
-				String[] returnArr = saveImg(img, request);
-				
-				Image a = new Image();
-				a.setImgName(img.getOriginalFilename());
-				a.setImgRename(returnArr[1]);
-				a.setImgPath(returnArr[1]);
-				a.setImgRefType("SHOW");
-				a.setImgRefNum(show.getShowNo());
-
-				imgList.add(a);
+		if(files != null) {
+			for (MultipartFile img : files) {
+				if (!img.isEmpty() && img != null) {
+					String[] returnArr = saveImg(img, request);
+					
+					Image a = new Image();
+					a.setImgName(img.getOriginalFilename());
+					a.setImgRename(returnArr[1]);
+					a.setImgPath(returnArr[1]);
+					a.setImgRefType("SHOW");
+					a.setImgRefNum(show.getShowNo());
+	
+					imgList.add(a);
+				}
 			}
 		}
-		
 		// 기존 이미지 삭제
 		ArrayList<String> deleteImg = new ArrayList<String>();
 
