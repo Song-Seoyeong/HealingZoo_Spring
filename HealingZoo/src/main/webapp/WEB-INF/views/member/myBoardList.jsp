@@ -68,7 +68,7 @@
 	<div class="container" style="width: 900px; margin-top: 100px;">
 		<h2 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;">내 게시글 보기</h2>
 		<form action="selDelBoard.me">
-			<table class="table">
+			<table class="table table-hover">
 			  <thead>
 			      <tr>
 				      <th scope="col" style="width:100px"><input type="checkbox" id="checkAll" style="cursor:pointer;"></th>
@@ -89,7 +89,7 @@
 			  <tbody class="table-group-divider">
 				  <c:forEach items="${ list }" var="b">
 					  <tr style="cursor:pointer;">
-					  	<th><input class="getDelete" type="checkbox"  id="boardNo" name='boNoList' value="${ b.boardNo }" style="cursor:pointer;"></th>
+					  	<th><input class="getDelete" type="checkbox"  id="boardNo" name='boNoList' value="${ b.boardNo }"></th>
 						<c:if test="${ b.cateNo == 100}">
 							<td><input type="hidden" id="cateNo" value="${ b.cateNo }">공지</td>
 						</c:if>
@@ -230,16 +230,13 @@
               checkbox.checked = this.checked;
           });
       	});
-		
-		// 선택 삭제
-		/* const boNoList = document.getElementsByName('boNoList')
-		console.log(boNoList.value)
-			 for(const boNo of boNoList){
-	    		boNo.addEventListener('change', () =>{
-					if(boNo.checked == true){
-						boNo.value
-				})
-			} */ 
+		//해당 게시글 마우스오버시 색 변환
+		for(const td of tds){
+			td.addEventListener('mouseover',function() {
+				this.style.cursor = 'pointer';
+			})
+		}
+
 		
 			
 	</script>	

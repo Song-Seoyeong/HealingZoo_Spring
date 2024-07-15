@@ -54,10 +54,6 @@ public class MemberServiceImpl implements MemberService {
 		return mDAO.getListCount(sqlSession, memNo);
 	}
 	
-	@Override
-	public int getListCommentCount(int memNo) {
-		return mDAO.getListCommentCount(sqlSession, memNo);
-	}
 
 	@Override
 	public ArrayList<Board> selectMyBoardList(PageInfo pi, int memNo) {
@@ -152,17 +148,82 @@ public class MemberServiceImpl implements MemberService {
 		return mDAO.updateStaff(sqlSession, i);
 	}
 
-	@Override
-	public Image selectStaff(int memNo) {
-		return mDAO.selectStaff(sqlSession, memNo);
-	}
 
 	@Override
 	public int updateGreetingWrite(HashMap<String, Object> mapI) {
 		return mDAO.updateGreetingWrite(sqlSession, mapI);
 	}
 
-	
+	@Override
+	public Image selectStaff(int memNo) {
+		return mDAO.selectStaff(sqlSession, memNo);
+	}
+	 //07.11
+	@Override
+	public ArrayList<Image> selectBoardImg(String boardNo) {
+		return mDAO.selecBoardImg(sqlSession, boardNo);
+	}
+	 //07.11
+	@Override
+	public int deleteBoardImg(String boardNo) {
+		return mDAO.deletBoardImg(sqlSession, boardNo);
+	}
+	//07.11
+	@Override
+	public int insertBoardImg(ArrayList<Image> list) {
+		return mDAO.insertBoardImg(sqlSession, list);
+	}
+	//07.12
+	@Override
+	public Board selectOrigin(String bId) {
+		return mDAO.selectOrigin(sqlSession, bId);
+	}
+	//07.12
+	@Override
+	public ArrayList<Image> selectOriginImg(String bId) {
+		return mDAO.selectOriginImg(sqlSession, bId);
+	}
+	//07.12
+	@Override
+	public ArrayList<Reply> selectOriginReply(String bId) {
+		return mDAO.selectOriginReply(sqlSession, bId);
+	}
+	//07.12
+	@Override
+	public int getListCommentCount(int memNo) {
+		return mDAO.getListCommentCount(sqlSession, memNo);
+	}
+	//07.12
+	@Override
+	public int deleteImg(ArrayList<String> deleteImg) {
+		return mDAO.deleteImg(sqlSession, deleteImg);
+	}
+	//07.12
+	@Override
+	public int deleteInDetailView(HashMap<String, Object> map) {
+		return mDAO.deleteInDetailView(sqlSession, map);
+	}
+	//07.13
+	@Override
+	public int getListSerachComCount(HashMap<String, Object> map) {
+		return mDAO.getListSerachComCount(sqlSession, map);
+	}
+	//07.13
+	@Override
+	public ArrayList<Reply> selectMySerachCom(PageInfo pi, HashMap<String, Object> map) {
+		return mDAO.selectMySerachCom(sqlSession, pi, map);
+	}
+
+	@Override
+	public Board selectedBoard(String bId) {
+		return mDAO.selectedBoard(sqlSession, bId);
+		
+	}
+
+	@Override
+	public Board getBoard(HashMap<String, Object> map) {
+		return mDAO.getBoard(sqlSession, map);
+	}
 	
 
 }

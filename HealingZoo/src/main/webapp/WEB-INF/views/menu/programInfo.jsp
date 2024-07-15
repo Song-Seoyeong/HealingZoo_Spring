@@ -75,9 +75,8 @@
             border-radius: 30px;
             overflow: hidden;
             transition: transform 0.3s ease;
-            width: 100%;
-            max-width: 1000px; /* 가운데 이미지박스 크기 늘리는 곳 */
-            height: auto;
+            width: 900px;
+            height: 250px;
         }
 
         .procard.right-image {
@@ -139,7 +138,7 @@
 
             .image-container {
                 width: 100%;
-                height: auto;
+                height: 100%;
             }
 
             .procard .text {

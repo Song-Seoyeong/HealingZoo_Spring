@@ -22,4 +22,5 @@ public class Reply {
 	private String reActive;
 	private String boardTitle; // 추가
 	private String memGrade; // 추가
+	private String boardContent;//추가
 }

@@ -66,4 +66,28 @@ public interface MemberService {
 
 	int updateGreetingWrite(HashMap<String, Object> mapI);
 
+	ArrayList<Image> selectOriginImg(String bId);
+
+	ArrayList<Reply> selectOriginReply(String bId);
+
+	Board selectedBoard(String bId);
+
+	int getListSerachComCount(HashMap<String, Object> map);
+
+	ArrayList<Reply> selectMySerachCom(PageInfo pi, HashMap<String, Object> map);
+
+	Board getBoard(HashMap<String, Object> map);
+
+	int insertBoardImg(ArrayList<Image> list);
+
+	int deleteImg(ArrayList<String> deleteImg);
+
+	Board selectOrigin(String bId);
+
+	int deleteInDetailView(HashMap<String, Object> map);
+
+	int deleteBoardImg(String boardNo);
+
+	ArrayList<Image> selectBoardImg(String boardNo);
+
 }
