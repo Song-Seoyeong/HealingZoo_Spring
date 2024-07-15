@@ -35,72 +35,77 @@
 	<!-- 내 게시글 수 조회 -->
 	<select id="getListCount" resultType="_int">
 		select count(*)
-		from IN_BO_BOARD_VIEW
-		where board_active='Y' and writer_no = #{memNo}
+		from board
+		where board_active='Y' and board_writer_no = #{memNo}
 	</select>
 	<!-- 내 게시글 수 조회 -->
 	
 	<!-- 내 게시글 리스트 조회 -->	
 	<select id="myBoardList" resultMap="selBoard">
 		select *
-		from IN_BO_BOARD_VIEW
-		where board_active='Y' and writer_no = #{memNo}
+		from board
+			join member on(board_writer_no = mem_no)
+		where board_active='Y' and board_writer_no = #{memNo}
 		order by board_no desc
 	</select>
-	<resultMap type="Board" id="selBoard">
+	<resultMap type="Board" id="selBoard"><!-- 07.14수정 -->
 		<result column="BOARD_NO" property="boardNo"/>
 		<result column="CATE_NO" property="cateNo"/>
-		<result column="WRITER_NO" property="boardWriterNo"/>
-		<result column="WRITER_NAME" property="boardWriterName"/>
+		<result column="BOARD_WRITER_NO" property="boardWriterNo"/>
+		<result column="BOARD_WRITER_NAME" property="boardWriterName"/>
 		<result column="BOARD_TITLE" property="boardTitle"/>
 		<result column="BOARD_CONTENT" property="boardContent"/>
 		<result column="BOARD_ACTIVE" property="boardActive"/>
 		<result column="BOARD_COUNT" property="boardCount"/>
 		<result column="CREATE_DATE" property="boardCreateDate"/>
 		<result column="MODIFY_DATE" property="boardModifyDate"/>
-		<result column="WRITER_PHONE" property="writerPhone"/>
-		<result column="BO_PWD" property="boPwd"/>
+		<result column="MEM_PHONE" property="writerPhone"/>
+		<result column="IN_BO_PWD" property="boPwd"/>
 		<result column="IN_BO_STATUS" property="quBoBoardStatus"/>
+		<result column="RE_CONTENT" property="reContent"/>
 	</resultMap>
 	<!-- 내 게시글 리스트 조회 -->	
 	
 	<!-- 검색 자기글 불러오기-->
 	<select id="listSearchCount" resultType="_int">
 		select count(*)
-		from IN_BO_BOARD_VIEW
-		where board_active = 'Y' and writer_no = ${memNo} and (board_title like '%'||  #{value} || '%' or board_content like '%' || #{value} || '%') 
+		from board
+		where board_active = 'Y' and board_writer_no = ${memNo} and (board_title like '%'||  #{value} || '%' or board_content like '%' || #{value} || '%') 
 		order by board_no desc
 	</select>
 	<select id="selectSearchList" resultMap="selBoard">
 		select *
-			from IN_BO_BOARD_VIEW
-			where board_active = 'Y' and writer_no = ${memNo} and (board_title like '%'||  #{value} || '%' or board_content like '%' || #{value} || '%') 
+			from board
+			where board_active = 'Y' and board_writer_no = ${memNo} and (board_title like '%'||  #{value} || '%' or board_content like '%' || #{value} || '%') 
 			order by board_no desc
 	</select>
 	<!-- 검색 자기글 불러오기-->
 	
 	
+	<!-- 07.12 수정 -->
 	<!-- 내 댓글 수 조회 -->	
 	<select id="getListCommentCount" resultType="_int">
 		select count(*)
 		from reply
-		where RE_WRITER = #{memNo} and re_active='Y'
+		where re_writer_no = #{memNo} and re_active='Y'
 	</select>
 	<!-- 내 댓글 수 조회 -->
 	
+	<!-- 07.12 수정 -->
 	<!-- 내 댓글 리스트 조회 -->
 	<select id="myCommentList" resultMap="selMyComment">
-	select re_no, board_no, re_writer, re_content, re_active, board_title
+	select re_no, board_no, re_writer_no, re_content, re_active, board_title
 		from reply
 			join board using(board_no)
-		where RE_WRITER = ${memNo} and re_active='Y'
+		where RE_WRITER_NO = ${memNo} and re_active='Y'
 	</select>
 	<resultMap type="Reply" id="selMyComment">
 		<result column="RE_NO" property="reNo"/>
 		<result column="BOARD_NO" property="boardNo"/>
-		<result column="RE_WRITER" property="memNo"/>
+		<result column="RE_WRITER_NO" property="memNo"/>
 		<result column="RE_CONTENT" property="reContent"/>
 		<result column="RE_ACTIVE" property="reActive"/>
+		<result column="MEM_NAME" property="memName"/>
 	</resultMap>
 	<!-- 내 댓글 리스트 조회 -->
 	
@@ -139,33 +144,37 @@
 	<!-- 마이리스트 말머리 리스트 조회 -->
 	<select id="listSubjectCount" resultType="_int">
 		select count(*)
-		from in_bo_board_view
+		from board
 		<if test="noSubject == 1">
-			where board_active='Y' and writer_no = ${memNo}
+			where board_active='Y' and board_writer_no = ${memNo}
 		</if>
 		<if test="noSubject != 1">
-			where board_active='Y' and CATE_NO = ${noSubject} and writer_no = ${memNo}
+			where board_active='Y' and CATE_NO = ${noSubject} and board_writer_no = ${memNo}
 		</if>
 	</select>
 	<select id="listSubject" resultMap="selBoard">
 		select *
-		from in_bo_board_view
+		from board
 		where board_active='Y' 
 		<if test="noSubject == 1">
-			and writer_no = ${memNo} 
+			and board_writer_no = ${memNo} 
 		</if>
 		<if test="noSubject != 1">
-			and CATE_NO = ${noSubject} and writer_no = ${memNo}
+			and CATE_NO = ${noSubject} and board_writer_no = ${memNo}
 		</if>
 		order by board_no desc
 	</select>
 	<!-- 마이리스트 말머리 리스트 조회 -->
 	
+	<!--07.14 수정  -->
 	<!-- 선택한 게시글 상세보기 -->
 	<select id="selectedBoard" resultMap="selBoard">
 		select *
-		from in_bo_board_view
+		from board
+			join member on(board_writer_no = mem_no)
+         	
 		where board_no=${bId} 
+		order by board_no desc
 	</select>
 	<!-- 선택한 게시글 상세보기 -->
 	
@@ -177,10 +186,18 @@
 	</update>
 	<!-- 선택된 댓글 삭제 -->
 	
-	<!-- 수정 할 게시글 불러오기 -->
+	
+	<!-- 07.14수정/ 수정 할 게시글 불러오기 if문 추가--> 
 	<select id="getBoard" resultMap="selBoard">
 		select *
-		from IN_BO_BOARD_VIEW
+		from board 
+			join member on(board_writer_no = mem_no)
+		<if test="cateNo == 100">
+			join inquiry_book using(board_no)
+		</if>
+		<if test="cateNo == 103">
+			join inquiry_book using(board_no)
+		</if>
 		where board_no = ${boNo}
 	</select>
 	<!-- 수정 할 게시글 불러오기 -->
@@ -205,7 +222,7 @@
 	<select id="selectStaff" resultType="Image">
 		select *
 		from image
-		where IMG_REF_NUM = #{memNo}
+		where IMG_REF_NUM = #{memNo} and IMG_REF_TYPE = 'STAFF'
 	</select>
 	
 	<!-- 관리자 사진 삭제 -->
@@ -225,5 +242,79 @@
 		set MEM_INTRO = #{greetingWrite}
 		where MEM_NO = #{memNo}
 	</update>
+	<!--  07.11 선택 게시글 수정시 사진 유무확인 -->
+	<select id="selectBoardImg"  resultType="Image">
+		select *
+		from image
+		where IMG_REF_NUM = #{boardNo}
+	</select>
+	
+	<!-- 07.11 사진 있을 시 기존 게시글 사진 삭제 -->
+	<delete id="deleteBoardImg">
+		delete from image where IMG_REF_NUM = #{boardNo}
+	</delete>
+	
+	<!-- 07.11 사진 삽입 -->
+	<insert id="insertBoardImg">
+		insert all
+			<foreach collection="list" item="img" separator=" ">
+				into image values(new_img_id, #{img.imgPath}, #{img.imgName}, #{img.imgRename}, #{img.imgRefNum}, #{img.imgRefType}, default, default)
+			</foreach>
+		select * from dual
+	</insert>
+	
+	<!-- 07.12 게시글 원문 조회 -->
+	<select id="selOrigin" resultMap="selBoard">
+		select *
+		from board 
+		where board_no = #{bId}
+	</select>
+	
+	<!-- 07.12 원문 이미지 불러오기 -->
+	<select id="selOriginImg" resultType="Image">
+		select *
+		from image 
+        where IMG_REF_NUM = #{bId}
+	</select>
+	
+	<!-- 07.12 원문 댓글 불러오기 -->
+	<select id="selOriginReply" resultMap="selMyComment">
+		select *
+		from reply 
+        join member on(RE_WRITER_NO = MEM_NO)
+        where board_no = #{bId} and re_active='Y'
+	</select>
+	
+	<!-- 7.12 사진삭제 -->
+	<delete id="deleteImg">
+		delete from image
+		where img_rename in
+			<foreach collection="list" item="deleteImg" open="(" close=")" separator=", ">
+				#{deleteImg}
+			</foreach>
+	</delete>
+	
+	<!-- 7.12 선택한 게시글 삭제 -->
+	<update id="deleteInDetailView">
+		update board
+		set board_active ='N'
+		where BOARD_NO = #{boardNo} and CATE_NO = #{cateNo}
+	</update>
+	
+	<!-- 07.13 내댓글 검색 수 조회 -->
+	<select id="getListSerachComCount" resultType="_int">
+		select count(*)
+		from reply 
+			join board using(board_no)
+		where  re_active = 'Y' and re_writer_no = ${memNo} and (board_title like '%' ||  #{value} || '%' or board_content like '%' || #{value} || '%') 
+	</select>
+	
+	<!-- 07.13/ 07.14 검색 게시글 조회 -->
+	<select id="selectMySerachCom" resultType="Reply">
+		select *
+		from reply 
+			join board using(board_no)
+		where  re_active = 'Y' and re_writer_no = ${memNo} and (board_title like '%' ||  #{value} || '%' or re_content like '%' || #{value} || '%')
+	</select>
 	
 </mapper>

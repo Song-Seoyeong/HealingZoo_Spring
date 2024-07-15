@@ -39,10 +39,6 @@ public class MemberDAO {
 	public int getListCount(SqlSession sqlSession, int memNo) {
 		return sqlSession.selectOne("memberMapper.getListCount", memNo);
 	}
-	
-	public int getListCommentCount(SqlSession sqlSession, int memNo) {
-		return sqlSession.selectOne("memberMapper.getListCommentCount", memNo);
-	}
 
 	public ArrayList<Board> selectMyBoardList(SqlSession sqlSession, PageInfo pi, int memNo) {
 		int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
@@ -134,9 +130,60 @@ public class MemberDAO {
 		return sqlSession.update("memberMapper.updateGreetingWrite", mapI);
 	}
 
+	//07.11
+	public ArrayList<Image> selecBoardImg(SqlSession sqlSession, String boardNo) {
+		return (ArrayList)sqlSession.selectList("memberMapper.selectBoardImg", boardNo);
+	}
+	//07.11
+	public int deletBoardImg(SqlSession sqlSession, String boardNo) {
+		return sqlSession.delete("memberMapper.deleteBoardImg", boardNo);
+	}
+	//07.11
+	public int insertBoardImg(SqlSession sqlSession, ArrayList<Image> list) {
+		return sqlSession.insert("memberMapper.insertBoardImg", list);
+	}
+	//07.12
+	public Board selectOrigin(SqlSession sqlSession, String bId) {
+		return sqlSession.selectOne("memberMapper.selOrigin", bId);
+	}
+	//07.12
+	public ArrayList<Image> selectOriginImg(SqlSession sqlSession, String bId) {
+		return (ArrayList)sqlSession.selectList("memberMapper.selOriginImg", bId);
+	}
+	//07.12
+	public ArrayList<Reply> selectOriginReply(SqlSession sqlSession, String bId) {
+		return (ArrayList)sqlSession.selectList("memberMapper.selOriginReply", bId);
+	}
+	//07.12
+	public int getListCommentCount(SqlSession sqlSession, int memNo) {
+		return sqlSession.selectOne("memberMapper.getListCommentCount", memNo);
+	}
+	//07.12
+	public int deleteImg(SqlSession sqlSession, ArrayList<String> deleteImg) {
+		return sqlSession.delete("memberMapper.deleteImg", deleteImg);
+	}
+	//07.13
+	public int deleteInDetailView(SqlSession sqlSession, HashMap<String, Object> map) {
+		return sqlSession.update("memberMapper.deleteInDetailView", map);
+	}
+	//07.13
+	public int getListSerachComCount(SqlSession sqlSession, HashMap<String, Object> map) {
+		return sqlSession.selectOne("memberMapper.getListSerachComCount", map);
+	}
+	//07.14
+	public ArrayList<Reply> selectMySerachCom(SqlSession sqlSession, PageInfo pi, HashMap<String, Object> map) {
+		int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return (ArrayList)sqlSession.selectList("memberMapper.selectMySerachCom", map, rowBounds);
+	}
 
-
+	public Board selectedBoard(SqlSession sqlSession, String bId) {
+		return sqlSession.selectOne("memberMapper.selectedBoard",bId);
+	}
 	
+	public Board getBoard(SqlSession sqlSession, HashMap<String, Object> map) {
+		return sqlSession.selectOne("memberMapper.getBoard", map);
+	}
 
 
 }

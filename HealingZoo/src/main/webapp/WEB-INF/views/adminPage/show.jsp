@@ -15,6 +15,7 @@
 	font-style: normal;
 }
 
+
 .search {
 	position: relative;
 	width: 300px;
@@ -38,7 +39,17 @@ input {
 	right: 12px;
 	margin: 0;
 }
-
+#address{ 
+	resize: none;
+	border: 1px solid #D9D9D9;
+	border-radius: 10px;
+}
+#updateBtn{
+	background-color: orange;
+	width: 80px;
+	border: none;
+	margin-right: 5px;
+}
 .form-check-input {
 	transform: scale(0.5);
 	accent-color: #65B741;
@@ -86,7 +97,53 @@ tr {
 	<%@ include file='../common/logoBar.jsp'%>
 	<%@ include file='../common/mainCategoryBar.jsp'%>
 	<%@ include file='../common/adminSidebar.jsp'%>
-
+	
+	<div class="container" style="width: 900px; margin-top: 100px; margin-bottom:150px;">
+		<h2 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;">프로그램 메인</h2>
+		
+		<form action="${contextPath}/insertProtitleImg.admin" method="post" enctype="multipart/form-data">
+			<!-- 시작문구 -->
+			<div class='row' style='margin-bottom:20px;'>
+				<div class='col-1'></div>
+				<div class='col-3'>
+					<p class='inputTitleName'>메인문구 : </p>
+				</div>
+				<div class='col-7 text-center'>
+					<input type="text" cols='48' rows='4' id='write' name='write'>
+				</div>
+				<div class='col-1'></div>
+			</div>
+			
+			<!-- 문구 -->
+			<div class='row' style='margin-bottom:30px;'>
+				<div class='col-1'></div>
+				<div class='col-3'>
+					<p class='inputTitleName'>문구 : </p>
+				</div>
+				<div class='col-7 text-center'>
+					<textArea cols='48' rows='4' id='swrite' name='swrite'></textArea>
+				</div>
+				<div class='col-1'></div>
+			</div>
+			
+			<!-- 사진 -->
+			<div class='row' style='margin-bottom:30px;'>
+				<div class='col-1'></div>
+				<div class='col-3'>
+					<p class='inputTitleName'>메인사진 : </p>
+				</div>
+				<div class='col-7 text-center'>
+					<input class="form-control" type="file" id="showImg" name='showImg' accept='image/*'>
+				</div>
+				<div class='col-1'></div>
+			</div>
+			
+			<!-- 버튼 -->
+		    <div class='text-end'>
+		        <button class="btn btn-primary" type="submit" id="updateBtn">수정</button>
+		    </div>
+		 </form>
+	</div>
 	<!-- 글 목록 -->
 	<div class="container" style="width: 900px; margin-top: 100px; margin-bottom:150px;">
 		<h2 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;">프로그램 목록</h2>
@@ -188,6 +245,13 @@ tr {
 		    }
 		});
 	
+		// 체크박스 모두 선택
+		document.getElementById('selectAll').addEventListener('change', function() {
+		    const checkboxes = document.querySelectorAll('input[name="aniNOs"]');
+		    checkboxes.forEach(checkbox => {
+		        checkbox.checked = this.checked;
+		    });
+		});
 	
 	
 		// 추가 클릭시
@@ -197,11 +261,11 @@ tr {
 		
 		// 전체 선택
 		document.getElementById('selectAll').addEventListener('change', function() {
-		    const checkboxes = document.querySelectorAll('input[name="showNo"]');
-		    checkboxes.forEach(checkbox => {
-		        checkbox.checked = this.checked;
-		    });
-		});
+	    const checkboxes = document.querySelectorAll('input[name="showNo"]');
+	    checkboxes.forEach(checkbox => {
+	        checkbox.checked = this.checked;
+	    });
+	});
 	</script>
 </body>
 </html>

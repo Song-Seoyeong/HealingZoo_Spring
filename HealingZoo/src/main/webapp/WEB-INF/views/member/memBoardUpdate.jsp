@@ -120,11 +120,11 @@
 					
 					<br>
 					<div  class='text-center' style='border: 1px solid #B5B5B5;'>
-				    	<textArea id='boardContent' name='boardContent' cols='70' rows="10">${ b.boardContent }</textArea>
+				    	<textArea id='boardContent' name='boardContent' cols='70' rows="10">${ b.boardContent }${ b }</textArea>
 				    	
 				    	<!-- 기존 사진 영역 -->
 				    	<c:forEach items="${ imgList }" var='img'>
-							<div style='margin: 15px 15px;'>
+							<div style='margin: 15px 15px;'> 
 								<img alt="${ img.imgName }" src="${ contextPath }/resources/uploadImg/${img.imgRename}" width='60%'>
 								<input type='hidden' name='checkDelete' value='none'/>
 								<button type="button" class="btn btn-sm deleteImg" style='background: #DD5353; color: white;' id='img-${ img.imgRename }'>삭제</button>
@@ -137,9 +137,9 @@
 							<button type='button' id='plusFile' class='btn btn-primary'>+ 파일 추가</button>
 						</div>
 						<div class='col-8 text-end' id='fileArea'>
-							<div style='margin: 5px;'>
+							 <div style='margin: 5px;'>
 								<input class="form-control" type="file" name='file' accept='image/*'>
-							</div>
+							</div> 
 						</div>
 						<div class='col-1'></div>
 					</div>
@@ -197,7 +197,6 @@
 		
 		// 파일 추가 로직
 		const fileArea = document.getElementById("fileArea");
-		console.log(fileArea)
 		document.getElementById('plusFile').addEventListener('click', ()=>{
 			const newFileArea = document.createElement('div');
 			newFileArea.innerHTML = "<input class='form-control' type='file' name='file'>";
@@ -212,12 +211,13 @@
 			btn.addEventListener('click', function(){
 				const hidden = this.previousElementSibling;
 				const img = hidden.previousElementSibling;
-				
+				console.log()
 				if(hidden.value == 'none'){
 					this.innerText = '취소';
 					this.style.background = '#60A869';
 					hidden.value = this.id.split('-')[1];
 					img.style.opacity = '0.5'
+						
 				}else{
 					this.innerText = '삭제';
 					this.style.background = '#DD5353';
@@ -226,25 +226,6 @@
 				}
 			})
 		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		
 	</script>

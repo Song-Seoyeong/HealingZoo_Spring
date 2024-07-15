@@ -179,7 +179,7 @@
 		document.getElementById('delete_button').addEventListener('click', function(e) {
 		    e.preventDefault(); // 기본 이벤트 방지
 		
-		    const checkboxes = document.querySelectorAll('input[name="boardNo"]:checked');
+		    const checkboxes = document.querySelectorAll('input[name="FAQNo"]:checked');
 		    
 		    if (checkboxes.length === 0) {
 		        alert('삭제할 항목을 선택해주세요.');
@@ -199,7 +199,7 @@
 		
 		// 전체 선택
 		document.getElementById('selectAll').addEventListener('change', function() {
-		    const checkboxes = document.querySelectorAll('input[name="boardNo"]');
+		    const checkboxes = document.querySelectorAll('input[name="FAQNo"]');
 		    checkboxes.forEach(checkbox => {
 		        checkbox.checked = this.checked;
 		    });
