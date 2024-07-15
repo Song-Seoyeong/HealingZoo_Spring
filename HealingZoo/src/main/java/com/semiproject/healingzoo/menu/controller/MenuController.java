@@ -394,7 +394,7 @@ public class MenuController {
 		return "way";
 	}
 
-	// 프로그램 목록 이동 menuController 0713
+	// 프로그램 목록 이동 menuController 0715
 	@RequestMapping("programInfo.menu")
 	public String showProgramInfo(Model model) {
 		Link showLink = aService.getShowLink();
@@ -421,10 +421,14 @@ public class MenuController {
 	        images.put("hoverImage", bService.getShowImage(show.getShowNo(), 2));
 	        showImages.put(show.getShowNo(), images);
 	    }
+		// PROMAIN으로 배경이미지만 따로 제작
+	    Image proMainImg = bService.getShowImage2(0, 0);
+	    model.addAttribute("proMainImg", proMainImg);
 	    model.addAttribute("showList", showList);
 	    model.addAttribute("showImages", showImages);
 	    return "programInfo";
 	}
+	
 	
 	
 	

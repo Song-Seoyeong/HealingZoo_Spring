@@ -48,7 +48,8 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	
-	@Override public int getAnimalCount() { 
+	@Override
+	public int getAnimalCount() { 
 		return aDAO.getAnimalCount(sqlSession); 
 	}
 
@@ -121,7 +122,7 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public Image getMascotImage() {
 		return aDAO.getMascotImage(sqlSession);
-	}
+	}//
 
 	@Override
 	public Image getGoodsInfoImage() {
@@ -171,7 +172,7 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<Goods> getMascotGoodsWithImages() {
 		return aDAO.getMascotGoodsWithImages(sqlSession);
-	}
+	}//
 	
 	@Override
 	public Image checkBanner(int i) {

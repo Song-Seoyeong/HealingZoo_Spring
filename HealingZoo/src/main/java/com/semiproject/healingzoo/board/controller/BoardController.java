@@ -105,59 +105,59 @@ public class BoardController {
 	}
 	
 	// 글쓰기 insert(공지/후기)
-		@RequestMapping("noReWrite.bo")
-		public String noReWrite(@ModelAttribute Board b,
-								 @RequestParam("file") ArrayList<MultipartFile> imgList,
-								 HttpServletRequest request,
-								 Model model) {
-			ArrayList<Image> list = new ArrayList<Image>();
-			
-			for(MultipartFile img : imgList) {
-				if(!img.isEmpty() && img != null) {
-					String[] returnArr = saveImg(img, request);
-					
-					Image newImg = new Image();
-					newImg.setImgName(img.getOriginalFilename());
-					newImg.setImgPath(returnArr[0]);
-					newImg.setImgRename(returnArr[1]);
-					newImg.setImgRefType("BOARD");
-					
-					list.add(newImg);
-				}
-			}
-			int resultBoard = 0;
-			int resultImg = 0;
-			
-			resultBoard = bService.insertBoard(b);
-			
-			//공지 게시글 분리
-			if(b.getCateNo() == 100) {
-				bService.insertNotice(b);
-			}
-			
-			//이미지가 있다면 DB 넣기
-			if(!list.isEmpty()) {
-				for(Image i : list) {
-					i.setImgRefNum(b.getBoardNo());
-				}
-				resultImg = bService.insertImg(list);
-			}
-			
-			
-			
-			if(resultBoard + resultImg == 1 + list.size()) {
+	@RequestMapping("noReWrite.bo")
+	public String noReWrite(@ModelAttribute Board b,
+							 @RequestParam("file") ArrayList<MultipartFile> imgList,
+							 HttpServletRequest request,
+							 Model model) {
+		ArrayList<Image> list = new ArrayList<Image>();
+		
+		for(MultipartFile img : imgList) {
+			if(!img.isEmpty() && img != null) {
+				String[] returnArr = saveImg(img, request);
 				
-				model.addAttribute("bId", b.getBoardNo());
-				model.addAttribute("category", b.getCateNo());
-				model.addAttribute("page", 1);
-				return "redirect:boardView.bo";
-			}else {
-				for(Image a : list) {
-					delete(a.getImgRename(), request);
-				}
-				throw new BoardException("게시글 등록에 실패 했습니다.");
+				Image newImg = new Image();
+				newImg.setImgName(img.getOriginalFilename());
+				newImg.setImgPath(returnArr[0]);
+				newImg.setImgRename(returnArr[1]);
+				newImg.setImgRefType("BOARD");
+				
+				list.add(newImg);
 			}
 		}
+		int resultBoard = 0;
+		int resultImg = 0;
+		
+		resultBoard = bService.insertBoard(b);
+		
+		//공지 게시글 분리
+		if(b.getCateNo() == 100) {
+			bService.insertNotice(b);
+		}
+		
+		//이미지가 있다면 DB 넣기
+		if(!list.isEmpty()) {
+			for(Image i : list) {
+				i.setImgRefNum(b.getBoardNo());
+			}
+			resultImg = bService.insertImg(list);
+		}
+		
+		
+		
+		if(resultBoard + resultImg == 1 + list.size()) {
+			
+			model.addAttribute("bId", b.getBoardNo());
+			model.addAttribute("category", b.getCateNo());
+			model.addAttribute("page", 1);
+			return "redirect:boardView.bo";
+		}else {
+			for(Image a : list) {
+				delete(a.getImgRename(), request);
+			}
+			throw new BoardException("게시글 등록에 실패 했습니다.");
+		}
+	}
 
 	// 이미지 삭제
 	private void delete(String rename, HttpServletRequest request) {

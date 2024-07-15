@@ -242,5 +242,12 @@ public class BoardDAO {
 	    params.put("imgRefHover", imgRefHover);
 	    return sqlSession.selectOne("boardMapper.getShowImage", params);
 	}
+	
+	public Image getShowImage2(SqlSession sqlSession, int i, int j) {
+		Map<String, Object> params = new HashMap<>();
+	    params.put("showNo", i);
+	    params.put("imgRefHover", j);
+	    return sqlSession.selectOne("boardMapper.getShowImage2", params);
+	}
 
 }

@@ -32,7 +32,7 @@
 	<!-- 동물 게시글 목록 조회 -->
 	<select id="selectFamilyList" resultMap="AnimalList">
 		SELECT * FROM animal
-		ORDER BY ANI_NO ASC
+		ORDER BY ANI_NO desc
 	</select>
 	<!-- 동물 게시글 목록 조회 -->
 	
@@ -376,8 +376,7 @@
 	<!-- 프로그램 이미지 삭제 -->
 	<delete id="deleteShowImg">
 		delete from image
-		where img_ref_num = #{showNo} and img_ref_type = #{imgRefType} and
-		img_ref_hover = #{imgRefHover}
+		where img_ref_num = #{showNo} and img_ref_type = 'SHOW'
 	</delete>
 	<!-- 프로그램 이미지 삭제 -->
 

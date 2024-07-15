@@ -91,4 +91,6 @@ public interface BoardService {
 	ArrayList<Reply> selectQuReply(int bId);
 	
 	Image getShowImageByRefType(String linkRefType);
+	
+	Image getShowImage2(int i, int j);
 }
