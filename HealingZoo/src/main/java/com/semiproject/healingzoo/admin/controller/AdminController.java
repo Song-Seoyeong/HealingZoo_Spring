@@ -1974,6 +1974,53 @@ public class AdminController {
     		return "redirect:member.admin";
     	}
     }
+    
+    // 문의 예약 댓글 작성 07.15
+   	@RequestMapping("insertQuBoReply.admin")
+   	@ResponseBody
+   	public void insertQuBoReply(@ModelAttribute Reply r,
+   							HttpServletResponse response) {
+   		
+   		int result = aService.insertQuBoReply(r);
+   		
+   		if(result > 0) {
+   			// 댓글 리스트 조회
+   			ArrayList<Reply> replyList = aService.selectQuBoReply(r.getBoardNo());
+   			
+   			GsonBuilder gb = new GsonBuilder().setDateFormat("yyyy-MM-dd");
+   			Gson gson = gb.create();
+   			response.setContentType("application/json; charset=UTF-8");
+   			
+   			try {
+   				gson.toJson(replyList, response.getWriter());
+   			} catch (JsonIOException e) {
+   				e.printStackTrace();
+   			} catch (IOException e) {
+   				e.printStackTrace();
+   			}
+   			
+   		}else {
+   			throw new AdminException("댓글 작성에 실패했습니다.");
+   		}
+   	}
+   	
+	// 댓글 완전 삭제 07.15 추가
+	@RequestMapping("deleteQuBoReply.admin")
+	@ResponseBody
+	public String deleteQuBoReply(@RequestParam("reId") int reId) {
+		int result = aService.deleteQuBoReply(reId);
+		
+		return result == 1 ? "success" : "fail";
+	}
+	
+	
+	// 댓글 수정 07.15 수정
+	@RequestMapping("updateQuBoReply.admin")
+	@ResponseBody
+	public String updateQuBoReply(@ModelAttribute Reply r) {
+		int result = aService.updateQuBoReply(r);
+		return result == 1 ? "success":"fail";
+	}
 	
 	
 }
