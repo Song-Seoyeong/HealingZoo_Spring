@@ -858,11 +858,12 @@
 	    WHERE IMG_REF_TYPE = 'SHOW' AND IMG_REF_NUM IS NULL
 	</delete>
 	
-	<!-- 상품 이미지 조회 -->
+	<!-- 상품 이미지 조회 0717 -->
 	<select id="getGoodsImage" parameterType="int" resultType="Image">
-        SELECT * FROM IMAGE 
-        WHERE IMG_REF_NUM = #{goodsNo} AND IMG_REF_TYPE = 'GOODS'
-    </select>
+	    SELECT * FROM IMAGE 
+	    WHERE IMG_REF_NUM = #{goodsNo} AND IMG_REF_TYPE = 'GOODS'
+	    ORDER BY IMG_NO DESC FETCH FIRST 1 ROW ONLY
+	</select>
     
     <!--상품 이미지 삭제 -->
     <delete id="deleteGoodsImage" parameterType="int">
@@ -1132,4 +1133,18 @@
 		where MEM_ACTIVE = 'Y' and MEM_GRADE = #{memGrade}
 		order by mem_no desc
 	</select>
+	
+	<!-- 회원인지 멤버 조회 07.17 -->
+	<select id="checkCon" resultType="Member">
+		select *
+		from member
+		where MEM_NO = #{memNo}
+	</select>
+	
+	<!-- 회원등급으로 변경 07.17-->
+	<update id="changeCon">
+		update member
+ 		set MEM_GRADE = 'CONSUMER'
+     	where MEM_NO = #{memNO}
+	</update>
 </mapper>

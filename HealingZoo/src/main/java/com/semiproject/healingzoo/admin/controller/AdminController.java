@@ -1010,14 +1010,16 @@ public class AdminController {
 		return "redirect:/mascot.admin";
 	}
 
-	// 마스코트 추가 페이지 이동
-	@RequestMapping("masInsert.admin")
+	// 마스코트 추가 페이지 이동 0717
+	@GetMapping("masInsert.admin")
 	public String masMove(@RequestParam(required = false) Integer goodsNo, Model model) {
-		if (goodsNo != null) {
-			Goods goods = aService.selectGoods(goodsNo);
-			model.addAttribute("goods", goods);
-		}
-		return "writeMascot";
+	    if (goodsNo != null) {
+	        Goods goods = aService.selectGoods(goodsNo);
+	        Image image = aService.getGoodsImage(goodsNo);
+	        model.addAttribute("goods", goods);
+	        model.addAttribute("image", image);
+	    }
+	    return "writeMascot";
 	}
 
 	//마스코트 상품 추가 0712 이미지파일 내 이미지 삭제
@@ -2021,6 +2023,25 @@ public class AdminController {
 		int result = aService.updateQuBoReply(r);
 		return result == 1 ? "success":"fail";
 	}
-	
+	//회원 등급 변경
+	@RequestMapping("changeCon.admin")
+	public String changeCon(@RequestParam("memNo") int memNo, Model model) {
+		
+		   //회원인지 확인
+	       Member m  = aService.checkCon(memNo);
+	       String memGrade = m.getMemGrade();
+	       
+	       //
+	       if(memGrade.equals("WORKER")) {
+	          int result = aService.changeCon(memNo);
+	          if(result > 0) {
+	             return "alert";
+	          }else {
+	             throw new AdminException("등급 전환에 실패하였습니다.");
+	          }
+	       }else {
+	          return "alertConsumer";
+	       }
+	    }
 	
 }

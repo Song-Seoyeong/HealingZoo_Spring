@@ -13,7 +13,7 @@
 <body>
 	<c:set var='contextPath' value='${ pageContext.servletContext.contextPath }' scope='application'/>
 	<script>
-		alert("등급 전환에 성공하였습니다.")
+		alert("현재 회원등급입니다")
 		location.href="${contextPath}/member.admin"
 	</script>
 </body>
