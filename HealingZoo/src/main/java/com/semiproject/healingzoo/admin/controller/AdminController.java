@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,6 +47,9 @@ import com.semiproject.healingzoo.member.model.vo.Member;
 @Controller
 @SessionAttributes("loginUser")
 public class AdminController {
+	
+	@Autowired
+	private BCryptPasswordEncoder bcrypt;
 
 	@Autowired
 	private BoardService bService;
@@ -1432,52 +1436,28 @@ public class AdminController {
 	public String updateGreetingImg(@RequestParam("operImg") MultipartFile upload, HttpServletRequest request) {
 		Image i = new Image();
 		String[] returnArr = saveImg(upload, request);
-
 		i.setImgRename(returnArr[1]);
 		i.setImgName(upload.getOriginalFilename());
 		i.setImgPath(returnArr[0]);
 		i.setImgRefType("GREETING");
-		
-		// DB에 저장하는 부분 작성 : spring-jdbc(+mybatis)
-		// service -> dao -> db(mapper)
+
+
+		// DB에 새로운 이미지 데이터 저장 : spring-jdbc(+mybatis)
 		int result = aService.insertGreeting(i);
-		if(result>0) {
+		if (result > 0) {
+			aService.deleteGreeting();
 			return "redirect:greeting.admin";
 		} else {
 			throw new AdminException("인삿말 사진 등록에 실패했습니다.");
 		}
-		
 	}
 
 	
-	// 오시는길 이미지 변경
-		@RequestMapping("updateWayImg.admin")
-	public String updateWayImg(@RequestParam("mapImg") MultipartFile upload, HttpServletRequest request) {
-			Image i = new Image();
-			String[] returnArr = saveImg(upload, request);
-
-			i.setImgRename(returnArr[1]);
-			i.setImgName(upload.getOriginalFilename());
-			i.setImgPath(returnArr[0]);
-			i.setImgRefType("WAY");
-			
-			// DB에 저장하는 부분 작성 : spring-jdbc(+mybatis)
-			// service -> dao -> db(mapper)
-			int result = aService.insertWay(i);
-			if(result>0) {
-				return "redirect:way.admin";
-			} else {
-				throw new AdminException("인삿말 사진 등록에 실패했습니다.");
-			}
-			
-		}
-		
-	//오시는길 주소변경
-	// Controller
+	// 오시는길 이미지,주소 변경
 	@PostMapping("updateWayInfo.admin")
-	public String updateWayInfo(@RequestParam("timestamp") String timestamp,
+	public String updateWayInfo(@RequestParam("timestamp") String timestamp, 
 	                            @RequestParam("address") String address,
-	                            @RequestParam("mapImg") MultipartFile mapImg,
+	                            @RequestParam("mapImg") MultipartFile mapImg, 
 	                            HttpServletRequest request,
 	                            RedirectAttributes redirectAttributes) {
 	    // 1. Link 정보 업데이트 (지도와 주소)
@@ -1485,25 +1465,24 @@ public class AdminController {
 	    mapLink.setLinkRefType("MAP");
 	    mapLink.setLinkUrl(timestamp);
 	    mapLink.setLinkInfo(address);
-
 	    int linkResult = aService.updateMapLink(mapLink);
-
 	    if (linkResult == 0) {
 	        linkResult = aService.insertMapLink(mapLink);
 	    }
 
-	    // 2. 이미지 업로드 및 저장 (기존 코드 유지)
+	    // 2. 이미지 업로드 및 저장 
 	    int imageResult = 1; // 이미지 업로드가 없는 경우에도 성공으로 간주
 	    if (!mapImg.isEmpty()) {
 	        Image i = new Image();
 	        String[] returnArr = saveImg(mapImg, request);
-
 	        i.setImgRename(returnArr[1]);
 	        i.setImgName(mapImg.getOriginalFilename());
 	        i.setImgPath(returnArr[0]);
 	        i.setImgRefType("WAY");
-
 	        imageResult = aService.insertWay(i);
+	        if (imageResult > 0) {
+	            aService.deleteWay(); // 기존 이미지 삭제
+	        }
 	    }
 
 	    if (linkResult > 0 && imageResult > 0) {
@@ -1511,7 +1490,6 @@ public class AdminController {
 	    } else {
 	        redirectAttributes.addFlashAttribute("error", "오시는 길 정보 업데이트에 실패했습니다.");
 	    }
-
 	    return "redirect:way.admin";
 	}
 
@@ -1707,7 +1685,295 @@ public class AdminController {
 	    }
 	    return "redirect:show.admin";
 	}
+	
+	// 상세 글 보기(문의, 예약) + 조회수 증가
+	@RequestMapping("boardQuBoView.admin")
+	public String selectQuBoBoard(@RequestParam("bId") int bId,
+			@RequestParam("page") int page,
+			@RequestParam("category") int category,
+			HttpSession session,
+			Model model) {
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		Integer userNo = null;
+		if(loginUser != null) {
+			userNo = (Integer)loginUser.getMemNo();
+		}
+		
+		// 카테고리별 상세 글 불러오는 메소드 나뉨
+		Board b = null;
+		
+		if(category == 100) {	// 공지
+			b = aService.selectNoBoard(bId, userNo);
+		} else if(category == 101 || category == 103){ // 문의/예약
+			b = aService.selectQuBoBoard(bId, userNo);
+		} else {	// 후기
+			b = aService.selectReBoard(bId, userNo);
+		}
+		
+		// 이미지 리스트 조회
+		ArrayList<Image> imgList = aService.selectImg(bId);
+		
+		
+		// 댓글 리스트 조회
+		ArrayList<Reply> replyQuBoList = aService.selectQuBoReply(bId);
+		if (category == 101 || category == 103) {
+			if( replyQuBoList != null && !replyQuBoList.isEmpty()) {
+				// 문의/예약 게시판에서 답글이 있을 시 진행상태를  Y로 변경
+				aService.updateQuBoStatusY(bId);
+			} else {
+				// 답글이 없을 시 N으로 변경
+				aService.updateQuBoStatusN(bId);
+			}
+		}
+		for(Reply r : replyQuBoList) {
+			r.setModifyDate(r.getModifyDate().split(" ")[0]);
+		}
+		
+		if(b != null && imgList != null) {
+			model.addAttribute("b", b);
+			model.addAttribute("imgList", imgList);
+			model.addAttribute("page", page);
+			model.addAttribute("quReply", replyQuBoList);
+			
+			return "boardDetailQuBoAdmin";
+		}else {
+			throw new AdminException("게시글을 불러 오는데 실패했습니다.");
+		}
+	}
 
+	//07.16 수정
+    @RequestMapping("member.admin")
+    public String selectMemberList(@RequestParam(value="page", defaultValue="1") Integer currentPage, 
+                            Model model, HttpSession session) {
+       
+    	// 관리자 버튼을 뜨게 하기위한 장치
+       String grade = ((Member)session.getAttribute("loginUser")).getMemGrade();
+       // 회원 수 조회
+       int memberCount = aService.getMemberListCount();
+       PageInfo pi = Pagination.getPageInfo(currentPage, memberCount, 10);
+       String status = "Y";
+       //회원 리스트 조회
+       ArrayList<Member> memberList = aService.selectMemberList(pi);
+       if(memberList != null) {
+          model.addAttribute("memberList", memberList);
+          model.addAttribute("pi", pi);
+          model.addAttribute("grade", grade);
+          model.addAttribute("status", status);
+          return "member";
+       } else {
+          throw new AdminException("회원 리스트를 불러오는데 실패했습니다.");
+       }
+    }
+	
+	// 회원 등급 말머리 조회
+	@RequestMapping("memGradeFilter.admin")
+	public String memGradeFilter(@RequestParam("memGrade") String memGrade, 
+							   @RequestParam(value="page", defaultValue="1") Integer currentPage, HttpSession session,
+							   Model model) {
+		
+		if(memGrade.equals("whole")) {
+			return "redirect:member.admin";
+		}
+		//관리자 버튼을 뜨게 하기 위한 장치
+		String grade = ((Member)session.getAttribute("loginUser")).getMemGrade();
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("memGrade", memGrade);
+		
+		// 말머리 필터 게시글 수 조회
+		int listMemGradeCount = aService.listMemGradeCount(map);
+		
+		PageInfo pi = Pagination.getPageInfo(currentPage, listMemGradeCount, 10);
+		
+		//NY버튼을 뜨게 하기 위한 장치
+		String status = "Y";
+		
+		// 말머리 필터 게시글 조회
+		ArrayList<Member> memberList = aService.memGradeFilter(map, pi);
+		
+		if(memberList != null) {
+			model.addAttribute("memberList", memberList);
+			model.addAttribute("pi", pi);
+			model.addAttribute("memGrade", memGrade);
+			model.addAttribute("grade", grade);
+			model.addAttribute("status", status);
+			
+			return "member";
+		} else {
+			throw new AdminException("말머리 검색 중 에러가 발생했습니다.");
+		}
+	}
+	
+	
+	// 비밀번호 초기화
+	@RequestMapping("initPassword.admin")
+	public String initPassword(@RequestParam("memberNo") List<Integer> memberNos, HttpSession session) {
+
+	    String pwd = "0000";
+	    String encodedPwd = bcrypt.encode(pwd); // 한 번만 암호화하여 재사용
+	    List<Map<String, Object>> updateList = new ArrayList<>();
+	    
+	    for (int memberNo : memberNos) {
+	        HashMap<String, Object> map = new HashMap<>();
+	        map.put("memberNo", memberNo);
+	        map.put("pwd", encodedPwd);
+	        updateList.add(map);
+	    }
+	    
+	    int result = aService.updatePwd(updateList);
+	    
+	    if (result > 0) {
+	    	session.setAttribute("initPwdSuccessMsg", "비밀번호 초기화에 성공했습니다.");
+	        return "redirect:member.admin";
+	    } else {
+	        throw new AdminException("비밀번호 초기화 중 에러가 발생했습니다.");
+	    }
+	}
+
+	// 회원 상태 변경
+	@RequestMapping("statusChange.admin")
+	public String statusChange(@RequestParam("memberNo") List<String> memberNos, HttpSession session) {
+		int result = aService.statusChange(memberNos);
+		
+		if( result > 0) {
+			session.setAttribute("statusChangeSuccess", "해당 회원이 탈퇴되었습니다.");
+			return "redirect:member.admin";
+		} else {
+			throw new AdminException("탈퇴처리 중 오류가 발생했습니다.");
+		}
+	}
+	
+	// 회원 검색
+	@RequestMapping("searchMember.admin")
+	public String searchMember(@RequestParam("condition") String condition,
+			   				   @RequestParam("search") String search,
+							   @RequestParam(value="page", defaultValue="1") Integer currentPage, HttpServletRequest request,
+							   HttpSession session, Model model) {
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("condition", condition);
+		map.put("search", search);
+		
+		
+		String grade = ((Member)session.getAttribute("loginUser")).getMemGrade();
+		// 검색어 게시글 수 조회
+		int memberCount = aService.listSearchMemberCount(map);
+		
+		PageInfo pi = Pagination.getPageInfo(currentPage, memberCount, 10);	
+		
+		ArrayList<Member> memberList = aService.searchMember(map, pi);
+		
+		if(memberList != null) {
+			model.addAttribute("memberList", memberList);
+			model.addAttribute("pi", pi);
+			model.addAttribute("condition", condition);
+			model.addAttribute("search", search);
+			model.addAttribute("grade", grade);
+			return "member";
+		} else {
+			throw new AdminException("검색에 실패했습니다.");
+		}
+	}
+	
+	//일반 회원 WORKER로 변경07.16
+    @RequestMapping("changeGrade.admin")
+    public String changeGrade(@RequestParam("memNo") int memNo, Model model) {
+       
+       
+       //관리자인지 확인
+       Member m  = aService.checkGrade(memNo);
+       String memGrade = m.getMemGrade();
+       
+       //관리자가 아니면 교체 맞으면 이미 관리자라는 알림(한명이라도 있으면 안됨)
+       if(memGrade.equals("CONSUMER")) {
+          int result = aService.changeGrade(memNo);
+          if(result > 0) {
+             return "alert";
+          }else {
+             throw new AdminException("등급 전환에 실패하였습니다.");
+          }
+       }else {
+          return "alertWorker";
+       }
+    }
+    
+    //07.16
+    //탈퇴 회원만 출력
+    @RequestMapping("notNormalView.admin")
+    public String notNormalView(@RequestParam("status") String status,
+    							@RequestParam(value="memGrade", required=false) String memGrade,
+    							@RequestParam(value="page", defaultValue="1") Integer currentPage, 
+    							Model model, HttpSession session) {
+    	
+    	//관리자 버튼 뜨게 하기 위한 장치
+    	String grade = ((Member)session.getAttribute("loginUser")).getMemGrade();
+    	
+    	//말머리 검색 후 탈퇴 정상 회원 조회
+    	if(memGrade.equals("CONSUMER") || memGrade.equals("WORKER") || memGrade.equals("MANAGER") ) {
+    		int memberCount = aService.memberGradeListCount(memGrade);
+    		
+    		PageInfo pi = Pagination.getPageInfo(currentPage, memberCount, 10);
+    		
+    		ArrayList<Member> memberList = aService.memberStatGra(memGrade, pi);
+    		
+    		model.addAttribute("memberList", memberList);
+    		model.addAttribute("pi", pi);
+    		model.addAttribute("grade", grade);
+    		model.addAttribute("status", status);
+    		return "member";
+    	}else {
+    		//페이지네이션을 위한 리스트 수
+    		int memberCount = aService.memberStatusListCount(status);
+    		
+    		PageInfo pi = Pagination.getPageInfo(currentPage, memberCount, 10);
+    		
+    		ArrayList<Member> memberList = aService.memberStatus(pi);
+    		
+    		model.addAttribute("memberList", memberList);
+    		model.addAttribute("pi", pi);
+    		model.addAttribute("grade", grade);
+    		model.addAttribute("status", status);
+    		return "member";
+    	}
+    	
+    }
+    //07.16
+    //정상 회원만 출력
+    @RequestMapping("normalView.admin")
+    public String normalView(@RequestParam("status") String status,
+    						 @RequestParam(value="memGrade", required=false) String memGrade,
+    		                 @RequestParam(value="page", defaultValue="1") Integer currentPage,
+    		                 Model model, HttpSession session) {
+    	// 관리자 버튼 뜨게 하기 위한 장치
+		String grade = ((Member)session.getAttribute("loginUser")).getMemGrade();
+		
+		if(memGrade.equals("CONSUMER") || memGrade.equals("WORKER") || memGrade.equals("MANAGER") ) {
+    		int memberCount = aService.memberGradeYListCount(memGrade);
+    		
+    		PageInfo pi = Pagination.getPageInfo(currentPage, memberCount, 10);
+    		
+    		ArrayList<Member> memberList = aService.memberStatGraY(memGrade, pi);
+    		
+    		model.addAttribute("memberList", memberList);
+    		model.addAttribute("pi", pi);
+    		model.addAttribute("grade", grade);
+    		model.addAttribute("status", status);
+    		return "member";
+    	}else {
+    		//페이지네이션을 위한 리스트 수
+    		int memberCount = aService.memberStatusYListCount(status);
+    		
+    		PageInfo pi = Pagination.getPageInfo(currentPage, memberCount, 10);
+    		
+    		ArrayList<Member> memberList = aService.memberStatusY(pi);
+    		
+    		model.addAttribute("memberList", memberList);
+    		model.addAttribute("pi", pi);
+    		model.addAttribute("grade", grade);
+    		model.addAttribute("status", status);
+    		return "redirect:member.admin";
+    	}
+    }
 	
 	
 }

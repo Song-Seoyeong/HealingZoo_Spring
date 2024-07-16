@@ -608,11 +608,10 @@
 		insert all
 		<foreach collection="list" item="img" separator=" ">
 			into Image values(new_img_id, #{img.imgPath}, #{img.imgName},
-			#{img.imgRename}, #{img.imgRefNum}, #{img.imgRefType}, default)
+			#{img.imgRename}, #{img.imgRefNum}, #{img.imgRefType}, default, default)
 		</foreach>
 		select * from dual
 	</insert>
-	<!-- 이미지 등록 -->
 
 	<!-- 후기 리스트 상세 글 조회 -->
 	<select id="selectReBoard" resultMap="reBoard">
@@ -878,6 +877,259 @@
 	</insert>
 	<!-- 프로그램 안내 메인이미지 -->
 	
+	<!-- 인사말 이미지 삭제 -->
+    <delete id="deleteGreeting">
+        <![CDATA[
+        DELETE FROM image
+        WHERE img_ref_type = 'GREETING'
+        AND img_no < (
+            SELECT MAX(img_no)
+            FROM image
+            WHERE img_ref_type = 'GREETING'
+        )
+        ]]>
+    </delete>
+    
+ 	<!-- 오시는길 이미지 삭제 -->
+    <delete id="deleteWay">
+        <![CDATA[
+        DELETE FROM image
+        WHERE img_ref_type = 'WAY'
+        AND img_no < (
+            SELECT MAX(img_no)
+            FROM image
+            WHERE img_ref_type = 'WAY'
+        )
+        ]]>
+    </delete>
 	
+	
+	<!-- 문의,예약 댓글 불러오기 07.15 추가-->
+	<select id="selectQuBoReply" resultMap="QuBoReply">
+		select *
+		from QU_REPLY
+			join board using(board_no)
+		where board_no = ${bId} 
+		order by board_no desc
+	</select>
+	<!-- 07.15 추가 -->
+	<resultMap type="Reply" id="QuBoReply">
+		<result column = "REPLY_CONTENT" property="reContent"/>
+		<result column = "REPLY_NO" property="reNo"/>
+	</resultMap> 
+	
+	<!-- 문의,예약 댓글 삽입 07.15 추가 -->
+	<insert id="insertQuBoReply">
+		insert into QU_REPLY
+			values(seq_reply.nextval, #{boardNo}, #{reContent}, sysdate, sysdate)
+	</insert>
+	
+	<!-- 문의,예약 댓글 삭제 07.15 추가 -->
+	<delete id="deleteQuBoReply">
+		delete from QU_REPLY
+		WHERE REPLY_NO = #{reId}
+	</delete>
+	
+	<!-- 문의 예약 댓글 수정 07.15 추가 -->
+	<update id="updateQuBoReply">
+		update QU_REPLY
+		set REPLY_CONTENT = #{reContent}
+		where reply_no = #{reNo}
+	</update>
+	
+	<!-- 멤버 수 카운트 07.16 -->
+	<select id="getMemberListCount" resultType="_int">
+		select count(*)
+		from member
+	</select>
+	
+	<!-- 멤버 리스트 불러오기 07.16 -->
+	<select id="selectMemberList" resultType="Member">
+		select *
+		from member
+		where mem_active = 'Y'
+		order by mem_no desc
+	</select>
+	<!-- 07.16 -->
+	<select id="listMemGradeCount" resultType="_int">
+		select count(*)
+		from member
+		where mem_grade = #{memGrade} and mem_Active = 'Y'
+	</select>
+	
+	<!-- 회원 말머리 필터 - 회원 리스트 검색 -->
+	<select id="memGradeFilter" resultType="Member">
+		select *
+		from member
+		where mem_grade = #{memGrade} and mem_Active = 'Y'
+		order by mem_no desc
+	</select>
+	
+	<select id="listMemActiveCountY" resultType="_int">
+		select count(*) from member
+		<where>
+			 mem_active = 'Y'
+			 <if test="memGrade==CONSUMER">
+			 	and mem_grade = 'CONSUMER'
+			 </if>
+			 <if test="memGrade==MANAGER">
+			 	and mem_grade = 'MANAGER'
+			 </if>
+			 <if test="memGrade==WORKER">
+			 	and mem_grade = 'WORKER'
+			 </if>
+		</where> 
+	</select>
+	
+	<select id="listMemActiveCountN" resultType="_int">
+		select count(*) from member 
+		<where>
+			mem_Active = 'N'
+			<if test="memGrade==CONSUMER">
+				and mem_grade = 'CONSUMER'
+			</if>
+			<if test="memGrade==MANAGER">
+				and mem_grade = 'MANAGER'
+			</if>
+			<if test="memGrade==WORKER">
+				and mem_grade = 'WORKER'
+			</if>
+		</where>
+	</select>
+	
+	<select id="memActiveFilterY" resultType="Member">
+		select * from member 
+		where mem_Active = 'Y'
+			<if test="memGrade=CONSUMER">
+			 	and mem_grade = 'CONSUMER'
+			 </if>
+			 <if test="memGrade=MANAGER">
+			 	and mem_grade = 'MANAGER'
+			 </if>
+			 <if test="memGrade=WORKER">
+			 	and mem_grade = 'WORKER'
+			 </if>
+			 order by mem_no desc
+	</select>
+	
+	<select id="memActiveFilterN" resultType="Member">
+		select * from member 
+		where mem_active = 'N'
+			<if test="memGrade=CONSUMER">
+			 	and mem_grade = 'CONSUMER'
+			 </if>
+			 <if test="memGrade=MANAGER">
+			 	and mem_grade = 'MANAGER'
+			 </if>
+			 <if test="memGrade=WORKER">
+			 	and mem_grade = 'WORKER'
+			 </if>
+			 order by mem_no desc
+	</select>
 
+	<!--  비밀번호 초기화 -->
+	<update id="updatePwd">
+	    UPDATE MEMBER
+    	SET MEM_PWD = #{pwd}
+    	WHERE MEM_NO = #{memberNo}
+	</update>
+	
+	<update id="statusChange">
+		update member
+		set mem_Active = 'N'
+		where mem_no = #{memberNo}
+	</update>
+	
+	<!--  회원 검색 -->
+	<select id="listSearchMemberCount" resultType="_int">
+		select count(*) from member
+		<where>
+			<if test="condition == 'memName'">MEM_NAME like '%' || #{search} || '%'</if>
+			<if test="condition == 'memId'">MEM_ID like '%' || #{search} || '%'</if>
+			<if test="condition == 'memPhone'">MEM_PHONE like '%' || #{search} || '%'</if>
+		</where>
+	</select>
+	
+	<select id="searchMember" resultType="Member">
+		select * from member
+		<where>
+			<if test="condition == 'memName'">MEM_NAME like '%' || #{search} || '%'</if>
+			<if test="condition == 'memId'">MEM_ID like '%' || #{search} || '%'</if>
+			<if test="condition == 'memPhone'">MEM_PHONE like '%' || #{search} || '%'</if>
+		</where>
+		order by mem_no desc
+	</select>
+	
+	<!-- 등급 변경 07.16 -->
+   <update id="changeGrade">
+      update member
+      set MEM_GRADE = 'WORKER'
+      where MEM_NO = #{memNO}
+   </update>
+   
+   <!-- 관리자 확인 07.16 -->
+   <select id="checkGrade" resultType="Member">
+      select *
+      from MEMBER
+      where MEM_NO = #{memNO}
+   </select>
+	
+	<!-- 상태가 N인 멤버수 조회 07.16 -->
+	<select id="memStatList" resultType="_int">
+		select count(*)
+		from MEMBER
+		where MEM_ACTIVE = 'N'
+	</select>
+	
+	<!-- 상태가 N인 멤버 리스트 조회 -->
+	<select id="memberStatus" resultType="Member">
+		select *
+		from MEMBER
+		where MEM_ACTIVE = 'N'
+		order by mem_no desc
+	</select>
+	
+	<!-- 상태가 Y인 멤버수 조회 07.16 -->
+	<select id="memStatYList" resultType="_int">
+		select count(*)
+		from MEMBER
+		where MEM_ACTIVE = 'Y'
+	</select>
+	
+	<!-- 상태가 Y인 멤버 리스트 조회 -->
+	<select id="memberStatusY" resultType="Member">
+		select *
+		from MEMBER
+		where MEM_ACTIVE = 'Y'
+		order by mem_no desc
+	</select>
+	
+	<!-- 말머리 검색 시 상태가 N인 멤버 수 -->
+	<select id="memGradeList" resultType="_int">
+		select count(*)
+		from member
+		where MEM_ACTIVE = 'N' and MEM_GRADE = #{memGrade}
+	</select>
+	<!-- 말머리 검색시 상태가 N인 멤버 조회 -->
+	<select id="memberStatGra" resultType="Member">
+		select *
+		from member
+		where MEM_ACTIVE = 'N' and MEM_GRADE = #{memGrade}
+		order by mem_no desc
+	</select>
+	
+	<!--  말머리 검색시 상태가 Y인 멤버 수 -->
+	<select id="memGradeYList" resultType="_int">
+		select count(*)
+		from member
+		where MEM_ACTIVE = 'Y' and MEM_GRADE = #{memGrade}
+	</select>
+	
+	<!-- 말머리 검색시 상태가 Y인 멤버 조회 -->
+	<select id="memberStatGraY" resultType="Member">
+		select *
+		from member
+		where MEM_ACTIVE = 'Y' and MEM_GRADE = #{memGrade}
+		order by mem_no desc
+	</select>
 </mapper>

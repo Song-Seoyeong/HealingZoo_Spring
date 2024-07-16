@@ -62,14 +62,12 @@
 	  .right-image {
 	      flex-direction: row-reverse;
 	  }
-	  #staff1 img,#staff2 img,#staff3 img,#staff4 img,#staff5 img{
-	  	width: 100px; /* 원하는 너비 설정 */
-		height: 100px; /* 원하는 높이 설정 */
-	  }
 	  
 	  .staff img {
 	      border-radius: 50%;
 	      margin: 0 20px;
+	      width: 100px; /* 원하는 너비 설정 */
+		height: 100px; /* 원하는 높이 설정 */
 	  }
 	  .staff .description {
 	      flex: 1;

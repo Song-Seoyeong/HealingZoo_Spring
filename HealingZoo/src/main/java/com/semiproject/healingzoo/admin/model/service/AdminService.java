@@ -13,6 +13,7 @@ import com.semiproject.healingzoo.board.model.vo.Image;
 import com.semiproject.healingzoo.board.model.vo.Link;
 import com.semiproject.healingzoo.board.model.vo.PageInfo;
 import com.semiproject.healingzoo.board.model.vo.Reply;
+import com.semiproject.healingzoo.member.model.vo.Member;
 
 public interface AdminService {
 	
@@ -257,6 +258,68 @@ public interface AdminService {
 
 	void deleteExistingShowImage();
 	
+	void deleteGreeting();
+
+	void deleteWay();
+
+	ArrayList<Reply> selectQuBoReply(int bId);
+	//07.15
+	int insertQuBoReply(Reply r);
+	//07.15
+	int deleteQuBoReply(int reId);
+	//07.15
+	int updateQuBoReply(Reply r);
 	
+// 회원 수 조회
+	int getMemberListCount();
 	
+	// 회원 리스트 조회
+	ArrayList<Member> selectMemberList(PageInfo pi);
+
+	// 회원 등급 말머리 필터 - 회원 수 검색
+	int listMemGradeCount(HashMap<String, Object> map);
+
+	// 회원 등급 말머리 필터 - 회원 리스트 조회
+//		ArrayList<Member> memGradeFilter(String memGrade, PageInfo pi);
+	ArrayList<Member> memGradeFilter(HashMap<String, Object> map, PageInfo pi);
+
+	// 회원 상태 말머리 필터 - 회원 수 검색
+	int listMemActiveCount(HashMap<String, Object> map);
+
+	// 회원 상태 말머리 필터 - 회원 리스트 조회
+//		ArrayList<Member> memActiveFilter(String memActive, PageInfo pi);
+	ArrayList<Member> memActiveFilter(HashMap<String, Object> map, PageInfo pi);
+
+	// 비밀번호 초기화
+	int updatePwd(List<Map<String, Object>> updateList);
+
+	// 회원 상태 변경
+	int statusChange(List<String> memberNos);
+
+	// 회원 검색
+	int listSearchMemberCount(HashMap<String, Object> map);
+
+	ArrayList<Member> searchMember(HashMap<String, Object> map, PageInfo pi);
+
+	//07.16 등급변환
+    int changeGrade(int memNo);
+   
+    //07.16 관리자 확인
+    Member checkGrade(int memNo);
+    //07.16 상태에따른 멤머 리스트 조회
+	int memberStatusListCount(String status);
+	//07.16
+	ArrayList<Member> memberStatus(PageInfo pi);
+	//07.16
+	int memberStatusYListCount(String status);
+	//07.16
+	ArrayList<Member> memberStatusY(PageInfo pi);
+	//07.16
+	int memberGradeListCount(String memGrade);
+	//07.16
+	ArrayList<Member> memberStatGra(String memGrade, PageInfo pi);
+	//07.16
+	int memberGradeYListCount(String memGrade);
+	//07.16
+	ArrayList<Member> memberStatGraY(String memGrade, PageInfo pi);
 }

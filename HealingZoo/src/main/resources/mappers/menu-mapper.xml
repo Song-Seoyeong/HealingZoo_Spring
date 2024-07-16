@@ -31,7 +31,7 @@
 		        AND IMG_REF_NUM IN (SELECT MEM_NO
 		                            FROM MEMBER
 		                            WHERE MEM_GRADE IN ('MANAGER', 'WORKER'))
-		ORDER BY IMG_REF_NUM
+		ORDER BY IMG_REF_NUM desc
 	</select>
 	
 	<!-- 인사말 스탭 문구 -->
@@ -39,6 +39,7 @@
 		select mem_intro
 		from member
 		where mem_grade in ('MANAGER', 'WORKER')
+		order by mem_no desc
 	</select>
 	
 	<!-- 오시는길 주소 -->

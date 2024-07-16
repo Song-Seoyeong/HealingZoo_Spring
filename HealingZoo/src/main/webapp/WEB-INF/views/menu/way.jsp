@@ -117,7 +117,7 @@
             <div class="way-bar"></div> <!-- 가운데 바 위치 -->
             <div class="way-bar2"></div>
             <div class="waydirections">
-                <img src="${contextPath }/resources/image/${image.imgRename}" alt="오는 지도">
+                <img src="${contextPath }/resources/uploadImg/${image.imgRename}" alt="오는 지도">
             </div>
         </div>
     </div>
