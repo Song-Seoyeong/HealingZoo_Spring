@@ -49,12 +49,13 @@
         flex-direction: column;
         align-items: center;
         padding: 20px;
+        margin-left: 180px;
     }
 
     .animal-card {
         background-color: white;
         border-radius: 10px;
-        width: 1100px;
+        width: 900px;
         height: auto;
         margin: 30px;
         overflow: hidden;
@@ -76,10 +77,12 @@
 
     .animal-card .content {
         width: 60%;
+        max-width: 350px; /* 최대 너비를 픽셀로 제한 */
         padding: 45px;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        overflow: hidden; /* 넘치는 부분을 숨김 */
         
     }
 

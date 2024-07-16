@@ -3,6 +3,7 @@ package com.semiproject.healingzoo.admin.model.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.semiproject.healingzoo.admin.model.vo.Show;
 import com.semiproject.healingzoo.board.model.vo.Animal;
@@ -28,9 +29,9 @@ public interface AdminService {
 
 	void deleteGoodsImage(int goodsNo);
 
-	ArrayList<Animal> selectFamilyList(PageInfo pi);
+	ArrayList<Animal> selectFamilyList(PageInfo pi, Map<String, String> filters);
 
-	int getAnimalCount();
+	int getAnimalCount(Map<String, String> filters);
 
 	ArrayList<Goods> selectMascotList();
 	
@@ -255,5 +256,7 @@ public interface AdminService {
 	Link getShowLink();
 
 	void deleteExistingShowImage();
+	
+	
 	
 }
