@@ -289,7 +289,7 @@ public class BoardController {
 		if (deleteBoardResult + deleteImgResult + deleteReplyResult == 1 + listSize + relistSize) {
 			return "redirect:" + category + ".menu";
 		} else {
-			throw new BoardException("게시글 삭제 중 에러 발생");
+			throw new BoardException("게시글을 삭제 중 에러가 발생하였습니다");
 		}
 	}
 
@@ -392,6 +392,9 @@ public class BoardController {
 			
 			return "redirect:boardView.bo";
 		} else {
+			for(Image i : imgList) {
+				delete(i.getImgRename(), request);
+			}
 			throw new BoardException("게시판 수정에 실패했습니다.");
 		}
 	}

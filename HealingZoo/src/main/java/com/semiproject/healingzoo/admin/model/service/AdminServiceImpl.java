@@ -767,5 +767,16 @@ public class AdminServiceImpl implements AdminService {
 	public ArrayList<Member> memberStatGraY(String memGrade, PageInfo pi) {
 		return aDAO.memberStatGraY(sqlSession, memGrade, pi);
 	}
-		
+	
+	//07.17
+	@Override
+	public Member checkCon(int memNo) {
+		return aDAO.checkCon(sqlSession, memNo);
+	}
+	//07.17
+	@Override
+	public int changeCon(int memNo) {
+		return aDAO.changeCon(sqlSession, memNo);
+	}
+	
 }

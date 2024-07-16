@@ -730,4 +730,14 @@ public class AdminDAO {
 		return (ArrayList)sqlSession.selectList("adminMapper.memberStatGraY",memGrade, rowBounds);
 	}
 	
+	//07.17
+	public Member checkCon(SqlSession sqlSession, int memNo) {
+		return sqlSession.selectOne("adminMapper.checkCon", memNo);
+	}
+
+	//07.17
+	public int changeCon(SqlSession sqlSession, int memNo) {
+		return sqlSession.update("adminMapper.changeCon",memNo);
+	}
+	
 }

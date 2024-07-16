@@ -39,7 +39,7 @@
 	}
 	#grade_button{
        background-color: #65B741;
-      width: 80px;
+      width: 100px;
       border: none;
       margin-right: 5px;
    }	
@@ -105,7 +105,8 @@
 		  </tbody>
 		</table>
 		<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <c:if test="${ grade == 'MANAGER' }"><button class="btn btn-primary" type="button" id="grade_button" onclick="change()">직원</button></c:if>
+			 <c:if test="${ grade == 'MANAGER' }"><button class="btn btn-primary" type="button" id="grade_button" onclick="changeCon()">회원등급</button></c:if>
+            <c:if test="${ grade == 'MANAGER' }"><button class="btn btn-primary" type="button" id="grade_button" onclick="change()">직원등급</button></c:if>
             <button class="btn btn-primary" type="button" id="init_button">초기화</button>
             <button class="btn btn-primary" type="button" id="delete_button">탈퇴</button>
          </div>    
@@ -215,7 +216,7 @@
 		  }
 		});
 	 	
-		//관리자 버튼 클릭시 관리자로 전환 단, master계정일 때만 가능
+		//직원등급 버튼 클릭시 관리자로 전환 단, master계정일 때만 가능
 		function change(){
 			 let checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
 	          const updateBoardNos = Array.from(checkboxes).map(cb => cb.value).join(',');
@@ -234,6 +235,26 @@
 	             }
 	          }	
 		}
+		//회원등급 버튼 클릭시 일반회원으로 전환 단, master 계정일 떄만 가능
+		function changeCon(){
+			 let checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+	          const updateBoardNos = Array.from(checkboxes).map(cb => cb.value).join(',');
+	          if(updateBoardNos == 0) {
+	             alert("선택 사항을 확인해주세요")
+	             return
+	          }else{
+	             let answer = confirm("등급전환을 하시겠습니까?");
+	             if(answer){
+	                for(const checkbox of checkboxes){
+	                   let memNo = checkbox.value;
+	                   location.href="${contextPath}/changeCon.admin?memNo=" + memNo;
+	                }
+	             }else{
+	               return;                   
+	             }
+	          }	
+		}
+		
        
        // N 버튼 클릭 시 탈퇴만 출력
        function notNormal(){
