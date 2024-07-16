@@ -93,8 +93,10 @@ tr {
 		<h2
 			style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;">동물
 			목록</h2>
-		<form action="${contextPath}/animalDelete" method="post"
-			id="deleteForm">
+		<form action="${contextPath}/animalDelete" method="post" id="deleteForm">
+		    <input type="hidden" name="animalClass" id="hiddenAnimalClass" value="ALL">
+		    <input type="hidden" name="extinctGrade" id="hiddenExtinctGrade" value="ALL">
+		    <input type="hidden" name="page" value="${pi.currentPage}">
 			<table class="table">
 				<thead>
 					<tr>
@@ -102,23 +104,25 @@ tr {
 						<th scope="col"><input class="form-check-input"
 						            type="checkbox" name="selectAll" id="selectAll"></th>
 						<th scope="col">번호</th>
-						<th scope="col"><select id="animalClassFilter"
-						            style="width: 60px; border: none;">
-							<option value="ALL" selected>전체</option>
-							<option value="포유류">포유류</option>
-							<option value="조류">조류</option>
-							<option value="파충류">파충류</option>
-						</select></th>
+						<th scope="col">
+						    <select id="animalClassFilter" name="animalClass" style="width: 70px; border: none;">
+						        <option value="ALL" ${animalClass == 'ALL' ? 'selected' : ''}>전체</option>
+						        <option value="포유류" ${animalClass == '포유류' ? 'selected' : ''}>포유류</option>
+						        <option value="조류" ${animalClass == '조류' ? 'selected' : ''}>조류</option>
+						        <option value="파충류" ${animalClass == '파충류' ? 'selected' : ''}>파충류</option>
+						    </select>
+						</th>
 						<th scope="col">소분류</th>
 						<th scope="col">동물 이름</th>
-						<th scope="col"><select id="extinctGradeFilter"
-						            style="width: 60px; border: none;">
-							<option value="ALL" selected>전체</option>
-							<option value="EX">절멸</option>
-							<option value="CR">위급</option>
-							<option value="EN">위기</option>
-							<option value="VU">취약</option>
-						</select></th>
+						<th scope="col">
+						    <select id="extinctGradeFilter" name="extinctGrade" style="width: 60px; border: none;">
+						        <option value="ALL" ${extinctGrade == 'ALL' ? 'selected' : ''}>등급</option>
+						        <option value="EX" ${extinctGrade == 'EX' ? 'selected' : ''}>절멸</option>
+						        <option value="CR" ${extinctGrade == 'CR' ? 'selected' : ''}>위급</option>
+						        <option value="EN" ${extinctGrade == 'EN' ? 'selected' : ''}>위기</option>
+						        <option value="VU" ${extinctGrade == 'VU' ? 'selected' : ''}>취약</option>
+						    </select>
+						</th>
 						<th scope="col">입소날짜</th>
 					</tr>
 				</thead>
@@ -198,32 +202,30 @@ tr {
 	document.addEventListener('DOMContentLoaded', function() {
 	    const animalClassFilter = document.getElementById('animalClassFilter');
 	    const extinctGradeFilter = document.getElementById('extinctGradeFilter');
-	    const tableRows = document.querySelectorAll('tbody tr');
-	
-	    function filterTable() {
+
+	    function applyFilter() {
 	        const selectedClass = animalClassFilter.value;
 	        const selectedGrade = extinctGradeFilter.value;
-	
-	        tableRows.forEach((row) => {
-	            const rowClass = row.children[2].textContent.trim();
-	            const rowGrade = row.children[5].textContent.trim();
-	            
-	            const classMatch = selectedClass === 'ALL' || rowClass === selectedClass;
-	            const gradeMatch = selectedGrade === 'ALL' || rowGrade === selectedGrade;
-	
-	            if (classMatch && gradeMatch) {
-	                row.style.display = '';
-	            } else {
-	                row.style.display = 'none';
-	            }
-	        });
+
+	        // 현재 URL 가져오기
+	        const currentUrl = new URL(window.location.href);
+
+	        // URL 파라미터 업데이트
+	        currentUrl.searchParams.set('animalClass', selectedClass);
+	        currentUrl.searchParams.set('extinctGrade', selectedGrade);
+	        currentUrl.searchParams.set('page', '1'); // 필터 변경 시 첫 페이지로 이동
+
+	        // 페이지 새로고침
+	        window.location.href = currentUrl.toString();
 	    }
 
-	    animalClassFilter.addEventListener('change', filterTable);
-	    extinctGradeFilter.addEventListener('change', filterTable);
+	    animalClassFilter.addEventListener('change', applyFilter);
+	    extinctGradeFilter.addEventListener('change', applyFilter);
 
-	    // 초기 필터링 실행
-	    filterTable();
+	    // 페이지 로드 시 현재 선택된 필터 값 설정
+	    const urlParams = new URLSearchParams(window.location.search);
+	    animalClassFilter.value = urlParams.get('animalClass') || 'ALL';
+	    extinctGradeFilter.value = urlParams.get('extinctGrade') || 'ALL';
 	});
 
 	// 추가 클릭시

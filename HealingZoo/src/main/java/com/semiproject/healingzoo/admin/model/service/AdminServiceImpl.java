@@ -3,6 +3,7 @@ package com.semiproject.healingzoo.admin.model.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,14 +44,13 @@ public class AdminServiceImpl implements AdminService {
 	}
 	
 	@Override
-	public ArrayList<Animal> selectFamilyList(PageInfo pi) {
-		return aDAO.selectFamilyList(sqlSession,pi);
+	public ArrayList<Animal> selectFamilyList(PageInfo pi,Map<String, String> filters) {
+		return aDAO.selectFamilyList(sqlSession,pi,filters);
 	}
 
-	
 	@Override
-	public int getAnimalCount() { 
-		return aDAO.getAnimalCount(sqlSession); 
+	public int getAnimalCount(Map<String, String> filters) { 
+		return aDAO.getAnimalCount(sqlSession,filters); 
 	}
 
 	@Override
@@ -230,13 +230,13 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public int getShowListCount() {
 		return aDAO.getShowListCount(sqlSession);
-	}
+	}//
 
 
 	@Override
 	public ArrayList<Show> getShowList(PageInfo pi) {
 		return aDAO.getShowList(sqlSession, pi);
-	}
+	}//
 
 
 	@Override
@@ -290,31 +290,31 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public int getListCount(int i) {
 		return aDAO.getListCount(sqlSession, i);
-	}
+	}//
 	
 	// 공지사항 게시글 리스트 조회
 	@Override
 	public ArrayList<Board> selectNoBoardList(PageInfo pi, int i) {
 		return aDAO.selectNoBoardList(sqlSession, pi, i);
-	}
+	}//
 
 	// 문의사항 게시글 리스트 조회
 	@Override
 	public ArrayList<Board> selectQuBoardList(PageInfo pi, int i) {
 		return aDAO.selectQuBoardList(sqlSession, pi, i);
-	}
+	}//
 
 	// 후기리스트 게시글 리스트 조회
 	@Override
 	public ArrayList<Board> selectReBoardList(PageInfo pi, int i) {
 		return aDAO.selectReBoardList(sqlSession, pi, i);
-	}
+	}//
 
 	// 예약리스트 게시글 리스트 조회
 	@Override
 	public ArrayList<Board> selectBoBoardList(PageInfo pi, int i) {
 		return aDAO.selectBoBoardList(sqlSession, pi, i);
-	}
+	}//
 
 	// 공지사항 게시글 상세 조회
 	@Override
@@ -625,4 +625,6 @@ public class AdminServiceImpl implements AdminService {
 	public int insertShowLink(Link showLink) {
 		return aDAO.insertShowLink(sqlSession, showLink);
 	}
+	
+	
 }

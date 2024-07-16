@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -301,7 +302,6 @@ public class AdminController {
 				list.add(newImg);
 			}
 		}
-		System.out.println(oneEyeLink);
 		int result = 0;
 		
 		Link link = new Link();
@@ -472,8 +472,6 @@ public class AdminController {
 		
 		ArrayList<Board> searchList = aService.searchReBoard(map, pi);
 		
-		System.out.println(search);
-		System.out.println(condition);
 		
 		if(searchList != null) {
 			model.addAttribute("list", searchList);
@@ -729,7 +727,7 @@ public class AdminController {
 	        category = aService.getCategoryByBoardNo(boardNoInt);
 	
 	    }
-	    System.out.println(category);
+	    //System.out.println(category);
 	    
 	    if(checkDelete == 1 && category == 100) {
 	    	return "redirect:/notice.admin";
@@ -810,18 +808,26 @@ public class AdminController {
 		}
 	}
 
-	// 동물 목록 조회 0711 +수정+
+	// 동물 목록 조회 0716 +수정+
 	@RequestMapping("animal.admin")
-	public String selectFamilyList(@RequestParam(value = "page", defaultValue = "1") int currentPage, Model model) {
-		int listCount = aService.getAnimalCount();
-
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
-
-		ArrayList<Animal> anilist = aService.selectFamilyList(pi);
-
-		model.addAttribute("list", anilist);
-		model.addAttribute("pi", pi);
-		return "animal";
+	public String selectFamilyList(@RequestParam(value = "page", defaultValue = "1") int currentPage,
+	                               @RequestParam(value = "animalClass", defaultValue = "ALL") String animalClass,
+	                               @RequestParam(value = "extinctGrade", defaultValue = "ALL") String extinctGrade,
+	                               Model model) {
+	    Map<String, String> filters = new HashMap<>();
+	    filters.put("animalClass", animalClass);
+	    filters.put("extinctGrade", extinctGrade);
+	    
+	    int listCount = aService.getAnimalCount(filters); // 수정된 부분
+	    PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+	    ArrayList<Animal> anilist = aService.selectFamilyList(pi, filters);  // 수정된 부분
+	    
+	    model.addAttribute("list", anilist);
+	    model.addAttribute("pi", pi);
+	    model.addAttribute("animalClass", animalClass);
+	    model.addAttribute("extinctGrade", extinctGrade);
+	    
+	    return "animal";
 	}
 
 	// 동물 추가 페이지 이동
@@ -877,7 +883,7 @@ public class AdminController {
 	    }
 	}
 
-	// 동물 수정 처리 0712 
+	// 동물 수정 처리 0715 
 	@PostMapping("animalUpdate")
 	public String animalUpdate(@ModelAttribute Animal animal,
 	                           @RequestParam(value = "file", required = false) MultipartFile file,
@@ -887,29 +893,34 @@ public class AdminController {
 	        // 기존 이미지 정보 가져오기
 	        Image oldImage = aService.selectAnimalImage(animal.getAniNO());
 	        
-	        // 기존 이미지 파일 삭제
-	        if (oldImage != null) {
-	            String uploadPath = request.getSession().getServletContext().getRealPath("/resources/uploadImg");
-	            File oldFile = new File(uploadPath + "/" + oldImage.getImgRename());
-	            if (oldFile.exists()) {
-	                oldFile.delete();
-	            }
-	        }
-	        
 	        // 동물 정보 업데이트
 	        int result = aService.updateAnimal(animal);
 	        
 	        // 새 이미지 처리
 	        if (file != null && !file.isEmpty()) {
-	            String[] imgInfo = saveImg(file, request);
-	            Image newImage = new Image();
-	            newImage.setImgPath("/resources/uploadImg");
-	            newImage.setImgName(file.getOriginalFilename());
-	            newImage.setImgRename(imgInfo[1]);
-	            newImage.setImgRefNum(animal.getAniNO());
-	            newImage.setImgRefType("ANIMAL");
+	            // 기존 이미지 파일 삭제
+	            if (oldImage != null) {
+	                String uploadPath = request.getSession().getServletContext().getRealPath("/resources/uploadImg");
+	                File oldFile = new File(uploadPath + "/" + oldImage.getImgRename());
+	                if (oldFile.exists()) {
+	                    oldFile.delete();
+	                }
+	            }
 	            
-	            aService.updateAnimalImage(newImage);
+	            if (file != null && !file.isEmpty()) {
+	                String[] imgInfo = saveImg(file, request);
+	                Image newImage = new Image();
+	                newImage.setImgPath("/resources/uploadImg");
+	                newImage.setImgName(file.getOriginalFilename());
+	                newImage.setImgRename(imgInfo[1]);
+	                newImage.setImgRefNum(animal.getAniNO());
+	                newImage.setImgRefType("ANIMAL");
+	                
+	                aService.updateAnimalImage(newImage);
+	            }
+	        } else if (oldImage != null) {
+	            // 새 이미지가 없으면 기존 이미지 정보를 유지
+	            aService.updateAnimalImage(oldImage);
 	        }
 	        
 	        if(result > 0) {

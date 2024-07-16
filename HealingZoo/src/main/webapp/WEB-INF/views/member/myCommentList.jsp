@@ -62,7 +62,7 @@
 	<!-- 글 목록 -->
 	<div class="container" style="width: 900px; margin-top: 100px;">
 		<h2 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;">내 댓글 보기</h2>
-		<form action="${contextPath}/selDelComment.me">
+		<form action="${contextPath}/selDelComment.me" onsubmit="return check()">
 		<table class="table table-hover">
 			<thead>
 				<tr>
@@ -201,6 +201,21 @@
 					doSearch(this);
 				}		
 			})
+		}
+		
+		//삭제 버튼 클릭시 알림 버튼
+		function check(){
+			const boNoLists = document.getElementsByName('boNoList')
+			for(let i = 0; i < boNoLists.length; i++){ 
+				const boNoList = boNoLists[i];
+				if(boNoList.checked == false){
+					alert('선택사항을 확인해주세요')
+					return false; 
+				}else{
+					var confirmed = confirm('삭제하시겠습니까')
+					return confirmed;
+				}
+			}
 		}
 		
 		

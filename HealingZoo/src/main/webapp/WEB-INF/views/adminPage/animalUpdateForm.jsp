@@ -71,9 +71,10 @@
 					<div class='row' style='margin:5px;'>
 					    <div class='col-4'>
 					        <c:if test="${not empty image}">
-					            <img src="${pageContext.request.contextPath}${image.imgPath}/${image.imgRename}" alt="Current Animal Image" class="current-image" style="max-width: 100%; height: auto;">
-					            <p>현재 이미지: ${image.imgName}</p>
-					        </c:if>
+								<img src="${pageContext.request.contextPath}${image.imgPath}/${image.imgRename}?v=${System.currentTimeMillis()}" 
+								 alt="Current Animal Image" class="current-image" style="max-width: 100%; height: auto;">
+								<p>현재 이미지: ${image.imgName}</p>
+							</c:if>
 					    </div>
 					    <div class='col-8 text-end' id='fileArea'>
 					        <div style='margin: 5px;'>

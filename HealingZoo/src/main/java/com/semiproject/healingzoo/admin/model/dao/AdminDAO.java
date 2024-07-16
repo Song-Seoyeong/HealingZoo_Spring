@@ -3,6 +3,7 @@ package com.semiproject.healingzoo.admin.model.dao;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
@@ -19,19 +20,20 @@ import com.semiproject.healingzoo.board.model.vo.Reply;
 
 @Repository("aDAO")
 public class AdminDAO {
-	public ArrayList<Animal> selectFamilyList(SqlSession sqlSession, PageInfo pi) { // + 수정 +
-        int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
-        RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-        return (ArrayList) sqlSession.selectList("adminMapper.selectFamilyList",rowBounds);
-    }
 	
 	public void deleteAnimalImage(SqlSession sqlSession, int aniNO) {
 		sqlSession.delete("adminMapper.deleteAnimalImage",aniNO);
 	}
 
 	
-	public int getAnimalCount(SqlSession sqlSession) { //+수정+ return
-		return sqlSession.selectOne("adminMapper.getAnimalCount"); 
+	public ArrayList<Animal> selectFamilyList(SqlSession sqlSession, PageInfo pi,Map<String, String> filters) { // + 수정 +
+        int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+        RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+        return (ArrayList) sqlSession.selectList("adminMapper.selectFamilyList",filters,rowBounds);
+    }
+
+	public int getAnimalCount(SqlSession sqlSession,Map<String, String> filters) { //+수정+ return
+		return sqlSession.selectOne("adminMapper.getAnimalCount",filters); 
 	}
 
 
@@ -567,4 +569,6 @@ public class AdminDAO {
 	public int insertShowLink(SqlSession sqlSession, Link showLink) {
 		return sqlSession.insert("adminMapper.insertShowLink", showLink);
 	}
+	
+	
 }
