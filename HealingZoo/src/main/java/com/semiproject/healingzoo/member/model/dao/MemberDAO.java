@@ -77,7 +77,7 @@ public class MemberDAO {
 	}
 	
 	public int updatePassword(SqlSession sqlSession, Member m) {
-		return sqlSession.update("memberMapper.updatePwd", m);
+		return sqlSession.update("memberMapper.updateSearchPwd", m);
 	}
 
 	public int selDelBoard(SqlSession sqlSession, String boNo) {

@@ -317,4 +317,12 @@
 		where  re_active = 'Y' and re_writer_no = ${memNo} and (board_title like '%' ||  #{value} || '%' or re_content like '%' || #{value} || '%')
 	</select>
 	
+	<!-- 비밀번호 찾기 > 비밀번호 변경 -->
+	<update id="updateSearchPwd">
+		update member
+			set mem_pwd = #{memPwd}
+			where mem_Id = #{memId} and mem_name = #{memName}
+	</update>
+	<!-- 비밀번호 찾기 > 비밀번호 변경 -->
+	
 </mapper>
