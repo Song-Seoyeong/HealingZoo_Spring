@@ -18,6 +18,7 @@ import com.semiproject.healingzoo.board.model.vo.Image;
 import com.semiproject.healingzoo.board.model.vo.Link;
 import com.semiproject.healingzoo.board.model.vo.PageInfo;
 import com.semiproject.healingzoo.board.model.vo.Reply;
+import com.semiproject.healingzoo.member.model.vo.Member;
 
 @Service("aService")
 public class AdminServiceImpl implements AdminService {
@@ -626,5 +627,145 @@ public class AdminServiceImpl implements AdminService {
 		return aDAO.insertShowLink(sqlSession, showLink);
 	}
 	
+	@Override
+	public void deleteGreeting() {
+		aDAO.deleteGreeting(sqlSession);
+	}
+
+	@Override
+	public void deleteWay() {
+		aDAO.deleteWay(sqlSession);
+	}
 	
+	@Override
+	public ArrayList<Reply> selectQuBoReply(int bId) {
+		return aDAO.selectQuBoReply(sqlSession, bId);
+	}
+	//07.15
+	@Override
+	public int insertQuBoReply(Reply r) {
+		return aDAO.insertQuBoReply(sqlSession, r);
+	}
+	//07.15
+	@Override
+	public int deleteQuBoReply(int reId) {
+		return aDAO.deleteQuBoReply(sqlSession, reId);
+	}
+	//07.15
+	@Override
+	public int updateQuBoReply(Reply r) {
+		return aDAO.updateQuBoReply(sqlSession, r);
+	}
+	
+// 회원 수 조회
+	@Override
+	public int getMemberListCount() {
+		return aDAO.getMemberListCount(sqlSession);
+	}
+
+	// 회원 리스트 조회
+	@Override
+	public ArrayList<Member> selectMemberList(PageInfo pi) {
+		return aDAO.selectMemberList(sqlSession, pi);
+	}
+
+	// 회원 등급 말머리 필터 - 회원 수 검색
+	@Override
+	public int listMemGradeCount(HashMap<String, Object> map) {
+		return aDAO.listMemGradeCount(sqlSession, map);
+	}
+
+	// 회원 등급 말머리 필터 - 회원 리스트 조회
+	@Override
+	public ArrayList<Member> memGradeFilter(HashMap<String, Object> map, PageInfo pi) {
+		return aDAO.memGradeFilter(sqlSession, map, pi);
+	}
+
+	// 회원 상태 말머리 필터 - 회원 수 검색
+	@Override
+	public int listMemActiveCount(HashMap<String, Object> map) {
+		return aDAO.listMemActiveCount(sqlSession, map);
+	}
+
+	// 회원 상태 말머리 필터 - 회원 리스트 검색
+	@Override
+	public ArrayList<Member> memActiveFilter(HashMap<String, Object> map, PageInfo pi) {
+		return aDAO.memActiveFilter(sqlSession, map, pi);
+	}
+
+	// 비밀번호 초기화
+	@Override
+	public int updatePwd(List<Map<String, Object>> updateList) {
+		return aDAO.updatePwd(sqlSession, updateList);
+	}
+
+
+	// 회원 상태 변경
+	@Override
+	public int statusChange(List<String> memberNos) {
+		return aDAO.statusChange(sqlSession, memberNos);
+	}
+
+	// 회원 검색 - 회원 수 조회
+	@Override
+	public int listSearchMemberCount(HashMap<String, Object> map) {
+		return aDAO.listSearchMemberCount(sqlSession, map);
+	}
+	// 회원 검색 - 검색어 리스트 조회
+	@Override
+	public ArrayList<Member> searchMember(HashMap<String, Object> map, PageInfo pi) {
+		return aDAO.searchMember(sqlSession, map, pi);
+	}
+
+	// 등급 변환 07.16
+   @Override
+   public int changeGrade(int memNo) {
+      return aDAO.changeGrade(sqlSession, memNo);
+   }
+   //07.16
+   @Override
+   public Member checkGrade(int memNo) {
+      return aDAO.checkGrade(sqlSession, memNo);
+   }
+   //07.16
+	@Override
+	public int memberStatusListCount(String status) {
+		return aDAO.memberStatusListCount(sqlSession, status);
+	}
+	//07.16
+	@Override
+	public ArrayList<Member> memberStatus(PageInfo pi) {
+		return aDAO.memberStatus(sqlSession, pi);
+	}
+	//07.16
+	@Override
+	public int memberStatusYListCount(String status) {
+		return aDAO.memberStatusY(sqlSession, status);
+	}
+	//07.16
+	@Override
+	public ArrayList<Member> memberStatusY(PageInfo pi) {
+		return aDAO.memberStatusY(sqlSession, pi);
+	}
+	//07.16
+	@Override
+	public int memberGradeListCount(String memGrade) {
+		return aDAO.memberGradeListCount(sqlSession, memGrade);
+	}
+	//07.16
+	@Override
+	public ArrayList<Member> memberStatGra(String memGrade, PageInfo pi) {
+		return aDAO.memberStatGra(sqlSession, memGrade, pi);
+	}
+	//07.16
+	@Override
+	public int memberGradeYListCount(String memGrade) {
+		return aDAO.memberGradeYListCount(sqlSession, memGrade);
+	}
+	//07.16
+	@Override
+	public ArrayList<Member> memberStatGraY(String memGrade, PageInfo pi) {
+		return aDAO.memberStatGraY(sqlSession, memGrade, pi);
+	}
+		
 }

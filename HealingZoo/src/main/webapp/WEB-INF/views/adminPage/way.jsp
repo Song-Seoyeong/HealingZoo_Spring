@@ -70,7 +70,7 @@
 				<div class='col-3'>
 				</div>
 				<div class='col-8 text-center' style='font-size:15px; color:#828282;'>
-					<p>지도 timestemp 복사하기 : 카카오맵 > 지도 > 내보내기 > html 소스 보기 > 복사</p>
+					<p>지도 timestemp 복사하기 : 카카오맵 > 지도 > 내보내기 > html 소스 보기 > timestemp 복사</p>
 				</div>
 			</div>
 		    

@@ -17,6 +17,7 @@ import com.semiproject.healingzoo.board.model.vo.Image;
 import com.semiproject.healingzoo.board.model.vo.Link;
 import com.semiproject.healingzoo.board.model.vo.PageInfo;
 import com.semiproject.healingzoo.board.model.vo.Reply;
+import com.semiproject.healingzoo.member.model.vo.Member;
 
 @Repository("aDAO")
 public class AdminDAO {
@@ -570,5 +571,163 @@ public class AdminDAO {
 		return sqlSession.insert("adminMapper.insertShowLink", showLink);
 	}
 	
+	public void deleteGreeting(SqlSession sqlSession) {
+		sqlSession.delete("adminMapper.deleteGreeting");
+	}
+
+	public void deleteWay(SqlSession sqlSession) {
+		sqlSession.delete("adminMapper.deleteWay");
+	}
+	
+	public ArrayList<Reply> selectQuBoReply(SqlSession sqlSession, int bId) {
+		return (ArrayList)sqlSession.selectList("adminMapper.selectQuBoReply",bId);
+	}
+	//07.15
+	public int insertQuBoReply(SqlSession sqlSession, Reply r) {
+		return sqlSession.insert("adminMapper.insertQuBoReply", r);
+	}
+	//07.15
+	public int deleteQuBoReply(SqlSession sqlSession, int reId) {
+		return sqlSession.delete("adminMapper.deleteQuBoReply", reId);
+	}
+	//07.15
+	public int updateQuBoReply(SqlSession sqlSession, Reply r) {
+		return sqlSession.update("adminMapper.updateQuBoReply", r);
+	}
+	// 회원 수 조회
+	public int getMemberListCount(SqlSession sqlSession) {
+		return sqlSession.selectOne("adminMapper.getMemberListCount");
+	}
+
+	// 회원 리스트 조회
+	public ArrayList<Member> selectMemberList(SqlSession sqlSession, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		
+		return (ArrayList)sqlSession.selectList("adminMapper.selectMemberList", null, rowBounds);
+	}
+
+	// 회원 등급 조회 - 회원 수 조회
+	public int listMemGradeCount(SqlSession sqlSession, HashMap<String, Object> map) {
+		String memGrade = (String)map.get("memGrade");
+		return sqlSession.selectOne("adminMapper.listMemGradeCount", map);
+	}
+
+	// 회원 등급 조회 - 회원 리스트 조회
+	public ArrayList<Member> memGradeFilter(SqlSession sqlSession, HashMap<String, Object> map, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		
+		String memGrade = (String)map.get("memGrade");
+		
+		return (ArrayList)sqlSession.selectList("adminMapper.memGradeFilter", map, rowBounds);
+	}
+	
+	// 회원 상태 조회 - 회원 수 조회
+	public int listMemActiveCount(SqlSession sqlSession, HashMap<String, Object> map) {
+		String memActive = (String)map.get("memActive");
+		if(memActive.equals("Y")) {
+			return sqlSession.selectOne("adminMapper.listMemActiveCountY", map);
+		} else {
+			return sqlSession.selectOne("adminMapper.listMemActiveCountN", map);
+		} 
+		
+	}
+
+	// 회원 상태 조회 - 회원 리스트 조회
+	public ArrayList<Member> memActiveFilter(SqlSession sqlSession, HashMap<String, Object> map, PageInfo pi) {
+		String memActive = (String)map.get("memActive");
+		
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		
+//			return (ArrayList)sqlSession.selectList("adminMapper.memActiveFilter", map, rowBounds);
+		if(memActive.equals("Y")) {
+			return (ArrayList)sqlSession.selectList("adminMapper.memActiveFilterY", map, rowBounds);
+			
+		} else {
+			return (ArrayList)sqlSession.selectList("adminMapper.memActiveFilterN", map, rowBounds);
+		}
+	}
+	
+	
+	// 비밀번호 초기화
+	public int updatePwd(SqlSession sqlSession, List<Map<String, Object>> updateList) {
+        int result = 0;
+        for (Map<String, Object> map : updateList) {
+            result += sqlSession.update("adminMapper.updatePwd", map);
+        }
+        return result;
+    }
+
+	// 회원 상태 변경
+	public int statusChange(SqlSession sqlSession, List<String> memberNos) {
+		int result = 0;
+		for(String memberNo : memberNos) {
+			result = sqlSession.update("adminMapper.statusChange", Integer.parseInt(memberNo));
+		}
+		return result;
+	}
+
+	// 회원 검색
+	public int listSearchMemberCount(SqlSession sqlSession, HashMap<String, Object> map) {
+		return sqlSession.selectOne("adminMapper.listSearchMemberCount", map);
+	}
+
+	public ArrayList<Member> searchMember(SqlSession sqlSession, HashMap<String, Object> map, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		
+		return (ArrayList)sqlSession.selectList("adminMapper.searchMember", map, rowBounds);
+	}
+
+	//등급 변환07.16
+   public int changeGrade(SqlSession sqlSession, int memNo) {
+      return sqlSession.update("adminMapper.changeGrade", memNo);
+   }
+   // 등급 확인 07.16
+   public Member checkGrade(SqlSession sqlSession, int memNo) {
+      return sqlSession.selectOne("adminMapper.checkGrade", memNo);
+   }
+	// 상태에 따른 멤버 수 조회 07.16
+	public int memberStatusListCount(SqlSession sqlSession, String status) {
+		return sqlSession.selectOne("adminMapper.memStatList",status);
+	}
+	//상태가 N일때 출력 07.16
+	public ArrayList<Member> memberStatus(SqlSession sqlSession, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return (ArrayList)sqlSession.selectList("adminMapper.memberStatus",null, rowBounds);
+	}
+	// 상태가 Y일 때 수 07.16
+	public int memberStatusY(SqlSession sqlSession, String status) {
+		return sqlSession.selectOne("adminMapper.memStatYList",status);
+	}
+	// 상태가 Y일 때 멤버 수 조회 07.16
+	public ArrayList<Member> memberStatusY(SqlSession sqlSession, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return (ArrayList)sqlSession.selectList("adminMapper.memberStatusY",null, rowBounds);
+	}
+	//말머리 조회시 N인 수 07.16
+	public int memberGradeListCount(SqlSession sqlSession, String memGrade) {
+		return sqlSession.selectOne("adminMapper.memGradeList", memGrade);
+	}
+	// 말머리 조회시 N인 멤버 조회 07.16
+	public ArrayList<Member> memberStatGra(SqlSession sqlSession, String memGrade, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return (ArrayList)sqlSession.selectList("adminMapper.memberStatGra",memGrade, rowBounds);
+	}
+	//07.16
+	public int memberGradeYListCount(SqlSession sqlSession, String memGrade) {
+		return sqlSession.selectOne("adminMapper.memGradeYList", memGrade);
+	}
+	//07.16
+	public ArrayList<Member> memberStatGraY(SqlSession sqlSession, String memGrade, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return (ArrayList)sqlSession.selectList("adminMapper.memberStatGraY",memGrade, rowBounds);
+	}
 	
 }

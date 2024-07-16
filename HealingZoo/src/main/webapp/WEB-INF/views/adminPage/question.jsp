@@ -51,7 +51,7 @@
 	<div class="container" style="width: 900px; margin-top: 100px;">
 		<h2 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;">문의사항</h2>
 
-		<table class="table text-center">
+		<table class="table table-hover text-center">
 			<thead>
 				<tr>
 					<th scope="col" style="width: 3%;"><input class="form-check-input" type="checkbox" id="checkAll"></th>
@@ -140,7 +140,7 @@
 			const parent = td.parentElement;
 			td.addEventListener('click', ()=>{
 				const boardNo = parent.children[1].innerText;
-				location.href = '${contextPath}/boardView.admin?bId=' + boardNo + "&page=" + ${pi.currentPage} + "&category=101";
+				location.href = '${contextPath}/boardQuBoView.admin?bId=' + boardNo + "&page=" + ${pi.currentPage} + "&category=101";
 			});
 		}
 		
@@ -191,6 +191,13 @@
 				checkbox.checked = this.checked;
 			});	
 		});   
+	    
+		//해당 게시글 마우스오버시 포인터 변환
+		for(const td of tds){
+			td.addEventListener('mouseover',function() {
+				this.style.cursor = 'pointer';
+			})
+		}	
 		</script>
 
 

@@ -53,7 +53,7 @@ tr {
 	<!-- 글 목록 -->
 	<div class="container" style="width: 900px; margin-top: 100px; margin-bottom:150px;">
 		<h2 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;">예약 리스트</h2>
-		<table class="table">
+		<table class="table table-hover">
 			<thead>
 				<tr>
 					<th scope="col" style="width: 3%"><input class="form-check-input" type="checkbox" id="checkAll"></th>
@@ -151,7 +151,7 @@ tr {
 			const parent = td.parentElement;
 			td.addEventListener('click', ()=>{
 				const boardNo = parent.children[1].innerText;
-				location.href = '${contextPath}/boardView.admin?bId=' + boardNo + "&page=" + ${pi.currentPage} + "&category=103";
+				location.href = '${contextPath}/boardQuBoView.admin?bId=' + boardNo + "&page=" + ${pi.currentPage} + "&category=103";
 			});
 		}
 		
@@ -203,23 +203,15 @@ tr {
 				checkbox.checked = this.checked;
 			});	
 		});   
+	    
+		//해당 게시글 마우스오버시 포인터 변환
+		for(const td of tds){
+			td.addEventListener('mouseover',function() {
+				this.style.cursor = 'pointer';
+			})
+		}
 	</script>
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	
