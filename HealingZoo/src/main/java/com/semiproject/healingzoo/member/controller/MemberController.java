@@ -69,7 +69,7 @@ public class MemberController {
 				
 				if(beforeURL.equals("")) {
 					if (loginUser.getMemGrade().equals("CONSUMER")) {
-						mv.setViewName("redirect:/");
+						mv.setViewName("successAlert");
 					} else {
 						mv.setViewName("redirect:/notice.admin");
 					}
@@ -77,12 +77,12 @@ public class MemberController {
 					mv.setViewName("redirect:" + beforeURL);
 				}
 			} else {
-				throw new MemberException("아이디 또는 비밀번호가 존재하지않습니다 :(");
+				mv.setViewName("failAlert");
 			}
-			return mv;
 		} else {
-			throw new MemberException("아이디 또는 비밀번호가 존재하지않습니다 :(");
+			mv.setViewName("failAlert");
 		}
+		return mv;
 	}
 
 	// 로그아웃

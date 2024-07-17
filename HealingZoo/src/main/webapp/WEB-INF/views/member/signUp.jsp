@@ -172,12 +172,14 @@
 		const id = document.getElementById('id');
 		const pwd = document.getElementById('pwd');
 		const phone = document.getElementById('phone');
+		const form = document.getElementById('signUpFrom');
+		const confirmText = document.getElementById('pwdConfirmText');
 			
 		// 필수 항목 빈칸 제출시 알림창
 		const doSignUp = () =>{
 			const name = document.getElementById('name');
 			const email = document.getElementById('email');
-			const pwdComfirm = document.getElementById('pwdComfirm');
+			const pwdConfirm = document.getElementById('pwdComfirm');
 			
 			if(name.value.trim() == ''){
 				alert('이름를 입력하세요.');
@@ -191,20 +193,20 @@
 			}else if(email.value.trim() == ''){
 				alert('이메일를 입력하세요.');
 				email.focus();
-			}else if(pwdComfirm.value.trim() == ''){
+			}else if(pwdConfirm.value.trim() == ''){
 				alert('비밀번호를 확인하세요.');
-				pwdComfirm.focus();
+				pwdConfirm.focus();
 			}else if(phone.value.trim() == ''){
 				alert('핸드폰 번호를 입력하세요.');
 				phone.focus();
 			}else{
-				document.getElementById('signUpFrom').submit();
+				form.submit();
 			}
 		}
 		
 		// 비밀번호 정규화 체크
+		const reg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
 		function checkPwdReg(){
-			const reg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
 			
 			if(!reg.test(pwd.value)){
 				alert("비밀번호는 숫자, 영어, 특수문자 포함 8자 이상 15자 미만으로 생성해주세요");
@@ -213,18 +215,20 @@
 		}
 		
 		// 핸드폰 번호 정규화 체크
+		const reg2 = /^(010|011)\d{8}$/;
 		function checkPhoneRef(){
-			const reg = /^(010|011)\d{8}$/;
 			
-			if(!reg.test(phone.value)){
+			if(!reg2.test(phone.value)){
 				alert("핸드폰 번호를 정확히 입력해주세요");
 				phone.focus();
 			}
 		}
 		
 		// 아이디 정규화 체크
+		const idConfirmText = document.getElementById("idConfirmText");
+		
 		function checkIdReg(){
-			const reg = /^[a-zA-Z0-9]{6,}$/;
+			const reg = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
 			console.log(reg.test(id.value));
 			if(!reg.test(id.value)){
 				alert("아이디는 영문/숫자 조합으로 입력해주세요");
@@ -232,7 +236,6 @@
 			}else{
 				// 아이디 중복 체크(비동기 방식 통신 : 페이지 이동없이 실시간)
 				const inputId = id.value;
-				const idConfirmText = document.getElementById("idConfirmText");
 				$.ajax({ 
 					type: "post",
 					url: '${contextPath}/checkId.me',
@@ -252,10 +255,30 @@
 			}
 		}
 		
+		// 조건에 불충분할시 넘어가지 못하도록 함
+		form.addEventListener('submit', e =>{
+			if(idConfirmText.innerText.includes("중복")){
+				e.preventDefault();
+				alert('중복된 아이디입니다. 다시 입력해주세요.')
+				id.focus();
+			}else if(confirmText.innerText.includes("비밀번호")){
+				e.preventDefault();
+				alert('비밀번호가 일치하지않습니다. 다시 입력해주세요.')
+			}else if(!reg.test(pwd.value)){
+				e.preventDefault();
+				alert("비밀번호는 숫자, 영어, 특수문자 포함 8자 이상 15자 미만으로 생성해주세요");
+				pwd.focus();
+			}else if(!reg2.test(phone.value)){
+				e.preventDefault();
+				alert("핸드폰 번호를 정확히 입력해주세요");
+				phone.focus();
+			}
+		})
+		
 		// 비밀번호 확인 일치 여부
 		document.getElementById('pwdConfirm').addEventListener('keyup', function(){
 			const pwd = document.getElementById('pwd');
-			const confirmText = document.getElementById('pwdConfirmText');
+			
 			if(this.value != pwd.value){
 				confirmText.innerText = '비밀번호가 일치하지 않습니다'
 				confirmText.style.color = 'red';
