@@ -468,7 +468,7 @@
 			
 			
 			// 수정 전 댓글 내용
-			const beforeContentInput = beforeTd.children[1].value;
+			const beforeContentInput = beforeTd.children[3].value;
 			
 			// 내용 Td
 			const contentTd = beforeTd.parentElement.children[1];
