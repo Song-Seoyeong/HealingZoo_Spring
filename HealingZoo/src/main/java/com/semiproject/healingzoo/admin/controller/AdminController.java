@@ -1170,10 +1170,11 @@ public class AdminController {
 		
 		for(int showNo : showNos) {
 			result += aService.deleteShow(showNo);
-			aService.deleteShowImg(showNo);
 			
 			// 파일에 저장된 이미지삭제
 			ArrayList<Image> imgList = aService.getImgList(showNo);
+			
+			aService.deleteShowImg(showNo);
 			for(Image img:imgList) {
 				delete(img.getImgRename(), request);
 			}
