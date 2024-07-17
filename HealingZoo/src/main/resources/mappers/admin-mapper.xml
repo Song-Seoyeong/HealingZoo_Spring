@@ -828,7 +828,7 @@
 	<!-- FAQ 수정 -->
 	<update id="updateFAQ">
 		update faq
-			set faq_title = #{boardTitle}, faq_content = #{boardContent}, update_date = sysdate
+			set faq_title = #{boardTitle}, faq_reply = #{boardContent}, update_date = sysdate
 			where faq_no = #{boardNo}
 	</update>
 

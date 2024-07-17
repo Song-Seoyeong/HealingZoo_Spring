@@ -1633,7 +1633,7 @@ public class AdminController {
 	}
 	
 	// FAQ 수정
-	@RequestMapping("updateFAQ/admin")
+	@RequestMapping("updateFAQ.admin")
 	public String updateFAQ(Board b,
 							@RequestParam("page") int page,
 							Model model) {
@@ -1641,7 +1641,7 @@ public class AdminController {
 		int result = aService.updateFAQ(b);
 		
 		if(result > 0) {
-			model.addAttribute("b", b);
+			model.addAttribute("FAQNo", b.getBoardNo());
 			model.addAttribute("page", page);
 			
 			
