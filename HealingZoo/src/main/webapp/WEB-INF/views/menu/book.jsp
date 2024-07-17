@@ -167,7 +167,7 @@
 			
 			td.addEventListener('click', ()=>{
 				const boardNo = parent.children[0].innerText;
-				location.href = '${contextPath}/pwdConfirm.bo?bId=' + boardNo + "&page=" + ${pi.currentPage} + "&category=102";
+				location.href = '${contextPath}/pwdConfirm.bo?bId=' + boardNo + "&page=" + ${pi.currentPage} + "&category=103";
 			})
 		}
 		

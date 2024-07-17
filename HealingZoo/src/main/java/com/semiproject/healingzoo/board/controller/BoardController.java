@@ -251,10 +251,11 @@ public class BoardController {
 		// 댓글 리스트 조회
 		ArrayList<Reply> replyList =  new ArrayList<Reply>();
 		
-		if(category == 100 || category == 102 || category == 103) {
+		if(category == 100 || category == 102 ) {
 			replyList = bService.selectReply(bId);
-		}else if(category == 101){
+		}else if(category == 101 || category == 103){
 			replyList = bService.selectQuReply(bId);
+			System.out.println(replyList);
 		}
 
 		if (b != null && imgList != null && replyList != null) {

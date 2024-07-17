@@ -134,7 +134,7 @@
 		</div>
 		
 		<!-- 문의 답변 폼 -->
-		<c:if test="${ b.cateNo == 101 }">
+		<c:if test="${ b.cateNo == 101 or b.cateNo == 103 }">
 			<div class="container" style='margin-bottom: 70px'>
 				<div class="row" height='300px'>
 					<div class="col"></div>
@@ -144,7 +144,7 @@
 								<div class='text-center'>아직 운영자가 답변을 남기지않았습니다. 조금만 기다려주세요.</div>
 							</c:if>
 							<c:if test='${ !empty replyList }'>
-								<div class='text-start'>${ replyList[0].reContent }</div>
+								<div class='text-start'><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${ replyList[0].reContent }</b></div>
 							</c:if>
 						</div>
 					<div class="col"></div>
@@ -153,7 +153,7 @@
 		</c:if>
 		
 		<!-- 댓글 폼 -->
-		<c:if test="${ b.cateNo != 101 }">
+		<c:if test="${ b.cateNo != 101 and b.cateNo != 103 }">
 			<div class="container text-center">
 				<div class="row">
 					<div class="col"></div>
