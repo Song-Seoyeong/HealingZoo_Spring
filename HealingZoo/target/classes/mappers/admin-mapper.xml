@@ -1147,4 +1147,10 @@
  		set MEM_GRADE = 'CONSUMER'
      	where MEM_NO = #{memNO}
 	</update>
+	
+	<!-- 0717 게시글 삭제 시 답변 댓글 완전 삭제 -->
+	<delete id="deleteQuReply">
+		delete from qu_Reply
+		where board_no = ${boardNo}
+	</delete>
 </mapper>

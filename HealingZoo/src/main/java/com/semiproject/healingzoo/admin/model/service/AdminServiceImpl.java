@@ -779,4 +779,8 @@ public class AdminServiceImpl implements AdminService {
 		return aDAO.changeCon(sqlSession, memNo);
 	}
 	
+	@Override
+	public int deleteQuReply(int boardNo) {
+		return aDAO.deleteQuReply(sqlSession, boardNo);
+	}
 }

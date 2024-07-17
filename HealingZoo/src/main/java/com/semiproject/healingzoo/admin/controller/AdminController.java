@@ -551,7 +551,7 @@ public class AdminController {
 		}
 	}
 
-	// (상세 글 보기에서) 게시글 삭제
+	// (상세 글 보기에서) 게시글 삭제 
 	@RequestMapping("delete.admin")
 	public String deleteBoard(@RequestParam("bId") int boardNo,
 						  @RequestParam("list") int listSize,
@@ -559,6 +559,8 @@ public class AdminController {
 		int deleteBoardResult = aService.deleteBoard(boardNo);
 		int deleteImgResult = aService.updateImgStatus(boardNo);
 		int deleteReplyResult = bService.updateReplyStatus(boardNo);
+		int deleteQuReplyResult = aService.deleteQuReply(boardNo);
+		
 		
 		if(deleteBoardResult + deleteImgResult  + deleteReplyResult == 1 + listSize) {
 			return "redirect:" + category + ".admin";
@@ -716,13 +718,14 @@ public class AdminController {
 		}
 	}
 	
-	// 게시글 삭제 처리
+	// 게시글 체크 삭제 처리
 	@RequestMapping("/checkDelete.admin") 
 	public String deleteCheckedPosts(@RequestParam("updateBoardNos") String boardNos) {
 	    String[] boardNoArray = boardNos.split(",");
 	    int checkDelete = 0;
 	    int category = 0;
 	    int deleteReplyResult = 0;
+	    
 	    for (String boardNo : boardNoArray) {
 	        int boardNoInt = Integer.parseInt(boardNo);
 	        
@@ -735,6 +738,7 @@ public class AdminController {
 	        // 게시글 삭제 처리 시 댓글 상태 변경하는 로직
 	        deleteReplyResult = aService.updateReplyStatus(boardNoInt);
 	        
+	        int eleteQuReplyResult = aService.deleteQuReply(boardNoInt);
 	    }
 	    
 	    if(checkDelete == 1 && category == 100) {
@@ -749,6 +753,7 @@ public class AdminController {
 	    	throw new AdminException("게시글 삭제를 실패했습니다.");
 	    }
 	}
+
 	
 	
 	// 글쓰기 페이지 이동 (카테고리 모두 동일)

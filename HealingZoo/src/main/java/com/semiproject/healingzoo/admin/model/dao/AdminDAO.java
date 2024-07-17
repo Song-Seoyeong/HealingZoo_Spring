@@ -740,4 +740,8 @@ public class AdminDAO {
 		return sqlSession.update("adminMapper.changeCon",memNo);
 	}
 	
+	public int deleteQuReply(SqlSession sqlSession, int boardNo) {
+		return sqlSession.delete("adminMapper.deleteQuReply", boardNo);
+	}
+	
 }

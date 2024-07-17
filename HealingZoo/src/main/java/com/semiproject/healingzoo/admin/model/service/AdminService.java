@@ -323,9 +323,10 @@ public interface AdminService {
 	//07.16
 	ArrayList<Member> memberStatGraY(String memGrade, PageInfo pi);
 	
-
 	//07.17
 	Member checkCon(int memNo);
 	//07.17
 	int changeCon(int memNo);
+	
+	int deleteQuReply(int boardNo);
 }
