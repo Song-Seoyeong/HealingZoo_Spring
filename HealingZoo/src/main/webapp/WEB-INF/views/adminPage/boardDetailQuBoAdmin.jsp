@@ -82,10 +82,10 @@
 								<!-- 문의 게시글 진행상태 -->
 								<c:if test="${ b.cateNo == 101 }">
 									<c:if test="${ b.quBoBoardStatus == 'Y' }">
-										<input type='text' id='status' value='답변 완료' size='8' class='inputBoard' style='color: green;' readonly>
+										<input type='text' id='status' name='Y' value='답변 완료' size='8' class='inputBoard' style='color: green;' readonly>
 									</c:if>
 									<c:if test="${ b.quBoBoardStatus == 'N' }">
-										<input type='text' id='status' value='미답변' size='8' class='inputBoard' style='color: red;' readonly>
+										<input type='text' id='status' name='N' value='미답변' size='8' class='inputBoard' style='color: red;' readonly>
 									</c:if>
 								</c:if>
 								<!-- 문의/예약 게시글 진행상태 -->
@@ -93,10 +93,10 @@
 								<!-- 예약 게시글 진행상태 -->
 								<c:if test="${ b.cateNo == 103 }">
 									<c:if test="${ b.quBoBoardStatus == 'Y' }">
-										<input type='text' id='status' value='예약 완료' size='8' class='inputBoard' style='color: green;' readonly>
+										<input type='text' id='status' name='Y' value='예약 완료' size='8' class='inputBoard' style='color: green;' readonly>
 									</c:if>
 									<c:if test="${ b.quBoBoardStatus == 'N' }">
-										<input type='text' id='status' value='확인중' size='8' class='inputBoard' style='color: red;' readonly>
+										<input type='text' id='status' name='${ b.quBoBoardStatus }' value='확인중' size='8' class='inputBoard' style='color: red;' readonly>
 									</c:if>
 								</c:if>
 								<!-- 문의/예약 게시글 진행상태 -->
@@ -342,6 +342,21 @@
 							tbody.append(tr);
 							
 							document.getElementById('replyContent').value = "";
+						
+							let status = document.querySelector('input[name="${ b.quBoBoardStatus}"]');
+							let statusValue = status.getAttribute('name');
+							console.log(statusValue);
+
+							if (${b.cateNo} == 101) {
+								//status.value = (statusValue === 'Y') ? '답변 완료' : '미답변';
+								status.value = '답변 완료';
+								status.style.color = 'green';
+								
+							} else if (${b.cateNo} == 103) {
+								//status.value = (statusValue === 'Y') ? '예약 완료' : '확인중';
+								status.value = '예약 완료';
+								status.style.color = 'green';
+							}
 						}
 					},
 					error: data => console.log(data)
@@ -391,6 +406,17 @@
 							success: data => {
 								if(data == 'success'){
 									clickTd.parentElement.remove();
+									
+									let status = document.querySelector('input[name="${ b.quBoBoardStatus}"]');
+									let statusValue = status.getAttribute('name');
+
+									if (${b.cateNo} == 101) {
+										status.value = '미답변';
+										status.style.color = 'red';
+									} else if (${b.cateNo} == 103) {
+										status.value = '확인중';
+										status.style.color = 'red';
+									}
 								}else{
 									alert("댓글 삭제에 실패했습니다.");
 								}

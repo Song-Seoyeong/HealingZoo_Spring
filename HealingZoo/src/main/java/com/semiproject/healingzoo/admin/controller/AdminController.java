@@ -552,20 +552,21 @@ public class AdminController {
 	}
 
 	// (상세 글 보기에서) 게시글 삭제
-		@RequestMapping("delete.admin")
+	@RequestMapping("delete.admin")
 	public String deleteBoard(@RequestParam("bId") int boardNo,
-							  @RequestParam("list") int listSize,
-							  @RequestParam("category") String category) {
+						  @RequestParam("list") int listSize,
+						  @RequestParam("category") String category) {
 		int deleteBoardResult = aService.deleteBoard(boardNo);
 		int deleteImgResult = aService.updateImgStatus(boardNo);
+		int deleteReplyResult = bService.updateReplyStatus(boardNo);
 		
-		if(deleteBoardResult + deleteImgResult == 1 + listSize) {
+		if(deleteBoardResult + deleteImgResult  + deleteReplyResult == 1 + listSize) {
 			return "redirect:" + category + ".admin";
 		}else {
 			throw new AdminException("게시글 삭제 중 에러 발생");
 		}
 	}
-
+	
 	// 이미지 삭제
 	private void delete(String rename, HttpServletRequest request) {
 		String savePath = request.getSession().getServletContext().getRealPath("resources") + "/uploadImg";
@@ -721,6 +722,7 @@ public class AdminController {
 	    String[] boardNoArray = boardNos.split(",");
 	    int checkDelete = 0;
 	    int category = 0;
+	    int deleteReplyResult = 0;
 	    for (String boardNo : boardNoArray) {
 	        int boardNoInt = Integer.parseInt(boardNo);
 	        
@@ -729,9 +731,11 @@ public class AdminController {
 	
 	        // 게시글 번호에 해당하는 카테고리 번호를 가져오는 로직
 	        category = aService.getCategoryByBoardNo(boardNoInt);
-	
+	        
+	        // 게시글 삭제 처리 시 댓글 상태 변경하는 로직
+	        deleteReplyResult = aService.updateReplyStatus(boardNoInt);
+	        
 	    }
-	    //System.out.println(category);
 	    
 	    if(checkDelete == 1 && category == 100) {
 	    	return "redirect:/notice.admin";
@@ -740,11 +744,10 @@ public class AdminController {
 	    } else if (checkDelete == 1 && category == 102) {
 	    	return "redirect:/review.admin";
 	    } else if (checkDelete == 1 && category == 103){
-	    	return "redurect:/book.admin";
+	    	return "redirect:/book.admin";
 	    } else {
 	    	throw new AdminException("게시글 삭제를 실패했습니다.");
 	    }
-		
 	}
 	
 	
