@@ -1568,7 +1568,7 @@ public class AdminController {
 	public String deleteFAQ(@RequestParam("FAQNo") ArrayList<Integer> FAQNos) {
 		int result = 0;
 		for(int FAQNo : FAQNos) {
-			result = aService.deleteFAQ(FAQNo);
+			result += aService.deleteFAQ(FAQNo);
 		}
 		
 		if(result == FAQNos.size()) {
