@@ -89,5 +89,10 @@ public interface MemberService {
 	int deleteBoardImg(String boardNo);
 
 	ArrayList<Image> selectBoardImg(String boardNo);
-
+	
+	int delReply(int memNo);
+	
+	int deleteBoard(int memNo);
+	
+	int selDelBoardReply(String boNo);
 }

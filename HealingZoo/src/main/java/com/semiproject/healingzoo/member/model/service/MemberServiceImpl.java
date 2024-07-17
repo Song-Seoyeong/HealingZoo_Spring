@@ -225,5 +225,20 @@ public class MemberServiceImpl implements MemberService {
 		return mDAO.getBoard(sqlSession, map);
 	}
 	
+	@Override
+	public int delReply(int memNo) {
+		return mDAO.delReply(sqlSession, memNo);
+	}
+	
+	@Override
+	public int deleteBoard(int memNo) {
+		return mDAO.deleteBoard(sqlSession, memNo);
+	}
+	
+	@Override
+	public int selDelBoardReply(String boNo) {
+		return mDAO.selDelBoardReply(sqlSession, boNo);
+	}
+	
 
 }

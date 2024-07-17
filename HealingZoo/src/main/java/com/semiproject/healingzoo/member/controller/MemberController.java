@@ -251,11 +251,13 @@ public class MemberController {
 		}
 	}
 			
-	// 마이페이지 > 회원탈퇴
+	// 마이페이지 > 회원탈퇴 07.17 회원탈퇴시 댓글 게시판 삭제 기능 추가
 	@RequestMapping("deleteMember.me")
 	public String deleteMember(Model model, SessionStatus status) {
 		int memNo = ((Member)model.getAttribute("loginUser")).getMemNo();
 		int result = mService.delMem(memNo);
+		int resultR = mService.delReply(memNo);
+		int resultB = mService.deleteBoard(memNo);
 		if(result > 0) {
 			status.setComplete();
 			return "endPage";	
@@ -424,13 +426,14 @@ public class MemberController {
 		}
 	}
 	
-	// 마이페이지> 선택된 내 게시글 삭제
+	// 마이페이지> 선택된 내 게시글 삭제 	07.17 수정
 	@RequestMapping("selDelBoard.me")
 	public String deleteBoard(@RequestParam("boNoList") ArrayList<String> boNoList) {
 		int result = 0;
 		for(int i = 0; i < boNoList.size(); i++ ) {
 			String boNo =boNoList.get(i);
 			result = mService.selDelBoard(boNo);
+			int resultR = mService.selDelBoardReply(boNo);
 			}
 		if(result > 0) {
 			return "redirect:myBoard.me";
@@ -636,25 +639,27 @@ public class MemberController {
 		}
 		
 	}
-	//07.12
-	@RequestMapping("delete.me")
-	public String deletInDetailView(@RequestParam("bId") int bId, 
-			                        @RequestParam("category") int cateNo, 
-			                        Model model)  {
-		
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("boardNo", bId);
-		map.put("cateNo", cateNo);
-		
-		int result = mService.deleteInDetailView(map);
-		
-		if(result >0) {
-			return "redirect:myBoard.me";
-		}else {
-			throw new MemberException("삭제하는데 실패하였습니다");
+	
+	//상세보기에서 삭제 07.17 수정
+		@RequestMapping("delete.me")
+		public String deletInDetailView(@RequestParam("bId") int bId,
+										@RequestParam("bId") String boNo,
+				                        @RequestParam("category") int cateNo, 
+				                        Model model)  {
+			
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("boardNo", bId);
+			map.put("cateNo", cateNo);
+			
+			int result = mService.deleteInDetailView(map);
+			int resultR = mService.selDelBoardReply(boNo);
+			if(result >0) {
+				return "redirect:myBoard.me";
+			}else {
+				throw new MemberException("삭제하는데 실패하였습니다");
+			}
+			
 		}
-		
-	}
 	
 	//07.13 내 답변보기까지의 길을 잃어 콜럼버스가 되어버린..
 	@RequestMapping("deleteCom.me")

@@ -325,4 +325,23 @@
 	</update>
 	<!-- 비밀번호 찾기 > 비밀번호 변경 -->
 	
+	<!-- 07.17 탈퇴 시 댓글 삭제 -->
+	<delete id="delReply">
+		delete from reply
+		where RE_WRITER_NO = #{memNo}
+	</delete>
+	
+	<!-- 07.17 탈퇴 시 게시글 삭제 -->
+	<delete id="delBoard">
+		delete from board
+		where BOARD_WRITER_NO = #{memNo}
+	</delete> 
+	
+	<!--07.17 게시글 삭제시 답글 상태 변경 -->
+	<update id="selDelBoReply">
+		update reply
+		set RE_ACTIVE = 'N'
+		where BOARD_NO = #{boNo}
+	</update>
+	
 </mapper>

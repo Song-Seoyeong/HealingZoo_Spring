@@ -184,6 +184,16 @@ public class MemberDAO {
 	public Board getBoard(SqlSession sqlSession, HashMap<String, Object> map) {
 		return sqlSession.selectOne("memberMapper.getBoard", map);
 	}
+	
+	public int delReply(SqlSession sqlSession, int memNo) {
+		return sqlSession.delete("memberMapper.delReply", memNo);
+	}
 
+	public int deleteBoard(SqlSession sqlSession, int memNo) {
+		return sqlSession.delete("memberMapper.delBoard", memNo);
+	}
+	public int selDelBoardReply(SqlSession sqlSession, String boNo) {
+		return sqlSession.update("memberMapper.selDelBoReply", boNo);
+	}
 
 }
