@@ -218,9 +218,9 @@ public class MenuController {
 		
 		// 검색어 게시글 수 조회
 		int listSubjectCount = bService.listSearchCount(map);
-		
+		//System.out.println(listSubjectCount);
 		PageInfo pi = Pagination.getPageInfo(currentPage, listSubjectCount, 10);	
-		
+		//System.out.println(pi);
 		ArrayList<Board> searchList = bService.searchNoReBoard(map, pi);
 
 		if(searchList != null) {

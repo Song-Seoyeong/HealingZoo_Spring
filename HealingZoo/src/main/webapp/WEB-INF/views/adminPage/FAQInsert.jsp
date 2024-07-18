@@ -94,7 +94,7 @@
 	
 	<script>
 		document.getElementById('write_button').addEventListener('click', e =>{
-			const name = document.getElementById('"faqTitle"');
+			const name = document.getElementById('faqTitle');
             const content = document.getElementById('faqContent');
             
             if (name.value.trim() === "") {

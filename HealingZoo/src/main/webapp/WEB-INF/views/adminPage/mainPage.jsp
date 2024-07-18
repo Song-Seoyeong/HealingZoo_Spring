@@ -373,7 +373,6 @@
 							 e.preventDefault();
 						}
 					}else{
-						 e.preventDefault();
 					}
 				}
 			}

@@ -31,6 +31,10 @@ input {
 	padding: 10px 12px;
 	font-size: 14px;
 }
+textArea{
+	border: 1px solid #bbb;
+	border-radius: 8px;
+}
 
 #search {
 	position: absolute;
@@ -121,7 +125,7 @@ tr {
 					<p class='inputTitleName'>문구 : </p>
 				</div>
 				<div class='col-7 text-center'>
-					<textArea cols='48' rows='4' id='swrite' name='swrite'></textArea>
+					<textArea cols='48' rows='4' id='swrite' name='swrite' style='resize: none;'></textArea>
 				</div>
 				<div class='col-1'></div>
 			</div>
