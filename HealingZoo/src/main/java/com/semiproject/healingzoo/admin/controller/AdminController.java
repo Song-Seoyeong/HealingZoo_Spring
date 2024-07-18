@@ -551,18 +551,22 @@ public class AdminController {
 		}
 	}
 
-	// (상세 글 보기에서) 게시글 삭제 
+	// (상세 글 보기에서) 게시글 삭제
 	@RequestMapping("delete.admin")
 	public String deleteBoard(@RequestParam("bId") int boardNo,
 						  @RequestParam("list") int listSize,
 						  @RequestParam("category") String category) {
 		int deleteBoardResult = aService.deleteBoard(boardNo);
 		int deleteImgResult = aService.updateImgStatus(boardNo);
-		int deleteReplyResult = bService.updateReplyStatus(boardNo);
-		int deleteQuReplyResult = aService.deleteQuReply(boardNo);
+		int deleteReplyResult = 0;
+		if (category == "notice" || category == "review") {
+	        deleteReplyResult = bService.updateReplyStatus(boardNo);
+	    } else if (category == "book" || category == "question") {
+	        deleteReplyResult = aService.deleteQuReply(boardNo);
+	    }
 		
 		
-		if(deleteBoardResult + deleteImgResult  + deleteReplyResult == 1 + listSize) {
+		if(deleteBoardResult + deleteImgResult  + deleteReplyResult  == 1 + listSize) {
 			return "redirect:" + category + ".admin";
 		}else {
 			throw new AdminException("게시글 삭제 중 에러 발생");

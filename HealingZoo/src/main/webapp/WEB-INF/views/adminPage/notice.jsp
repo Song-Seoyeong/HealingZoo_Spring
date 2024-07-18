@@ -1,244 +1,491 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix='c' uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix='c' uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>공지사항(관리자)</title>
+<title>상세 글페이지</title>
 <style>
-@font-face {
-	font-family: 'NanumSquareRound';
-	src:
-		url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/NanumSquareRound.woff')
-		format('woff');
-	font-weight: normal;
-	font-style: normal;
+.margin {
+	width: 100%;
+	height: 70px;
 }
 
-.form-check-input {
-	transform: scale(1);
-	accent-color: #65B741;
+.inputBoard {
+	border-radius: 3px;
+	border-shadow: none;
+	border: 1px solid #fff;
 }
 
-#deleteButton {
-	background-color: #DD5353;
-	width: 80px;
-	border: none;
+#status {
+	color: #65B741;
 }
 
-#writeBoard {
-	background-color: #65B741;
-	width: 80px;
-	border: none;
-	margin-right: 5px;
+#replyContent {
+	border-radius: 3px;
+	border-shadow: none;
+	border: 1px solid #B5B5B5;
 }
-
-.pagination-container {
-	display: flex;
-	justify-content: center;
+#contentBox{
+	border: 1px solid #B5B5B5;	
 }
-
-.number-button-wrapper {
-	padding: 10px;
-}
-
-tr {
-	text-align: center;
-}
-
-
 </style>
-<title>Insert title here</title>
 </head>
 <body>
-	<%@ include file='../common/logoBar.jsp' %>
+	<!-- 헤더 -->
+	<%@ include file='../common/logoBar.jsp'%>
+
 	<%@ include file='../common/mainCategoryBar.jsp'%>
-	<%@ include file='../common/adminSidebar.jsp'%>
-	
-	<!-- 글 목록 -->
-	<div class="container" style="width: 900px; margin-top: 100px;">
-		<h2 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;">공지사항</h2>
-		<form id="filterForm" action="${ contextPath }/notice.admin/filter">
-			<table class="table">
-				<thead>
-					<tr>
-						<th scope="col" style="width: 3%"><input class="form-check-input" type="checkbox" id="checkAll"></th>
-						<th scope="col" style="width: 10%;">글 번호</th>
-						<th scope="col" style="width: 130px;">
-							<select aria-label="말머리 선택" id='searchFilter' name='noSubject' style="border-style: none;  text-align: center; background-color: #fff; font-family: 'NanumSquareRound';">
-								<option selected>말머리</option>
-								<option value="전체">전체</option>
-						        <option value="NEWS">새소식</option>
-						        <option value="NOTICE">공지사항</option>
-						        <option value="EVENT">이벤트</option>
-							</select>
-						</th>
-						<th scope="col" width='43%'>글 제목</th>
-					    <th scope="col" width='7%'>작성자</th>
-					    <th scope="col" width='20%'>작성일</th>
-					    <th scope="col" width='8%'>조회수</th>
-					</tr>
-				</thead>
-				<tbody class="table-group-divider">
-					<c:forEach items="${ list }" var="n">
-						<tr>
-							<th><input class="form-check-input" type="checkbox" value="${ n.boardNo }" name="checked" id="flexCheckDefault"></th>
-							<td scope="row">${ n.boardNo }</td>
-							<c:if test="${ n.noSubject == 'NOTICE' }">
-								<td>공지</td>
-							</c:if>
-							<c:if test="${ n.noSubject == 'EVENT' }">
-								<td>이벤트</td>
-							</c:if>
-							<c:if test="${ n.noSubject == 'NEWS' }">
-								<td>새소식</td>
-							</c:if>
-							<td>${ n.boardTitle }</td>
-							<td>${ n.boardWriterName }</td>
-							<td>${ n.boardModifyDate }</td>
-							<td>${ n.boardCount }</td>
-						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
-		</form>
-		<!-- 글 목록 -->
+	<!-- /헤더 -->
 
-		<!-- 메시지 표시 -->
-		<c:if test="${not empty message}">
-		    <div class="alert alert-success" role="alert">
-		        ${message}
-		    </div>
-		</c:if>
-		<c:if test="${not empty error}">
-		    <div class="alert alert-danger" role="alert">
-		        ${error}
-		    </div>
-		</c:if>
-		
-	
+	<div class='margin'></div>
 
-		<!-- 버튼 -->
-		<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-			<button class="btn btn-primary" type="button" id="writeBoard">글쓰기</button>
-			<button class="btn btn-primary" type="button" id="deleteButton">삭제</button>
+	<!-- 글 상세 페이지 폼 -->
+	<form action="${ contextPath }/updateView.admin?bId=${b.boardNo}&cateNo=${b.cateNo}" method='post'>
+		<div class="container text-center">
+			<div class="row">
+				<div class="col"></div>
+					<div class="col-8 content-center" style='background: white; border-radius: 25px;'>
+							<br>
+							<input type='hidden' name='page' value='${ page }'>
+							<input type='hidden' name='boardNo' value='${ b.boardNo }'>
+<%-- 							<input type='hidden' name='boardWriterName' value='${ b.boardWriterName }'> --%>
+							
+							<c:if test="${ b.cateNo == 100 }">
+								<input type='hidden' name='category' value='notice'>
+							</c:if>
+							<c:if test="${ b.cateNo == 101 }">
+								<input type='hidden' name='category' value='question'>
+							</c:if>
+							<c:if test="${ b.cateNo == 102 }">
+								<input type='hidden' name='category' value='review'>
+							</c:if>
+							<c:if test="${ b.cateNo == 103 }">
+								<input type='hidden' name='category' value='book'>
+							</c:if>
+							
+							<div class='text-start'>
+								&nbsp;&nbsp;&nbsp;&nbsp;
+								<h3 style="border-left: 5px solid #65B741; padding-left: 10px; display: inline-block; margin-bottom: 15px;">
+									${ b.boardTitle }
+								</h3>
+							</div>
+							
+							<hr style='border: 2px solid'>
+							<div class='text-end'>
+								<input type='text' name=boardWriterName value='${ b.boardWriterName }' id='inputBoardWriter' size='10' class='inputBoard' readonly>
+								&nbsp;&nbsp;
+								<input type='text' value='${ b.boardModifyDate }' size='10' class='inputBoard' readonly>
+								&nbsp;&nbsp; 
+								
+								<!-- 문의 게시글 진행상태 -->
+								<c:if test="${ b.cateNo == 101 }">
+									<c:if test="${ b.quBoBoardStatus == 'Y' }">
+										<input type='text' id='status' value='답변 완료' size='8' class='inputBoard' style='color: green;' readonly>
+									</c:if>
+									<c:if test="${ b.quBoBoardStatus == 'N' }">
+										<input type='text' id='status' value='미답변' size='8' class='inputBoard' style='color: red;' readonly>
+									</c:if>
+								</c:if>
+								<!-- 문의/예약 게시글 진행상태 -->
+								
+								<!-- 예약 게시글 진행상태 -->
+								<c:if test="${ b.cateNo == 103 }">
+									<c:if test="${ b.quBoBoardStatus == 'Y' }">
+										<input type='text' id='status' value='예약 완료' size='8' class='inputBoard' style='color: green;' readonly>
+									</c:if>
+									<c:if test="${ b.quBoBoardStatus == 'N' }">
+										<input type='text' id='status' value='확인중' size='8' class='inputBoard' style='color: red;' readonly>
+									</c:if>
+								</c:if>
+								<!-- 문의/예약 게시글 진행상태 -->
+								
+							</div>
+							<br>
+							<div class='text-start' id='contentBox'>
+								<textArea id='boardContent' name='boardContent' cols='70' rows="10" style="resize: none; board" class='inputBoard' readonly>${ b.boardContent }</textArea>
+								<c:forEach items="${ imgList }" var='img'>
+									<div style='margin: 15px 15px;'>
+										<img alt="${ img.imgName }" src="${ contextPath }/resources/uploadImg/${img.imgRename}" width='60%'>
+									</div>
+								</c:forEach>
+							</div>
+							<div class='text-start'></div>
+							<hr>
+							<div class="text-center">
+								<button type="button" class="btn" style='background: #60A869; color: white; margin-right: 2.5%;' id='goToBack'>목록</button>
+								
+								<!-- 로그인유저와 글쓴이가 같을 거나, 예약/문의 게시글을 비번 입력 후 들어왔을 때 -->
+								<c:if test="${ b.cateNo == 101 || b.cateNo == 102 || b.cateNo == 103 }">
+									<c:if test="${ (loginUser.memNo == b.boardWriterNo) }">
+										&nbsp;&nbsp;&nbsp;
+										<button class="btn" id='updateBoard' style='background: #EA862A; color: white;'>수정</button>
+									</c:if>
+								</c:if>
+								<c:if test="${ b.cateNo == 100 }">
+									<c:if test="${ loginUser.memGrade == 'MANAGER' || loginUser.memGrade == 'WORKER' || loginUser.memNo == b.boardWriterNo }">
+										<button class="btn" id='updateBoard' style='background: #EA862A; color: white;'>수정</button>
+									</c:if>
+								</c:if>
+								<c:if test="${ loginUser.memGrade == 'MANAGER' || loginUser.memGrade == 'WORKER' || loginUser.memNo == b.boardWriterNo }">
+									&nbsp;&nbsp;&nbsp;
+									<button type="button" class="btn" id='deleteBoard' style='background: #DD5353; color: white;'>삭제</button>
+								</c:if>
+								<!-- 로그인유저와 글쓴이가 같을 거나, 예약/문의 게시글을 비번 입력 후 들어왔을 때 -->
+								
+							</div>
+						<hr>
+					</div>
+				<div class="col"></div>
+			</div>	
 		</div>
-		<!-- 버튼 -->
-
-		<!-- 선택된 게시물의 상태 업데이트를 위한 숨은 폼 -->
-		<form id="updateForm" action="${contextPath}/checkDelete.admin" method="post" style="display: none;">
-		    <input type="hidden" name="updateBoardNos" id="updateBoardNos"/>
-		</form>
-
-
 		
-		<!-- 페이지네이션 -->
-		<%@ include file="../common/pagination.jsp" %>
-		<!-- 페이지네이션 -->
-
-
-
-		<!-- 검색 -->
-			<div class="container text-center" style='margin: 1%; margin-bottom: 20%; '>
-			  <div class="row">
-			    <div class="col"></div>
-			      <div class="col-8">
-			    	<select name='searchOption'>
-					  <option value="title" selected>제목</option>
-					  <option value="content">내용</option>
-					</select>
-					&nbsp;&nbsp;
-			    	<input type='text' name='search' size='30' placeholder='제목/내용으로 검색 가능'/>
-			    	&nbsp;&nbsp;
-			    	<img src="resources/image/search.svg" id='searchIcon'>
-			    </div>
-			    <div class="col"></div>
-			  </div>
+		
+		<!-- 댓글 폼 -->
+			<div class="container text-center">
+				<div class="row">
+					<div class="col"></div>
+					<div class="col-8 content-center" style='background: white; border-radius: 25px;'>
+						<table class="table">
+							<thead>
+								<tr>
+									<th scope="col" width='15%'>작성자</th>
+									<th scope="col" width='55%'>
+										<c:if test="${ b.cateNo == 101 || b.cateNo == 103 }">답변</c:if>
+										<c:if test="${ b.cateNo == 100 || b.cateNo == 102 }">댓글</c:if>
+									</th>
+									<th scope="col" width='15%'>작성일</th>
+									<th scope="col" width='20%'></th>
+								</tr>
+							</thead>
+							<tbody class='table-group-divider'>
+								<c:if test="${ !empty replyList }">
+									<c:forEach items="${ replyList }" var='r'>
+										<tr>
+											<td >
+												<c:if test="${ r.memGrade == 'CONSUMER'}">${ r.memName }</c:if>
+												<c:if test="${ r.memGrade == 'MANAGER' || r.memGrade == 'WORKER' }">${ r.memName }</c:if>
+											</td>
+											<td>${ r.reContent }</td>
+											<td>${ r.modifyDate }</td>
+											<td>
+												<input type='hidden' value='${ r.reNo }' name='reNo'>
+												<c:if test="${ r.memNo eq loginUser.memNo  || loginUser.memGrade == 'MANAGER' || loginUser.memGrade == 'WORKER'}">
+													<span><button type="button" class="btn btn-sm" id='updateReply' style='background: #EA862A; color: white;'>수정</button></span>
+													 <span><button type="button" class="btn btn-sm" id='deleteReply' style='background: #DD5353; color: white;'>삭제</button></span>
+												</c:if>
+												<input type='hidden' value='${ r.reContent }' name='reContent'>
+											</td>
+										</tr>
+									</c:forEach>
+								</c:if>
+								<c:if test="${ empty replyList }">
+									<tr>
+										<td scope="row" colspan='4'>
+											<c:if test="${ b.cateNo == 100 || b.cateNo == 102 }">댓글이 없습니다. 댓글을 입력해주세요 :)</c:if>
+										</td>
+									</tr>
+								</c:if>
+							</tbody>
+						</table>
+						<div id='paginaion'></div>
+						<!-- 비회원 댓글 입력창 -->
+						<c:if test="${ empty loginUser }">
+							<div class="row">
+								<div class="col-2">
+									<c:if test="${ b.cateNo == 100 || b.cateNo == 102 }">댓글</c:if>
+									<c:if test="${ b.cateNo == 101 || b.cateNo == 103 }">답변</c:if>
+								</div>
+								<div class="col-7 content-center" style='background: white; border-radius: 25px;'>
+									<textarea rows="3" cols="50" style='resize: none;' readonly placeholder='로그인 후 이용해주세요'></textarea>
+								</div>
+								<div class="col-3 content-center">
+									<button type="button" class="btn btn-sm" id='noLoginReply' style='background: #60A869; color: white;'>등록</button>
+								</div>
+							</div>
+						</c:if>
+						<!-- 비회원 댓글 입력창 -->
+						
+						<!-- 회원 댓글 입력창 -->
+						<c:if test="${ !empty loginUser}">
+							<div class="row">
+								<div class="col-2">
+									<c:if test="${ b.cateNo == 100 || b.cateNo == 102 }">댓글</c:if>
+									<c:if test="${ b.cateNo == 101 || b.cateNo == 103 }">답변</c:if>
+								</div>
+								<div class="col-8 content-center" style='background: white; border-radius: 25px;'>
+									<textarea rows="3" cols="50" style='resize: none;' id='replyContent' placeholder='<c:if test="${ b.cateNo == 100 || b.cateNo == 102 }">댓글을 작성해주세요.</c:if><c:if test="${ b.cateNo == 101 || b.cateNo == 103 }">답변을 작성해주세요.</c:if>'></textarea>
+								</div>
+								<div class="col-2 content-center">
+									<button type="button" class="btn btn-sm" id='insertReply' style='background: #60A869; color: white;'>등록</button>
+								</div>
+							</div>
+						</c:if>
+						<!-- 회원 댓글 입력창 -->
+							
+					</div>
+					<div class="col"></div>
+				</div>
 			</div>
-		<!-- 검색 -->
-
-
-	</div>
-	<!-- 하단 푸터 -->
-	<%@ include file='../common/footer.jsp'%>
-	<!-- 하단 푸터 -->
-
-
-
+		<!-- 댓글 폼 -->
+	</form>
 	
+		<!-- 삭제 모달 -->
+		<div class="modal fade" tabindex="-1" role="dialog" id="modalChoice">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content rounded-3 shadow">
+					<div class="modal-body p-4 text-center">
+						<h3 class="mb-0">정말로 삭제하시겠습니까?</h3>
+						<p class="mb-0">삭제 후 게시글은 복구할 수 없습니다.</p>
+					</div>
+					<div class="modal-footer flex-nowrap p-0">
+						<button type="button"class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0 border-end" id='delete'>
+							<strong>네</strong>
+						</button>
+						<button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0" data-bs-dismiss="modal">아니오</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 삭제 모달 -->
+		
+		<!-- 댓글 로그인 모달 -->
+		<div class="modal fade" tabindex="-1" role="dialog" id="modalChoice2">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content rounded-3 shadow">
+					<div class="modal-body p-4 text-center">
+						<h3 class="mb-0">로그인 후 이용해주세요</h3>
+					</div>
+					<div class="modal-footer flex-nowrap p-0">
+						<button type="button"class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0 border-end" id='loginView'>
+							<strong>로그인</strong>
+						</button>
+						<button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0" data-bs-dismiss="modal">취소</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 댓글 로그인 모달 -->
+		
+
+	<div class='margin'></div>
+	<!-- 푸터 -->
+	<%@ include file='../common/footer.jsp'%>
+	<!-- /푸터 -->
+
 	<script>
-		// 상세 글 보기 이동
-		const tds = document.querySelectorAll('td');
-		for(const td of tds){
-			const parent = td.parentElement;
+		// 삭제 버튼 클릭시
+		document.getElementById('deleteBoard').addEventListener('click', ()=>{
+			$('#modalChoice').modal('show');
+		})
+		
+		// 목록 버튼 클릭시
+		document.getElementById('goToBack').addEventListener('click', ()=>{
+			if(${b.cateNo} == 100){
+				location.href = '${contextPath}/notice.admin?page=' + ${ page };
+			}else if(${b.cateNo} == 101){
+				location.href = '${contextPath}/question.admin?page=' + ${ page };
+			}else if(${b.cateNo} == 102){
+				location.href = '${contextPath}/review.admin?page=' + ${ page };
+			}else{
+				location.href = '${contextPath}/book.admin?page=' + ${ page };
+			}
+		})
+		
+	
+		// 삭제 버튼 '예'클릭시
+		document.getElementById('delete').addEventListener('click', () =>{
+			let category;
+			if(${b.cateNo == 100}){
+				category = 'notice';
+			}else if(${b.cateNo == 101}){
+				category = 'question';
+			}else if(${b.cateNo == 102}){
+				category = 'review';
+			}else{
+				category = 'book';
+			}
 			
-			td.addEventListener('click', ()=>{
-				const boardNo = parent.children[1].innerText;
-				location.href = '${contextPath}/boardView.admin?bId=' + boardNo + "&page=" + ${pi.currentPage} + "&category=100";
+			location.href = '${contextPath}/delete.admin?bId=' + ${ b.boardNo } + "&list=" + ${imgList.size()} + "&category=" + category;
+		})
+		
+		
+		
+		// 미로그인한 상태에서 댓글 등록 버튼 클릭시
+		const noLoginReply = document.getElementById('noLoginReply');
+		
+		if(noLoginReply != null){
+			noLoginReply.addEventListener('click', ()=>{
+				$('#modalChoice2').modal('show');
 			})
 		}
 		
-		// 글쓰기 이동
-		document.getElementById('writeBoard').addEventListener('click', () =>{
-			location.href = '${contextPath}/writeView.admin?category=' + 'notice';
-														//?category=question
+		// 로그인하기 클릭시
+		document.getElementById('loginView').addEventListener('click', () =>{
+			location.href = '${contextPath}/loginView.me';
 		})
 		
+		const tbody = document.querySelector('tbody');
 		
-		// 말머리 검색
-		document.getElementById('searchFilter').addEventListener('change', function(){
-			location.href = '${contextPath}/searchFilter.admin?noSubject=' + this.value + "&page=" + ${pi.currentPage};
-		})
+		// 댓글 등록
+		if(document.getElementById('insertReply') != null){
+			document.getElementById('insertReply').addEventListener("click", () =>{
+				$.ajax({
+					url:"${contextPath}/insertReply.admin",
+					data:{reContent:document.getElementById('replyContent').value, boardNo:${b.boardNo}, memNo:'${loginUser.memNo}'},
+					dataType: 'json',
+					success: data => {
+						tbody.innerHTML = ""
+						
+						for(const reply of data){
+							const tr = document.createElement("tr");
+							
+							const nameTd = document.createElement('td');
+							nameTd.innerText = reply.memName;
+							
+							const contentTd = document.createElement('td');
+							contentTd.innerHTML = reply.reContent;
+							
+							const dateTd = document.createElement('td');
+							dateTd.innerText = reply.modifyDate.split(" ")[0];
+							
+							const buttonTd = document.createElement('td');
+							buttonTd.innerHTML = "<input type='hidden' value='" + reply.reNo +"' name='reNo'><span><button type='button' class='btn btn-sm' id='updateReply' style='background: #EA862A; color: white;'>수정</button></span> <span><button type='button' class='btn btn-sm' id='deleteReply' style='background: #DD5353; color: white;'>삭제</button><span>"
+							/* if(reply.memNo == '${loginUser.memNo}'){
+								buttonTd.innerHTML = "<input type='hidden' value='" + reply.reNo +"' name='reNo'><span><button type='button' class='btn btn-sm' id='updateReply' style='background: #EA862A; color: white;'>수정</button></span> <span><button type='button' class='btn btn-sm' id='deleteReply' style='background: #DD5353; color: white;'>삭제</button><span>" 
+							} */
+							
+							tr.append(nameTd);
+							tr.append(contentTd);
+							tr.append(dateTd);
+							tr.append(buttonTd);
+							
+							tbody.append(tr);
+							
+							document.getElementById('replyContent').value = "";
+						}
+					},
+					error: data => console.log(data)
+				})
+			})
+		}
 		
-		// 검색창 검색
-		document.getElementById('searchIcon').addEventListener('click', function(){
-			const condition = this.parentElement.children[0].value;
-			const search = this.parentElement.children[1].value;
+		// 댓글 수정 + 삭제
+		tbody.addEventListener('click', e => {
+			const eventTarget = e.target;
+			const targetTagName = eventTarget.tagName.toLowerCase();
 			
-			location.href = "${contextPath}/searchNotice.admin?condition=" + condition + "&search=" + search + "&page=" + ${pi.currentPage};
+			
+			let targetButton = null;
+			if(targetTagName == 'button'){
+				targetButton = eventTarget.parentElement;
+			}else if(targetTagName == 'span'){
+				targetButton = eventTarget;
+			}
+			
+			// 댓글 수정
+			if(targetButton != null){
+				// 클릭한 버튼 td
+				const clickTd = targetButton.parentElement;
+				
+				// reId
+				const reId = clickTd.children[0].value;
+				
+				// content가 담긴 Td
+				const contentTd = clickTd.parentElement.children[1];
+				
+				if(targetButton.children[0].id == 'updateReply'){
+					
+					// 다른 댓글 수정 버튼 클릭시
+					if(document.getElementById('updateReplySubmit') != null){
+						buttonChange();
+					}
+					
+					
+					contentTd.innerHTML = '<textarea rows="3" cols="50" style="resize: none;">' + contentTd.innerText +'</textarea>'
+					
+					// 수정 버튼 > 완료 버튼
+					clickTd.children[1].innerHTML = '<button type="button" class="btn btn-sm" id="updateReplySubmit" style="background: #60A869	; color: white;">완료</button>&nbsp;'
+					
+					// 삭제 버튼 > 취소 버튼
+					clickTd.children[2].innerHTML = '<button type="button" class="btn btn-sm" id="cancelUpdateReply" style="background: #DD5353; color: white;">취소</button>'
+					
+				// 댓글 삭제	
+				}else if(targetButton.children[0].id == 'deleteReply'){
+					if(confirm("정말 삭제하시겠습니까?")){
+						$.ajax({
+							url:'${contextPath}/deleteReply.admin',
+							data:{reId:reId},
+							success: data => {
+								if(data == 'success'){
+									clickTd.parentElement.remove();
+								}else{
+									alert("댓글 삭제에 실패했습니다.");
+								}
+							},
+							error: data => console.log(data)
+						})
+					}
+				}else if(targetButton.children[0].id = 'updateReplySubmit'){
+				
+					$.ajax({
+						url:"${contextPath}/updateReply.admin",
+						data:{reNo:reId, reContent:contentTd.children[0].value},
+						success: data => {
+							if(data == 'success'){
+								buttonChange(contentTd.children[0].value);
+							}else{
+								alert("댓글 수정에 실패했습니다.");
+							}
+						},
+						error: data => console.log(data)
+					})
+					
+				}else if(targetButton.children[0].id = 'cancelUpdateReply'){
+					buttonChange();
+				}
+				
+			}
 		})
 		
-		// 엔터 키로 검색 실행
-		document.querySelector('input[name="search"]').addEventListener('keyup', function(event) {
-		  if (event.key === 'Enter') {
-		    const condition = this.parentElement.children[0].value;
-		    const search = this.value;
-		    location.href = "${contextPath}/searchNotice.admin?condition=" + condition + "&search=" + search + "&page=" + ${pi.currentPage};
-		  }
-		});
 		
-		
-		
-		// 삭제 버튼 클릭 시 선택된 게시물 상태 업데이트
-		document.getElementById('deleteButton').addEventListener('click', function() {
-		    const checkedBoxes = document.querySelectorAll('input[name="checked"]:checked');
-		    const updateBoardNos = Array.from(checkedBoxes).map(cb => cb.value).join(',');
-			const cateNo = 100;
-		    if (updateBoardNos.length === 0) {
-		        alert('삭제할 게시물을 선택해주세요.');
-		        return;
-		    }
-
-		    if (!confirm('게시글을 삭제 하시겠습니까?')) {
-		        return;
-		    }
-
-		    // 숨은 폼 필드에 선택된 게시물 ID 할당
-		    document.getElementById('updateBoardNos').value = updateBoardNos;
-
-		    // 폼 제출
-		    document.getElementById('updateForm').submit();
-		});
-		
-		
-	    // 체크박스 전체 선택
-		document.querySelector('input[id="checkAll"]').addEventListener('change', function() {
-			const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-				checkboxes.forEach(checkbox => {
-				checkbox.checked = this.checked;
-			});	
-		});
+		// 댓글 수정 삭제 버튼 변경 함수
+		const buttonChange = (type) => {
+			
+			// 이전 완료 버튼
+			const submitButton = document.getElementById('updateReplySubmit');
+			
+			// 이전 완료 버튼의 span
+			const submitSpan = submitButton.parentElement;
+			
+			// 이전 취소 버튼의 span
+			const cancelSpan = submitSpan.nextElementSibling;
+			
+			// 이전 완료/취소 버튼의 TD
+			const beforeTd = submitSpan.parentElement;
+			
+			// reNo
+			const reNoInput = beforeTd.children[0].value;
+			
+			
+			// 수정 전 댓글 내용
+			const beforeContentInput = beforeTd.children[1].value;
+			
+			// 내용 Td
+			const contentTd = beforeTd.parentElement.children[1];
+			
+			//버튼 변경
+			submitSpan.innerHTML = "<button type='button' class='btn btn-sm' id='updateReply' style='background: #EA862A; color: white;'>수정</button>&nbsp;";
+			cancelSpan.innerHTML = "<button type='button' class='btn btn-sm' id='deleteReply' style='background: #DD5353; color: white;'>삭제</button>";
+			
+			if(type == undefined){
+				contentTd.innerHTML = beforeContentInput
+			}else{
+				contentTd.innerHTML = type
+				beforeTd.children[3].value = type
+			}
+		}
 	</script>
 </body>
 </html>

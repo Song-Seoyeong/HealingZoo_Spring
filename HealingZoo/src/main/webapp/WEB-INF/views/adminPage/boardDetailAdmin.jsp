@@ -104,7 +104,7 @@
 							</div>
 							<br>
 							<div class='text-start' id='contentBox'>
-								<textArea id='boardContent' name='boardContent' cols='70' rows="10" style="resize: none; board" class='inputBoard' readonly>${ b.boardContent }</textArea>
+								<textArea id='boardContent' name='boardContent' cols='84' rows="30" style="resize: none; board" class='inputBoard' readonly>${ b.boardContent }</textArea>
 								<c:forEach items="${ imgList }" var='img'>
 									<div style='margin: 15px 15px;'>
 										<img alt="${ img.imgName }" src="${ contextPath }/resources/uploadImg/${img.imgRename}" width='60%'>
@@ -124,11 +124,11 @@
 									</c:if>
 								</c:if>
 								<c:if test="${ b.cateNo == 100 }">
-									<c:if test="${ loginUser.memGrade == 'MANAGER' }">
+									<c:if test="${ loginUser.memGrade == 'MANAGER' || loginUser.memGrade == 'WORKER' || loginUser.memNo == b.boardWriterNo }">
 										<button class="btn" id='updateBoard' style='background: #EA862A; color: white;'>수정</button>
 									</c:if>
 								</c:if>
-								<c:if test="${ (loginUser.memNo == b.boardWriterNo) || (loingUser.memGrade == MANAGER) }">
+								<c:if test="${ loginUser.memGrade == 'MANAGER' || loginUser.memGrade == 'WORKER' || loginUser.memNo == b.boardWriterNo }">
 									&nbsp;&nbsp;&nbsp;
 									<button type="button" class="btn" id='deleteBoard' style='background: #DD5353; color: white;'>삭제</button>
 								</c:if>
@@ -150,13 +150,13 @@
 						<table class="table">
 							<thead>
 								<tr>
-									<th scope="col" width='10%'>작성자</th>
-									<th scope="col" width='60%'>
+									<th scope="col" width='15%'>작성자</th>
+									<th scope="col" width='55%'>
 										<c:if test="${ b.cateNo == 101 || b.cateNo == 103 }">답변</c:if>
 										<c:if test="${ b.cateNo == 100 || b.cateNo == 102 }">댓글</c:if>
 									</th>
 									<th scope="col" width='15%'>작성일</th>
-									<th scope="col" width='15%'></th>
+									<th scope="col" width='20%'></th>
 								</tr>
 							</thead>
 							<tbody class='table-group-divider'>
@@ -165,13 +165,13 @@
 										<tr>
 											<td >
 												<c:if test="${ r.memGrade == 'CONSUMER'}">${ r.memName }</c:if>
-												<c:if test="${ r.memGrade == 'MANAGER' }">관리자</c:if>
+												<c:if test="${ r.memGrade == 'MANAGER' || r.memGrade == 'WORKER' }">${ r.memName }</c:if>
 											</td>
 											<td>${ r.reContent }</td>
 											<td>${ r.modifyDate }</td>
 											<td>
 												<input type='hidden' value='${ r.reNo }' name='reNo'>
-												<c:if test="${ r.memNo eq loginUser.memNo  || loginUser.memGrade == 'MANAGER'}">
+												<c:if test="${ r.memNo eq loginUser.memNo  || loginUser.memGrade == 'MANAGER' || loginUser.memGrade == 'WORKER'}">
 													<span><button type="button" class="btn btn-sm" id='updateReply' style='background: #EA862A; color: white;'>수정</button></span>
 													 <span><button type="button" class="btn btn-sm" id='deleteReply' style='background: #DD5353; color: white;'>삭제</button></span>
 												</c:if>
@@ -351,9 +351,10 @@
 							dateTd.innerText = reply.modifyDate.split(" ")[0];
 							
 							const buttonTd = document.createElement('td');
-							if(reply.memNo == '${loginUser.memNo}'){
+							buttonTd.innerHTML = "<input type='hidden' value='" + reply.reNo +"' name='reNo'><span><button type='button' class='btn btn-sm' id='updateReply' style='background: #EA862A; color: white;'>수정</button></span> <span><button type='button' class='btn btn-sm' id='deleteReply' style='background: #DD5353; color: white;'>삭제</button><span>"
+							/* if(reply.memNo == '${loginUser.memNo}'){
 								buttonTd.innerHTML = "<input type='hidden' value='" + reply.reNo +"' name='reNo'><span><button type='button' class='btn btn-sm' id='updateReply' style='background: #EA862A; color: white;'>수정</button></span> <span><button type='button' class='btn btn-sm' id='deleteReply' style='background: #DD5353; color: white;'>삭제</button><span>" 
-							}
+							} */
 							
 							tr.append(nameTd);
 							tr.append(contentTd);

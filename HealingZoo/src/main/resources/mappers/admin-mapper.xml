@@ -1153,4 +1153,11 @@
 		delete from qu_Reply
 		where board_no = ${boardNo}
 	</delete>
+	
+	<resultMap type="Board" id="reBoard">
+		<result column="WRITER_NO" property="boardWriterNo" />
+		<result column="WRITER_NAME" property="boardWriterName" />
+		<result column="MODIFY_DATE" property="boardModifyDate" />
+		<result column="CREATE_DATE" property="boardCreateDate" />
+	</resultMap>
 </mapper>
